@@ -1,0 +1,29 @@
+﻿@using MyUniversityProject.Models.AuthenticationModel
+@model MyUniversityProject.Models.UserInfo
+
+@{
+    ViewData["Title"] = "Index";
+}
+<table class="table">
+    <tr>
+        <th>Change User Information</th>
+        <th>Additional Information</th>
+    </tr>
+    <tr>
+        <td>
+
+            @await Html.PartialAsync("_UserInformation")
+
+        </td>
+        <td>
+            @Html.ActionLink("Check History of Reservation", "Reservation", "MyOffice", new { area = "" }, new { @class = "btn btn-danger my-2 my-sm-0 my-margin-for-button" })
+            @Html.ActionLink("Сheck Messages", "UserMessage", "MyOffice", new { area = "" }, new { @class = "btn btn-danger my-2 my-sm-0 my-margin-for-button" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @await Html.PartialAsync("_ChangePassword", new ChangePassword());
+        </td>
+    </tr>
+
+</table>

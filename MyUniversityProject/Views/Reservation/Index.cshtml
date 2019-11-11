@@ -1,0 +1,153 @@
+﻿@model MyUniversityProject.Models.ReservationModel.ReservationLuggage
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="wrapper">
+    <div class="wrapped-div-1">
+        <div class="col-md-10 offset-md-1">
+            @using (Html.BeginForm("Index", "Reservation", new { htmlAttributes = new { @class = "mb-4" } }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StartReservation, "Date Reservation", htmlAttributes: new { @class = "control-label text-white" })
+                        @Html.EditorFor(model => model.StartReservation, new { htmlAttributes = new { @class = "form-control", @type = "date", @min = "1899-01-01", @id = "listingDateOpen" } })
+                        @Html.ValidationMessageFor(model => model.StartReservation, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Time, "Time Reservation", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(model => model.Time, new { htmlAttributes = new { @class = "form-control", @type = "time" } })
+                                @Html.ValidationMessageFor(model => model.Time, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.HowManyHours, "How Many Hours", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(model => model.HowManyHours, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                                @Html.ValidationMessageFor(model => model.HowManyHours, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <table id="luggageBlock" class="table">
+                            @if (Model != null)
+                            {
+                                for (int i = 0; i < Model.Luggages.Count; i++)
+                                {
+                                    <tr class='form-group' name='record'>
+                                        <td class='align-bottom'>
+                                            <label class='control-label text-white'> @(i + 1)</label>
+                                        </td>
+                                        <td class='form-group'>
+                                            @Html.Label("Width", "Width", htmlAttributes: new { @class = "control-label text-white" })
+                                            @Html.EditorFor(model => Model.Luggages[i].Width, new { htmlAttributes = new { @class = "form-control", @min = "0", @type = "number" } })
+                                        </td>
+                                        <td class='form-group'>
+                                            @Html.Label("Height", "Height", htmlAttributes: new { @class = "control-label text-white" })
+                                            @Html.EditorFor(model => Model.Luggages[i].Height, new { htmlAttributes = new { @class = "form-control", @min = "0", @type = "number" } })
+                                        </td>
+                                        <td class='form-group'>
+                                            @Html.Label("Length", "Length", htmlAttributes: new { @class = "control-label text-white" })
+                                            @Html.EditorFor(model => Model.Luggages[i].Length, new { htmlAttributes = new { @class = "form-control", @min = "0", @type = "number" } })
+                                        </td>
+                                        <td class='form-group'>
+                                            @Html.Label("Capacity", "Capacity", htmlAttributes: new { @class = "control-label text-white" })
+                                            @Html.EditorFor(model => Model.Luggages[i].Capacity, new { htmlAttributes = new { @class = "form-control", @min = "0", @type = "number" } })
+                                        </td>
+                                        @Html.ValidationMessageFor(model => Model.Luggages[i], "", new { @class = "text-danger" })
+                                    </tr>
+                                }
+                            }
+                        </table>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <a class="addLink text-white btn btn-success">
+                                        <img src="~/assets/images/icons8-цветные-48.png" width="40" height="40" alt="Add">
+                                        Add Luggage
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <a class="text-white btn btn-danger" id="remove">
+                                        <img src="~/assets/images/icons8-trash-can-48.png" id="remove" width="40" height="40" alt="Remove">
+                                        Remove Luggage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Make Reservation" class="btn btn-success btn-lg btn-block" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(function () {
+            var i = @(Model==null ? 0: Model.Luggages.Count);
+            $('.addLink').click(function () {
+                if (i >= 5) {
+                    $('.addLink').disable();
+                    alert("Max count of luggages 5")
+                }
+                else {
+                    var html2Add = "<tr class='form-group' name='record'>" +
+                        "<td class='align-bottom'>" +
+                        "<label class = 'control-label text-white'>" + (i + 1) + " " + "</label>" +
+                        "</td>" +
+                        "<td class='form-group'>" +
+                        '@Html.Label("Width", "Width", htmlAttributes: new { @class = "control-label text-white" })' +
+                        "<input class = 'form-control' type='number' min = '0' name='Luggages[" + i + "].Width' />" +
+                        "</td>" +
+                        "<td class='form-group'>" +
+                        '@Html.Label("Height", "Height", htmlAttributes: new { @class = "control-label text-white" })' +
+                        "<input class = 'form-control' type='number' min = '0' name='Luggages[" + i + "].Height' />" +
+                        "</td>" +
+                        "<td class='form-group'>" +
+                        '@Html.Label("Length", "Length", htmlAttributes: new { @class = "control-label text-white" })' +
+                        "<input class = 'form-control' type='number' min = '0' name='Luggages[" + i + "].Length' />" +
+                        "</td>" +
+                        "<td class='form-group'>" +
+                        '@Html.Label("Capacity", "Capacity", htmlAttributes: new { @class = "control-label text-white" })' +
+                        "<input class = 'form-control' type='number' min = '0' name='Luggages[" + i + "].Capacity' />" +
+                        "</td>" +
+                        "</tr>";
+                    $('#luggageBlock').append(html2Add);
+                    i++;
+                }
+            });
+            $('#remove').on("click", function () {
+                if (i > 0) {
+                    --i;
+                    $('.table tr:last').remove();
+                }
+            });
+        });
+</script>
+<script>
+        $(function () {
+        let today = new Date(),
+            day = today.getDate(),
+            month = today.getMonth() + 1,
+            year = today.getFullYear();
+        if (day < 10) {
+            day = '0' + day
+        }
+        if (month < 10) {
+            month = '0' + month
+        }
+        today = year + '-' + month + '-' + day;
+        document.getElementById("listingDateOpen").setAttribute("min", today);
+    });
+</script>
+}

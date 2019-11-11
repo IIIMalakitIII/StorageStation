@@ -1,0 +1,26 @@
+﻿@model MyUniversityProject.Models.Employee
+@{
+    ViewData["Title"] = "Index";
+}
+
+<br/>
+<div class="row d-flex justify-content-center">
+    <div class="col-md-3">
+        <ul class="list-group bg-dark text-center">
+            <li class="list-group-item bg-dark">
+                @Html.ActionLink("Work with Storage", "AllStorage", "Storage", null, new { @class = "btn btn-outline-success " })
+            </li>
+            <li class="list-group-item bg-dark">
+                @Html.ActionLink("User Information", "Users", "Admin", null, new { @class = "btn btn-outline-success" })
+            </li>
+            <li class="list-group-item bg-dark">
+                @Html.ActionLink("Admin Settings", "AdminSettings", "Admin", null, new { @class = "btn btn-outline-success" })
+            </li>
+            <li class="list-group-item bg-dark">
+                @Html.ActionLink("Reservation Info", "AllReservation", "Reservation", null, new { @class = "btn btn-outline-success" })
+            </li>
+        </ul>
+    </div>
+</div>
+
+
