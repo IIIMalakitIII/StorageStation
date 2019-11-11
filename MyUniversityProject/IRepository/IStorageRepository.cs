@@ -14,6 +14,12 @@ namespace MyUniversityProject.IRepository
         Task<IndexViewModel> GetCellsAsync(int storageId, int page);
         List<List<Cell>> ListCells(List<Cell> skipCells);
         List<Storage> GetStoragesCell();
-        
+        Task<Storage> GetStorageInfoAsync(int id);
+        Task<bool> Check(Storage storage);
+        Task<bool> Update(Storage storage);
+        Task<List<Cell>> GetAllStorageInfoAsync(int storageId);
+        Task SaveAsync();
+
+
     }
 }

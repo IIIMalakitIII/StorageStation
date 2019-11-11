@@ -39,8 +39,8 @@ namespace MyUniversityProject.Repository
             return null;
         }
 
-        public async Task<bool> SaveAsync() =>
-            await dataContext.SaveChangesAsync() > 0;
+        public async Task SaveAsync() =>
+            await dataContext.SaveChangesAsync();
 
         public async Task<Employee> GetEpmloyee(string Email) =>
             await dataContext.Employee.FirstOrDefaultAsync(o => o.Email == Email);

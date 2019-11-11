@@ -41,6 +41,18 @@ namespace MyUniversityProject.Repository
 
         }
 
+        public async Task<Storage> GetStorageInfoAsync(int id) =>
+            await dataContext.Storages.AsNoTracking()
+            .Where(o => o.StorageId == id)
+            .FirstOrDefaultAsync();
+
+        public async Task<List<Cell>> GetAllStorageInfoAsync(int storageId) =>
+            await dataContext.Cells
+                .AsNoTracking()
+                .Include(o => o.Reservations)
+                .Where(x => x.StorageId == storageId && x.Reservations.All(r => r.Status))
+                .ToListAsync();
+
         public async Task<IEnumerable<Cell>> GetCellsAsync(int storageId) =>
             await dataContext.Cells.Where(o => o.StorageId == storageId).ToListAsync();
 
@@ -82,6 +94,17 @@ namespace MyUniversityProject.Repository
             }
             return list;
         }
+        public async Task SaveAsync()
+        {
+            try
+            {
+                await dataContext.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new Exception("We are sorry. Your operation conflicted with another operation in database. It has been cancelled.");
+            }
+        }
 
         public List<Storage> GetStoragesCell()
         {
@@ -90,6 +113,45 @@ namespace MyUniversityProject.Repository
                 .ToList();
 
             return Storage;
+        }
+
+        public async Task<bool> Update(Storage storage)
+        {
+
+            var oldStorage = await GetStorageInfoAsync(storage.StorageId);
+            if (oldStorage.Status == storage.Status || storage.Status)
+            {
+                dataContext.Storages.Update(storage);
+                return true;
+            }
+            else
+            {
+                var listOfCells = await GetAllStorageInfoAsync(storage.StorageId);
+                if (listOfCells == null)
+                {
+                    dataContext.Storages.Update(storage);
+                    return true;
+                }
+                else
+                {
+                    foreach (var cell in listOfCells)
+                    {
+                        if (cell.Reservations.Count > 0)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                dataContext.Storages.Update(storage);
+                return true;
+            }
+          
+        }
+
+        public async Task<bool> Check(Storage storage)
+        {
+            Storage storageFind = await GetStorageInfoAsync(storage.StorageId);
+            return storageFind == storage;
         }
     }
 }
