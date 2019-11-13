@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyUniversityProject.Repository
 {
-    public class ReservationRepository: IReservationRepository
+    public class ReservationRepository : IReservationRepository
     {
         private readonly DataContext dataContext;
 
@@ -21,34 +21,152 @@ namespace MyUniversityProject.Repository
 
         }
 
-        public Reservation Create(ref ReservationLuggage reservationLuggage)
+        public async Task<ReservationLuggage> Create(ReservationLuggage reservationLuggage, string Email)
         {
-            var Cells =  dataContext.Cells
-                .Where(blog => blog.Status)
-                .Include(blog => blog.Storage)
-                .Include(blog => blog.Standard)
-                //.Include("Cells.Standard")
-                .ToList();
-            //if (reservationLuggage.Luggages.Count == 0)
-            //{
-            //    LinqExtensions.
-            //    var b = Cells.Min(g => g.Standard.Price && (g.Width* g.Capacity * g.Length)==() );
-            //}
-            //List<string> b = new List<string>();
-            //foreach (var c in new[] { "1", "2", "3", "4", "5" }.CombinationsWithoutRepetition(ofLength: 1, upToLength: 5))
-            //{
-            //    b.Add(string.Join(',', c));
-            //    //Console.WriteLine(string.Join(',', c));
-            //}
-            var b = new Reservation();
-            b.CellId = 1;
-            b.EndReservation = DateTime.Now;
-            b.StartReservation = DateTime.Now;
-            b.Status = false;
-            b.ReservationId = 0;
-            b.Price = 516;
+            reservationLuggage.SomethingElse = false; // haven't got any problem 
+            List<Cell> filterCells = await GetCells(reservationLuggage);
 
-            return b;
+            if (filterCells.Count == 0)
+            {
+                reservationLuggage.SomethingElse = true;
+                reservationLuggage.Exeception = "Sorry, but all cells are reserved, try at another time.";
+                return reservationLuggage; //вернуть сообщение о том что нет свободных ячеек
+            }
+
+            Cell resultCell = null;
+
+            if (reservationLuggage.Luggages.Count == 0)
+            {
+                foreach (var cell in filterCells)
+                {
+                    if (resultCell == null)
+                    {
+                        resultCell = cell;
+                    }
+                    else
+                    {
+                        if (resultCell.Standard.Price > cell.Standard.Price)
+                        {
+                            resultCell = cell;
+                        }
+                    }
+                }
+            }
+
+            int[] result = SelectionAlgorithm.Algo(filterCells, reservationLuggage.Luggages);
+
+            if (result[0] == -1)
+            {
+                reservationLuggage.SomethingElse = true;
+                reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
+                return null; //вернуть то что нет подходящей ячейки
+            }
+            if (result.Length>1 && !reservationLuggage.DivideTheLuggage)
+            {
+                reservationLuggage.SomethingElse = true;
+                reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
+            }
+            if (!reservationLuggage.DivideTheLuggage)
+            {
+                reservationLuggage.SomethingElse = true;
+                reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
+            }
+
+            List<Luggage> luggage = new List<Luggage>(); //список багажей которые не поместились
+            for (int i = 0; i < result.Length - 1; i++)
+            {
+                luggage.Add(reservationLuggage.Luggages[result[i + 1]]);
+            }
+
+            resultCell = filterCells.FirstOrDefault(x => x.CellId == result[0]); // берем подобранную ячейку
+
+            var newCreateReservationId = await CreateReservation(resultCell, Email, reservationLuggage);
+
+            if (newCreateReservationId == 0)
+            {
+                reservationLuggage.SomethingElse = true;
+                reservationLuggage.Exeception = "Something is wrong, try another time";
+                return reservationLuggage;
+            }
+            else
+            {
+                reservationLuggage.NotFit = "";
+                if (luggage.Count > 0)
+                {
+                    reservationLuggage.Luggages = luggage;
+                    string description = "";
+                    foreach (var item in reservationLuggage.Luggages)
+                    {
+                        description += @"\v\n" + $"{item.Width} | {item.Height} | {item.Length} | {item.Capacity}";
+                    }
+                    reservationLuggage.NotFit = description;
+                }
+                reservationLuggage.ReservationId = newCreateReservationId;
+                return reservationLuggage;
+            }
         }
+        public async Task<int> CreateReservation(Cell cell, string Email, ReservationLuggage reservationLuggage)
+        {
+            var userInfo = await dataContext.UserInfos
+                .AsNoTracking()
+                .Where(o => o.Email == Email)
+                .FirstOrDefaultAsync();
+
+            if (userInfo == null)
+            {
+                return 0;
+            }
+
+            Reservation reservation = new Reservation();
+            reservation.StartReservation = reservationLuggage.StartReservation;
+            reservation.Price = cell.Standard.Price * reservationLuggage.HowManyHours;
+            reservation.EndReservation = reservationLuggage.StartReservation.AddHours(reservationLuggage.HowManyHours);
+            reservation.UserInfoId = userInfo.UserInfoId;
+            reservation.CellId = cell.CellId;
+            reservation.Status = true;
+            dataContext.Reservations.Add(reservation);
+            await SaveAsync();
+
+            return reservation.ReservationId;
+        }
+
+
+        public async Task<Reservation> GetReservation(int id) =>
+             await dataContext.Reservations.Where(o => o.ReservationId == id).FirstOrDefaultAsync();
+
+        public async Task SaveAsync() =>
+            await dataContext.SaveChangesAsync();
+
+        //public async Task<Reservation>() GetTaskInfo=>
+
+        public async Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage)
+        {
+            var Cells = await GetAllCell();
+            var filterCells = new List<Cell>();
+            var EndTimeReserve = reservationLuggage.StartReservation.AddHours(reservationLuggage.HowManyHours);
+            foreach (var cell in Cells)
+            {
+                bool addCell = cell.Reservations.Any(reserve =>
+                    (reserve.StartReservation <= reservationLuggage.StartReservation &&
+                    reserve.EndReservation >= reservationLuggage.StartReservation) ||
+                    (reservationLuggage.StartReservation <= reserve.StartReservation &&
+                    EndTimeReserve >= reserve.StartReservation));
+
+                if (!addCell)
+                {
+                    filterCells.Add(cell);
+                }
+            }
+            return filterCells;
+        }
+
+        public async Task<List<Cell>> GetAllCell() =>
+            await dataContext.Cells
+                .AsNoTracking()
+                .Include(blog => blog.Standard)
+                .Include(blog => blog.Reservations)
+                .Include(blog => blog.Storage)
+                .Where(x => x.Storage.Status && x.Status && x.Reservations.All(r => r.Status))
+                .ToListAsync();
     }
 }

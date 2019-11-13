@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "ReservationResult";
+
 }
 
 <h1>ReservationResult</h1>
@@ -40,32 +41,7 @@
     <div class="wrapper-reserv">
         <div class="wrapped-div-2">
             <div class="col-md-6">
-                @*<table class="table">
-                        @if (ViewBag != null)
-                        {
-                            foreach (var item in ViewBag.Luggages)
-                            {
-                                <tr class='form-group' name='record'>
-                                    <td class='form-group'>
-                                        @Html.Label("Width", "Width", htmlAttributes: new { @class = "control-label text-white" })
-                                        @Html.Label("Width", item.Luggages.Width, htmlAttributes: new { @class = "form-control" })
-                                    </td>
-                                    <td class='form-group'>
-                                        @Html.Label("Height", "Height", htmlAttributes: new { @class = "control-label text-white" })
-                                        @Html.Label("Height", item.Luggages.Height, htmlAttributes: new { @class = "form-control" })
-                                    </td>
-                                    <td class='form-group'>
-                                        @Html.Label("Length", "Length", htmlAttributes: new { @class = "control-label text-white" })
-                                        @Html.Label("Length", item.Luggages.Length, htmlAttributes: new { @class = "form-control" })
-                                    </td>
-                                    <td class='form-group'>
-                                        @Html.Label("Capacity", "Capacity", htmlAttributes: new { @class = "control-label text-white" })
-                                        @Html.Label("Capacity", item.Luggages.Capacity, htmlAttributes: new { @class = "form-control" })
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </table>*@
+                <label class="text-white">@ViewBag.Description</label>
             </div>
         </div>
     </div>

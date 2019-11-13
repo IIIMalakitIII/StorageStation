@@ -14,6 +14,12 @@ namespace MyUniversityProject.Models.ReservationModel
 
         [Required]
         public int HowManyHours { get; set; }
+        [Required]
+        public bool DivideTheLuggage { get; set; }
+        public int ReservationId { get; set; }
+        public string Exeception { get; set; }
+        public string NotFit { get; set; }
+        public bool SomethingElse { get; set; }
 
         public List<Luggage> Luggages { get; set; } = new List<Luggage>();
     }
