@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Index";
+    <link rel="stylesheet" href="~/lib/bootstrap/bootstrap-toggle/css/bootstrap-toggle.min.css" />
+    <script src="~/lib/bootstrap/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
 }
 
 <div class="wrapper">
@@ -12,11 +14,11 @@
                 @Html.AntiForgeryToken()
                 <div class="form-horizontal">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.StartReservation, "Date Reservation", htmlAttributes: new { @class = "control-label text-white" })
-                        @Html.EditorFor(model => model.StartReservation, new { htmlAttributes = new { @class = "form-control", @type = "date", @min = "1899-01-01", @id = "listingDateOpen" } })
-                        @Html.ValidationMessageFor(model => model.StartReservation, "", new { @class = "text-danger" })
-                    </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.StartReservation, "Date Reservation", htmlAttributes: new { @class = "control-label text-white" })
+                            @Html.EditorFor(model => model.StartReservation, new { htmlAttributes = new { @class = "form-control", @type = "date", @min = "1899-01-01", @id = "listingDateOpen" } })
+                            @Html.ValidationMessageFor(model => model.StartReservation, "", new { @class = "text-danger" })
+                        </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -82,14 +84,26 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input type="submit" value="Make Reservation" class="btn btn-success btn-lg btn-block" />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.DivideTheLuggage, "Put in the cell those baggage that fit", htmlAttributes: new { @class = "control-label  text-white" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.CheckBoxFor(model => model.DivideTheLuggage, htmlAttributes: new { @class = "form-control", @type = "checkbox", @checked = true, @data_toggle = "toggle", @data_onstyle = "success", @data_offstyle = "danger" })
+                                </div>
+                            </div>
+                        </div>
+                            <div class="form-group">
+                                <input type="submit" value="Make Reservation" class="btn btn-success btn-lg btn-block" />
+                            </div>
+                        </div>
+                            </div>
+                            }
                         </div>
                     </div>
-                </div>
-            }
-        </div>
-    </div>
 </div>
 @section Scripts {
     <script>
@@ -133,21 +147,21 @@
                 }
             });
         });
-</script>
-<script>
+    </script>
+    <script>
         $(function () {
-        let today = new Date(),
-            day = today.getDate(),
-            month = today.getMonth() + 1,
-            year = today.getFullYear();
-        if (day < 10) {
-            day = '0' + day
-        }
-        if (month < 10) {
-            month = '0' + month
-        }
-        today = year + '-' + month + '-' + day;
-        document.getElementById("listingDateOpen").setAttribute("min", today);
-    });
-</script>
+            let today = new Date(),
+                day = today.getDate(),
+                month = today.getMonth() + 1,
+                year = today.getFullYear();
+            if (day < 10) {
+                day = '0' + day
+            }
+            if (month < 10) {
+                month = '0' + month
+            }
+            today = year + '-' + month + '-' + day;
+            document.getElementById("listingDateOpen").setAttribute("min", today);
+        });
+    </script>
 }

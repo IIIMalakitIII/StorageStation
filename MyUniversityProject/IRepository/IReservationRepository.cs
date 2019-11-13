@@ -9,6 +9,10 @@ namespace MyUniversityProject.IRepository
 {
     public interface IReservationRepository
     {
-        Reservation Create(ref ReservationLuggage reservationLuggage);
+        Task<ReservationLuggage> Create(ReservationLuggage reservationLuggage, string Email);
+        Task<Reservation> GetReservation(int id);
+        Task SaveAsync();
+        Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage);
+        Task<List<Cell>> GetAllCell();
     }
 }

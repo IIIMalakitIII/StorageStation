@@ -27,23 +27,29 @@ namespace MyUniversityProject.Controllers
 
 
         [HttpPost]
-        public IActionResult Index(ReservationLuggage reservationLuggage)
+        public async Task<IActionResult> Index(ReservationLuggage reservationLuggage)
         {
             reservationLuggage.StartReservation = reservationLuggage.StartReservation.Add(TimeSpan.Parse(reservationLuggage.Time));
             if (ModelState.IsValid)
             {
-                var reservations  = reservationRepository.Create(ref reservationLuggage);
-                return RedirectToAction(nameof(Result), new { id = reservations.ReservationId });
+                var reservations = await reservationRepository.Create(reservationLuggage, User.Identity.Name);
+                if (reservations.SomethingElse)
+                {
+                    ModelState.AddModelError("", reservationLuggage.Exeception);
+                    return View(reservationLuggage);
+                }
+                return RedirectToAction(nameof(Result), new { id = reservations.ReservationId, desription = reservations.NotFit });
             }
             return View(reservationLuggage);
         }
 
 
         [HttpGet]
-        public IActionResult Result(int id,[FromBody] ReservationLuggage reservationLuggage)
+        public async Task<IActionResult> Result(int id, string desription)
         {
-            ViewBag.Luggaes = reservationLuggage;
-            return View("ReservationResult", reservationLuggage);
+            var model = await reservationRepository.GetReservation(id);
+            ViewBag.Description = desription;
+            return View("ReservationResult", model);
         }
 
 
