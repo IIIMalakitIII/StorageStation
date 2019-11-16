@@ -164,7 +164,7 @@ namespace MyUniversityProject.Controllers
                 }
             }
             //return CreatedAtAction("GetTaskInfo", new { id = taskItem.Id }, taskItem);
-            return View("_ChangePassword", model);
+            return Json(model);
         }
 
        

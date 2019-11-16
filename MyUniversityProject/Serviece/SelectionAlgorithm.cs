@@ -97,7 +97,7 @@ namespace MyUniversityProject.Serviece
         static public int[] Algo(List<Cell> boxes, List<Luggage> bags)//максимум 5 багажей
         {
             boxes = Sort(boxes);
-            int res = 0;//номер ячейки 
+            int res = -1;//номер ячейки 
             int Max = 0;//максимальное кол-во багажа которое мы всунули
             bool[] resarr = new bool[bags.Count]; //массив в котором отмечаем берем тот или иной багаж
             for (int j = 0; j < resarr.Length; j++) //каждому багажу присваивает фолсс изначально мы ничего не ббьерем 

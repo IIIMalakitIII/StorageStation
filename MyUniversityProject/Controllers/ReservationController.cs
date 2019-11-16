@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
@@ -44,11 +45,19 @@ namespace MyUniversityProject.Controllers
         }
 
 
+        //[HttpGet]
+        //public async Task<IActionResult> Result(int id, string desription)
+        //{
+        //    var model = await reservationRepository.GetReservation(id);
+        //    ViewBag.Description = desription;
+        //    return View("ReservationResult", model);
+        //}
+
         [HttpGet]
         public async Task<IActionResult> Result(int id, string desription)
         {
             var model = await reservationRepository.GetReservation(id);
-            ViewBag.Description = desription;
+            ViewBag.Description = HttpUtility.HtmlDecode(desription);
             return View("ReservationResult", model);
         }
 
