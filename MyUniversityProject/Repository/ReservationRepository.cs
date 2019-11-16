@@ -95,9 +95,11 @@ namespace MyUniversityProject.Repository
                 {
                     reservationLuggage.Luggages = luggage;
                     string description = "";
-                    foreach (var item in reservationLuggage.Luggages)
+                    var index = 0;
+                    foreach (var item in luggage)
                     {
-                        description += @"\v\n" + $"{item.Width} | {item.Height} | {item.Length} | {item.Capacity}";
+                        ++index;
+                        description+=($@"<p>[{index}] Width: {item.Width} Height: {item.Height} Length: {item.Length} Capacity:{item.Capacity}");
                     }
                     reservationLuggage.NotFit = description;
                 }

@@ -51,7 +51,6 @@ C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\bin\Debug\netc
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\bin\Debug\netcoreapp2.2\MyUniversityProject.pdb
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\bin\Debug\netcoreapp2.2\MyUniversityProject.Views.dll
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\bin\Debug\netcoreapp2.2\MyUniversityProject.Views.pdb
-C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.RazorAssemblyInfo.cache
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.RazorAssemblyInfo.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.AssemblyInfoInputs.cache
@@ -129,3 +128,4 @@ C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\net
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.pdb
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csproj.CopyComplete
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache

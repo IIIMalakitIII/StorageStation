@@ -10,6 +10,7 @@ namespace MyUniversityProject.IRepository
     public interface IReservationRepository
     {
         Task<ReservationLuggage> Create(ReservationLuggage reservationLuggage, string Email);
+        Task<int> CreateReservation(Cell cell, string Email, ReservationLuggage reservationLuggage);
         Task<Reservation> GetReservation(int id);
         Task SaveAsync();
         Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage);
