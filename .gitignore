@@ -24,3 +24,5 @@ MyUniversityProject/bin/Debug/netcoreapp2.2/MyUniversityProject.dll
 MyUniversityProject/bin/Debug/netcoreapp2.2/MyUniversityProject.pdb
 MyUniversityProject/obj/Debug/netcoreapp2.2/MyUniversityProject.assets.cache
 MyUniversityProject/bin/Debug/netcoreapp2.2/MyUniversityProject.Views.dll
+.vs/MyUniversityProject/v16/Server/sqlite3/storage.ide
+.vs/MyUniversityProject/DesignTimeBuild/.dtbcache
