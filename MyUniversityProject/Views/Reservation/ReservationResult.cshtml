@@ -38,17 +38,52 @@
             </div>
         </div>
     </div>
-    @if (@ViewBag.Description.Count > 0)
+    @if (ViewBag.Description != null)
     {
         <div class="wrapper-reserv">
             <div class="wrapped-div-2">
-                <div class="col-md-10 offset-md-1">
-                    <ul>
-                        @Html.Raw(ViewBag.Description);
-                    </ul>
-                </div>
+                <table>
+                    @for (int i = 0; i < ViewBag.Description.Count; i++)
+                    {
+                    <tr class='form-group' name='record'>
+                        <td class='align-bottom'>
+                            <label class='control-label text-white'> @(i + 1)</label>
+                        </td>
+                        <td class='form-group'>
+                            @Html.Label("Width", "Width", htmlAttributes: new { @class = "control-label text-white" })
+                            @Html.TextBoxx("", ViewBag.Description[i].Width)
+                        </td>
+                        <td class='form-group'>
+                            @Html.Label("Height", "Height", htmlAttributes: new { @class = "control-label text-white" })
+                            @Html.EditorFor(model => Model.Luggages[i].Height, new { htmlAttributes = new { @class = "form-control", @min = "0", @type = "number" } })
+                        </td>
+                        <td class='form-group'>
+                            @Html.Label("Length", "Length", htmlAttributes: new { @class = "control-label text-white" })
+                            @Html.EditorFor(model => Model.Luggages[i].Length, new { htmlAttributes = new { @class = "form-control", @min = "0", @type = "number" } })
+                        </td>
+                        <td class='form-group'>
+                            @Html.Label("Capacity", "Capacity", htmlAttributes: new { @class = "control-label text-white" })
+                            @Html.EditorFor(model => Model.Luggages[i].Capacity, new { htmlAttributes = new { @class = "form-control", @min = "0", @type = "number" } })
+                        </td>
+                        @Html.ValidationMessageFor(model => Model.Luggages[i], "", new { @class = "text-danger" })
+                    </tr>
+                    }
+                </table>
             </div>
         </div>
     }
+
+    @*@if (@ViewBag.Description.Count > 0)
+        {
+            <div class="wrapper-reserv">
+                <div class="wrapped-div-2">
+                    <div class="col-md-10 offset-md-1">
+                        <ul>
+                            @Html.Raw(ViewBag.Description);
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }*@
 </div>
 

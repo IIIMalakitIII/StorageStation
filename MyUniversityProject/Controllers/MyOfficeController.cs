@@ -141,7 +141,7 @@ namespace MyUniversityProject.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> ChangePassword(ChangePassword model)
+        public async Task<IActionResult> _ChangePassword(ChangePassword model)
         {
             if (ModelState.IsValid)
             {
@@ -151,7 +151,8 @@ namespace MyUniversityProject.Controllers
                     await accountRepository.SaveAsync();
                     if (await accountRepository.Check(User.Identity.Name, changeUser))
                     {
-                        return RedirectToAction(nameof(Index), "MyOffice");
+                        //return RedirectToAction(nameof(Index), "MyOffice");
+                        return Json(new { redirectTo = Url.Action("Index") });
                     }
                     else
                     {
@@ -163,8 +164,7 @@ namespace MyUniversityProject.Controllers
                     ModelState.AddModelError("", "Changing user password wasn't successful");
                 }
             }
-            //return CreatedAtAction("GetTaskInfo", new { id = taskItem.Id }, taskItem);
-            return Json(model);
+            return View(model);
         }
 
        

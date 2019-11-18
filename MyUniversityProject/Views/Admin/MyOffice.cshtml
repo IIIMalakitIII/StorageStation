@@ -4,24 +4,21 @@
 @{
     ViewData["Title"] = "MyOffice";
 }
-<table class="table">
-    <tr>
-        <th>Change User Information</th>
-        <th>Additional Information</th>
-    </tr>
-    <tr>
-        <td>
-            @if (User.IsInRole("SuperUser"))
-            {
-                @await Html.PartialAsync("_MyOfficeForSuperUser")
-            }
-            else
-            {
-                @await Html.PartialAsync("_MyOfficeForAdmin")
-            }
-        </td>
-        <td>
-            @await Html.PartialAsync("_ChangePassword", new ChangePassword());
-        </td>
-    </tr>
-</table>
+
+<h2 class="text-center"> Employy Information </h2>
+<hr>
+<div class="row">
+    <div class="col-md-7">
+        @if (User.IsInRole("SuperUser"))
+        {
+            @await Html.PartialAsync("_MyOfficeForSuperUser")
+        }
+        else
+        {
+            @await Html.PartialAsync("_MyOfficeForAdmin")
+        }
+    </div>
+    <div class="col-md-5">
+        @await Html.PartialAsync("_ChangePassword", new ChangePassword())
+    </div>
+</div>

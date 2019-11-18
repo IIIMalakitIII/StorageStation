@@ -35,6 +35,8 @@ namespace MyUniversityProject.Repository
 
             Cell resultCell = null;
 
+            //reservationLuggage.Luggages.RemoveAll(x => x.Height == 0 || x.Width == 0 || x.Length == 0);
+
             if (reservationLuggage.Luggages.Count == 0)
             {
                 foreach (var cell in filterCells)
@@ -94,14 +96,14 @@ namespace MyUniversityProject.Repository
                 if (luggage.Count > 0)
                 {
                     reservationLuggage.Luggages = luggage;
-                    string description = "";
-                    var index = 0;
-                    foreach (var item in luggage)
-                    {
-                        ++index;
-                        description+=($@"<p>[{index}] Width: {item.Width} Height: {item.Height} Length: {item.Length} Capacity:{item.Capacity}");
-                    }
-                    reservationLuggage.NotFit = description;
+                    //string description = "";
+                    //var index = 0;
+                    //foreach (var item in luggage)
+                    //{
+                    //    ++index;
+                    //    description+=($@"<p>[{index}] Width: {item.Width} Height: {item.Height} Length: {item.Length} Capacity:{item.Capacity}");
+                    //}
+                    //reservationLuggage.NotFit = description;
                 }
                 reservationLuggage.ReservationId = newCreateReservationId;
                 return reservationLuggage;

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyUniversityProject.IRepository;
-using MyUniversityProject.Models;
 using MyUniversityProject.Models.ReservationModel;
+using System;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace MyUniversityProject.Controllers
 {
@@ -21,6 +20,7 @@ namespace MyUniversityProject.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -28,39 +28,43 @@ namespace MyUniversityProject.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Index(ReservationLuggage reservationLuggage)
         {
-            reservationLuggage.StartReservation = reservationLuggage.StartReservation.Add(TimeSpan.Parse(reservationLuggage.Time));
             if (ModelState.IsValid)
             {
+                reservationLuggage.StartReservation = reservationLuggage.StartReservation.Add(TimeSpan.Parse(reservationLuggage.Time));//add time 
                 var reservations = await reservationRepository.Create(reservationLuggage, User.Identity.Name);
                 if (reservations.SomethingElse)
                 {
                     ModelState.AddModelError("", reservationLuggage.Exeception);
                     return View(reservationLuggage);
                 }
-                return RedirectToAction(nameof(Result), new { id = reservations.ReservationId, desription = reservations.NotFit });
+                var b = JsonConvert.SerializeObject(reservations);
+                return RedirectToAction(nameof(Result), new { obj = b });
+                //return RedirectToAction(nameof(Result), new { id = reservations.ReservationId, desription = reservations.NotFit });
             }
+            ModelState.AddModelError("","Something is wrong");
             return View(reservationLuggage);
         }
 
-
         //[HttpGet]
+        //[Authorize]
         //public async Task<IActionResult> Result(int id, string desription)
         //{
         //    var model = await reservationRepository.GetReservation(id);
-        //    ViewBag.Description = desription;
+        //    ViewBag.Description = HttpUtility.HtmlDecode(desription);
         //    return View("ReservationResult", model);
         //}
 
         [HttpGet]
-        public async Task<IActionResult> Result(int id, string desription)
+        [Authorize]
+        public async Task<IActionResult> Result(string obj)
         {
-            var model = await reservationRepository.GetReservation(id);
-            ViewBag.Description = HttpUtility.HtmlDecode(desription);
-            return View("ReservationResult", model);
+            var model = JsonConvert.DeserializeObject<ReservationLuggage>(model1);
+            var model2 = await reservationRepository.GetReservation(model.ReservationId);
+            ViewBag.Description = model.Luggages;
+            return View("ReservationResult", model2);
         }
-
-
     }
 }
