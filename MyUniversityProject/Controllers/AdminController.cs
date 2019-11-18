@@ -27,7 +27,6 @@ namespace MyUniversityProject.Controllers
             return View();
         }
 
-    
         public async Task<IActionResult> MyOffice()
         {
             var employee = await adminRepository.GetEpmloyee(User.Identity.Name);

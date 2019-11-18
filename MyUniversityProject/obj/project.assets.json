@@ -3143,6 +3143,54 @@
           }
         }
       },
+      "Syncfusion.Compression.Net.Core/17.3.0.26": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "2.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.Compression.Portable.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.Compression.Portable.dll": {}
+        }
+      },
+      "Syncfusion.DocIO.Net.Core/17.3.0.26": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Compression.Net.Core": "17.3.0.26",
+          "Syncfusion.Licensing": "17.3.0.26",
+          "Syncfusion.OfficeChart.Net.Core": "17.3.0.26"
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.DocIO.Portable.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.DocIO.Portable.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/17.3.0.26": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.OfficeChart.Net.Core/17.3.0.26": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "2.0.0",
+          "Syncfusion.Compression.Net.Core": "17.3.0.26"
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.OfficeChart.Portable.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.OfficeChart.Portable.dll": {}
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -8474,6 +8522,84 @@
         "version.txt"
       ]
     },
+    "Syncfusion.Compression.Net.Core/17.3.0.26": {
+      "sha512": "sl5dScfJ2vGFT3sc0gwNPqd6HbkiZnKvG2fZc5t8O3NlrZR3p3PZEyGp7ETHQ6p9wXlnBHiYFHlpnrMUETYzOg==",
+      "type": "package",
+      "path": "syncfusion.compression.net.core/17.3.0.26",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard1.2/Syncfusion.Compression.Portable.dll",
+        "lib/netstandard1.2/Syncfusion.Compression.Portable.xml",
+        "lib/netstandard1.4/Syncfusion.Compression.Portable.dll",
+        "lib/netstandard1.4/Syncfusion.Compression.Portable.xml",
+        "lib/netstandard2.0/Syncfusion.Compression.Portable.dll",
+        "lib/netstandard2.0/Syncfusion.Compression.Portable.xml",
+        "syncfusion.compression.net.core.17.3.0.26.nupkg.sha512",
+        "syncfusion.compression.net.core.nuspec"
+      ]
+    },
+    "Syncfusion.DocIO.Net.Core/17.3.0.26": {
+      "sha512": "LFknElqCSXkRUyxpkUwCPY8cOUXq0Cdq9QFLqwqAppzAnqlqv5nmxPdPW+Al6HQvZUi9oYKLxXMMivzspuskQw==",
+      "type": "package",
+      "path": "syncfusion.docio.net.core/17.3.0.26",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard1.2/Syncfusion.DocIO.Portable.dll",
+        "lib/netstandard1.2/Syncfusion.DocIO.Portable.xml",
+        "lib/netstandard1.4/Syncfusion.DocIO.Portable.dll",
+        "lib/netstandard1.4/Syncfusion.DocIO.Portable.xml",
+        "lib/netstandard2.0/Syncfusion.DocIO.Portable.dll",
+        "lib/netstandard2.0/Syncfusion.DocIO.Portable.xml",
+        "syncfusion.docio.net.core.17.3.0.26.nupkg.sha512",
+        "syncfusion.docio.net.core.nuspec"
+      ]
+    },
+    "Syncfusion.Licensing/17.3.0.26": {
+      "sha512": "EeKHArPD0M1bkJ3x28EcKcnlCqkBokQWd/v5v44j48ImsFuQgywV8G1CN8W+S1aSsqjwZaRF0W16oJvWBkbhfw==",
+      "type": "package",
+      "path": "syncfusion.licensing/17.3.0.26",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/MonoAndroid10/Syncfusion.Licensing.dll",
+        "lib/Xamarin.Mac/Syncfusion.Licensing.dll",
+        "lib/Xamarin.iOS10/Syncfusion.Licensing.dll",
+        "lib/net20/Syncfusion.Licensing.dll",
+        "lib/net35/Syncfusion.Licensing.dll",
+        "lib/net40/Syncfusion.Licensing.dll",
+        "lib/net45/Syncfusion.Licensing.dll",
+        "lib/net451/Syncfusion.Licensing.dll",
+        "lib/net46/Syncfusion.Licensing.dll",
+        "lib/netcoreapp3.0/Syncfusion.Licensing.dll",
+        "lib/netstandard1.0/Syncfusion.Licensing.dll",
+        "lib/netstandard1.2/Syncfusion.Licensing.dll",
+        "lib/netstandard1.4/Syncfusion.Licensing.dll",
+        "lib/netstandard2.0/Syncfusion.Licensing.dll",
+        "lib/portable-win+net45+wp80+win81+wpa81/Syncfusion.Licensing.dll",
+        "lib/uap10.0/Syncfusion.Licensing.dll",
+        "syncfusion.licensing.17.3.0.26.nupkg.sha512",
+        "syncfusion.licensing.nuspec"
+      ]
+    },
+    "Syncfusion.OfficeChart.Net.Core/17.3.0.26": {
+      "sha512": "Ru+oeL4Z6LlWUOJEkLr+HiMUznwalT53UkjMms6Tt/x9N6C5Zdqsj8B+g9JyAHH67A21E5PfiSmju1R77g82xw==",
+      "type": "package",
+      "path": "syncfusion.officechart.net.core/17.3.0.26",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard1.2/Syncfusion.OfficeChart.Portable.dll",
+        "lib/netstandard1.2/Syncfusion.OfficeChart.Portable.xml",
+        "lib/netstandard1.4/Syncfusion.OfficeChart.Portable.dll",
+        "lib/netstandard1.4/Syncfusion.OfficeChart.Portable.xml",
+        "lib/netstandard2.0/Syncfusion.OfficeChart.Portable.dll",
+        "lib/netstandard2.0/Syncfusion.OfficeChart.Portable.xml",
+        "syncfusion.officechart.net.core.17.3.0.26.nupkg.sha512",
+        "syncfusion.officechart.net.core.nuspec"
+      ]
+    },
     "System.AppContext/4.3.0": {
       "sha512": "fKC+rmaLfeIzUhagxY17Q9siv/sPrjjKcfNg1Ic8IlQkZLipo8ljcaZQu4VtI4Jqbzjc2VTjzGLF6WmsRXAEgA==",
       "type": "package",
@@ -13024,27 +13150,28 @@
       "Microsoft.NETCore.App >= 2.2.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.2.4",
       "Microsoft.jQuery.Unobtrusive.Ajax >= 3.2.6",
-      "Microsoft.jQuery.Unobtrusive.Validation >= 3.2.11"
+      "Microsoft.jQuery.Unobtrusive.Validation >= 3.2.11",
+      "Syncfusion.DocIO.Net.Core >= 17.3.0.26"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Latif\\.nuget\\packages\\": {},
+    "C:\\Users\\user\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Latif\\Documents\\GitHub\\StorageStation\\MyUniversityProject\\MyUniversityProject.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Documents\\GitHub\\StorageStation\\MyUniversityProject\\MyUniversityProject.csproj",
       "projectName": "MyUniversityProject",
-      "projectPath": "C:\\Users\\Latif\\Documents\\GitHub\\StorageStation\\MyUniversityProject\\MyUniversityProject.csproj",
-      "packagesPath": "C:\\Users\\Latif\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Latif\\Documents\\GitHub\\StorageStation\\MyUniversityProject\\obj\\",
+      "projectPath": "C:\\Users\\user\\Documents\\GitHub\\StorageStation\\MyUniversityProject\\MyUniversityProject.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\user\\Documents\\GitHub\\StorageStation\\MyUniversityProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Latif\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -13100,13 +13227,23 @@
           "Microsoft.jQuery.Unobtrusive.Validation": {
             "target": "Package",
             "version": "[3.2.11, )"
+          },
+          "Syncfusion.DocIO.Net.Core": {
+            "target": "Package",
+            "version": "[17.3.0.26, )"
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -73,6 +73,10 @@
             "Microsoft.jQuery.Unobtrusive.Validation": {
               "target": "Package",
               "version": "[3.2.11, )"
+            },
+            "Syncfusion.DocIO.Net.Core": {
+              "target": "Package",
+              "version": "[17.3.0.26, )"
             }
           },
           "imports": [

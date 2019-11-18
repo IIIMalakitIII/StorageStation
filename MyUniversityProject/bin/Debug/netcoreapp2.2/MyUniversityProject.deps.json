@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "d271f7dd96dc4b33df6921a8c4f7f0df91b142de"
+    "signature": ""
   },
   "compilationOptions": {
     "defines": [
@@ -10,7 +10,7 @@
       "NETCOREAPP",
       "NETCOREAPP2_2"
     ],
-    "languageVersion": "",
+    "languageVersion": "7.3",
     "platform": "",
     "allowUnsafe": false,
     "warningsAsErrors": false,
@@ -30,7 +30,8 @@
           "Microsoft.NETCore.App": "2.2.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.2.4",
           "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.6",
-          "Microsoft.jQuery.Unobtrusive.Validation": "3.2.11"
+          "Microsoft.jQuery.Unobtrusive.Validation": "3.2.11",
+          "Syncfusion.DocIO.Net.Core": "17.3.0.26"
         },
         "runtime": {
           "MyUniversityProject.dll": {}
@@ -223,6 +224,62 @@
         },
         "compile": {
           "lib/netstandard1.6/NuGet.Frameworks.dll": {}
+        }
+      },
+      "Syncfusion.Compression.Net.Core/17.3.0.26": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.Compression.Portable.dll": {
+            "assemblyVersion": "17.3200.0.26",
+            "fileVersion": "17.3200.0.26"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.Compression.Portable.dll": {}
+        }
+      },
+      "Syncfusion.DocIO.Net.Core/17.3.0.26": {
+        "dependencies": {
+          "Syncfusion.Compression.Net.Core": "17.3.0.26",
+          "Syncfusion.Licensing": "17.3.0.26",
+          "Syncfusion.OfficeChart.Net.Core": "17.3.0.26"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.DocIO.Portable.dll": {
+            "assemblyVersion": "17.3200.0.26",
+            "fileVersion": "17.3200.0.26"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.DocIO.Portable.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/17.3.0.26": {
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.Licensing.dll": {
+            "assemblyVersion": "17.3.0.26",
+            "fileVersion": "17.3.0.26"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.OfficeChart.Net.Core/17.3.0.26": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "Syncfusion.Compression.Net.Core": "17.3.0.26"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.OfficeChart.Portable.dll": {
+            "assemblyVersion": "17.3200.0.26",
+            "fileVersion": "17.3200.0.26"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.OfficeChart.Portable.dll": {}
         }
       },
       "System.Composition/1.0.31": {
@@ -3668,6 +3725,34 @@
       "sha512": "sha512-qbXaB76XYUVLocLBs8Z9TS/ERGK2wm797feO+0JEPFvT7o7MRadOR77mqaSD4J1k8G+DlZQyq+MlkCuxrkr3ag==",
       "path": "nuget.frameworks/4.7.0",
       "hashPath": "nuget.frameworks.4.7.0.nupkg.sha512"
+    },
+    "Syncfusion.Compression.Net.Core/17.3.0.26": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sl5dScfJ2vGFT3sc0gwNPqd6HbkiZnKvG2fZc5t8O3NlrZR3p3PZEyGp7ETHQ6p9wXlnBHiYFHlpnrMUETYzOg==",
+      "path": "syncfusion.compression.net.core/17.3.0.26",
+      "hashPath": "syncfusion.compression.net.core.17.3.0.26.nupkg.sha512"
+    },
+    "Syncfusion.DocIO.Net.Core/17.3.0.26": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LFknElqCSXkRUyxpkUwCPY8cOUXq0Cdq9QFLqwqAppzAnqlqv5nmxPdPW+Al6HQvZUi9oYKLxXMMivzspuskQw==",
+      "path": "syncfusion.docio.net.core/17.3.0.26",
+      "hashPath": "syncfusion.docio.net.core.17.3.0.26.nupkg.sha512"
+    },
+    "Syncfusion.Licensing/17.3.0.26": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EeKHArPD0M1bkJ3x28EcKcnlCqkBokQWd/v5v44j48ImsFuQgywV8G1CN8W+S1aSsqjwZaRF0W16oJvWBkbhfw==",
+      "path": "syncfusion.licensing/17.3.0.26",
+      "hashPath": "syncfusion.licensing.17.3.0.26.nupkg.sha512"
+    },
+    "Syncfusion.OfficeChart.Net.Core/17.3.0.26": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ru+oeL4Z6LlWUOJEkLr+HiMUznwalT53UkjMms6Tt/x9N6C5Zdqsj8B+g9JyAHH67A21E5PfiSmju1R77g82xw==",
+      "path": "syncfusion.officechart.net.core/17.3.0.26",
+      "hashPath": "syncfusion.officechart.net.core.17.3.0.26.nupkg.sha512"
     },
     "System.Composition/1.0.31": {
       "type": "package",

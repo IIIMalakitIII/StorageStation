@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.ReservationModel;
 using MyUniversityProject.Serviece;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,7 +38,7 @@ namespace MyUniversityProject.Repository
             }
 
             Cell resultCell = null;
-
+            List<Luggage> luggage = new List<Luggage>(); //список багажей которые не поместились
             //reservationLuggage.Luggages.RemoveAll(x => x.Height == 0 || x.Width == 0 || x.Length == 0);
 
             if (reservationLuggage.Luggages.Count == 0)
@@ -54,34 +58,32 @@ namespace MyUniversityProject.Repository
                     }
                 }
             }
-
-            int[] result = SelectionAlgorithm.Algo(filterCells, reservationLuggage.Luggages);
-
-            if (result[0] == -1)
+            else
             {
-                reservationLuggage.SomethingElse = true;
-                reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
-                return null; //вернуть то что нет подходящей ячейки
-            }
-            if (result.Length>1 && !reservationLuggage.DivideTheLuggage)
-            {
-                reservationLuggage.SomethingElse = true;
-                reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
-            }
-            if (!reservationLuggage.DivideTheLuggage)
-            {
-                reservationLuggage.SomethingElse = true;
-                reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
-            }
+                int[] result = SelectionAlgorithm.Algo(filterCells, reservationLuggage.Luggages);
+                if (result[0] == -1)
+                {
+                    reservationLuggage.SomethingElse = true;
+                    reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
+                    return null; //вернуть то что нет подходящей ячейки
+                }
+                if (result.Length > 1 && !reservationLuggage.DivideTheLuggage)
+                {
+                    reservationLuggage.SomethingElse = true;
+                    reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
+                }
+                if (!reservationLuggage.DivideTheLuggage)
+                {
+                    reservationLuggage.SomethingElse = true;
+                    reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
+                }
+                for (int i = 0; i < result.Length - 1; i++)
+                {
+                    luggage.Add(reservationLuggage.Luggages[result[i + 1]]);
+                }
 
-            List<Luggage> luggage = new List<Luggage>(); //список багажей которые не поместились
-            for (int i = 0; i < result.Length - 1; i++)
-            {
-                luggage.Add(reservationLuggage.Luggages[result[i + 1]]);
+                resultCell = filterCells.FirstOrDefault(x => x.CellId == result[0]); // берем подобранную ячейку
             }
-
-            resultCell = filterCells.FirstOrDefault(x => x.CellId == result[0]); // берем подобранную ячейку
-
             var newCreateReservationId = await CreateReservation(resultCell, Email, reservationLuggage);
 
             if (newCreateReservationId == 0)
@@ -92,19 +94,7 @@ namespace MyUniversityProject.Repository
             }
             else
             {
-                reservationLuggage.NotFit = "";
-                if (luggage.Count > 0)
-                {
-                    reservationLuggage.Luggages = luggage;
-                    //string description = "";
-                    //var index = 0;
-                    //foreach (var item in luggage)
-                    //{
-                    //    ++index;
-                    //    description+=($@"<p>[{index}] Width: {item.Width} Height: {item.Height} Length: {item.Length} Capacity:{item.Capacity}");
-                    //}
-                    //reservationLuggage.NotFit = description;
-                }
+                reservationLuggage.Luggages = luggage;
                 reservationLuggage.ReservationId = newCreateReservationId;
                 return reservationLuggage;
             }
@@ -136,7 +126,7 @@ namespace MyUniversityProject.Repository
 
 
         public async Task<Reservation> GetReservation(int id) =>
-             await dataContext.Reservations.Where(o => o.ReservationId == id).FirstOrDefaultAsync();
+             await dataContext.Reservations.Include(o => o.UserInfo).Where(o => o.ReservationId == id).FirstOrDefaultAsync();
 
         public async Task SaveAsync() =>
             await dataContext.SaveChangesAsync();
@@ -145,7 +135,7 @@ namespace MyUniversityProject.Repository
 
         public async Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage)
         {
-            var Cells = await GetAllCell();
+            var Cells = await GetAllCell(reservationLuggage.SelectedStorage);
             var filterCells = new List<Cell>();
             var EndTimeReserve = reservationLuggage.StartReservation.AddHours(reservationLuggage.HowManyHours);
             foreach (var cell in Cells)
@@ -164,13 +154,47 @@ namespace MyUniversityProject.Repository
             return filterCells;
         }
 
-        public async Task<List<Cell>> GetAllCell() =>
+        public async Task<MemoryStream> ResultFile(int id)
+        {
+            var reservation = await GetReservation(id);
+            using (WordDocument document = new WordDocument())
+            {
+                document.EnsureMinimal();
+                document.LastParagraph.AppendText($"Reservation Id: {reservation.ReservationId} \n");
+                document.LastParagraph.AppendText($"Price: {reservation.Price} \n");
+                document.LastParagraph.AppendText($"Start Reservation: {reservation.StartReservation} \n");
+                document.LastParagraph.AppendText($"End Reservation: {reservation.EndReservation} \n");
+                document.LastParagraph.AppendText($"Cell Id: {reservation.CellId} \n");
+                document.LastParagraph.AppendText($"User Information: {reservation.UserInfo.FirstName} {reservation.UserInfo.LastName} \n");
+                document.LastParagraph.AppendText($"User Id: {reservation.UserInfoId} \n");
+                MemoryStream stream = new MemoryStream();
+                document.Save(stream, FormatType.Docx);
+                stream.Position = 0;
+                return stream;
+            }
+        }
+
+        public async Task<List<Cell>> GetAllCell(string location) =>
             await dataContext.Cells
                 .AsNoTracking()
                 .Include(blog => blog.Standard)
                 .Include(blog => blog.Reservations)
                 .Include(blog => blog.Storage)
-                .Where(x => x.Storage.Status && x.Status && x.Reservations.All(r => r.Status))
+                .Where(x => x.Storage.Location.Contains(location) && x.Storage.Status && x.Status && x.Reservations.All(r => r.Status))
                 .ToListAsync();
+
+        public async Task<List<SelectListItem>> GetFreeStorage()
+        {
+            return await dataContext.Storages
+                .AsNoTracking()
+                .Where(x => x.Status)
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Location,
+                    Value = x.Location
+                })
+                .ToListAsync();
+        }
     }
+
 }

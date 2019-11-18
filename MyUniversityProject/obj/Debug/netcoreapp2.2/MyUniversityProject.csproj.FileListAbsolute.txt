@@ -70,7 +70,6 @@ C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netc
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\_ChangePassword.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\_UserInformation.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Reservation\Index.cshtml.g.cs
-C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Reservation\ReservationResult.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_Layout.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\AllStorage.cshtml.g.cs
@@ -129,3 +128,4 @@ C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\net
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csproj.CopyComplete
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Reservation\Result.cshtml.g.cs

@@ -1,7 +1,9 @@
-﻿using MyUniversityProject.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MyUniversityProject.Models;
 using MyUniversityProject.Models.ReservationModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +16,9 @@ namespace MyUniversityProject.IRepository
         Task<Reservation> GetReservation(int id);
         Task SaveAsync();
         Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage);
-        Task<List<Cell>> GetAllCell();
+        //Task<List<Cell>> GetAllCell();
+        Task<MemoryStream> ResultFile(int id);
+        Task<List<SelectListItem>> GetFreeStorage();
+        Task<List<Cell>> GetAllCell(string location);
     }
 }

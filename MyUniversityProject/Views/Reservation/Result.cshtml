@@ -1,0 +1,117 @@
+﻿@model MyUniversityProject.Models.Reservation
+@{
+    ViewData["Title"] = "ReservationResult";
+
+}
+
+<h1 class="text-center">ReservationResult</h1>
+
+<div class="wrapper-reserv">
+    <div class="wrapped-div-2">
+        <div class="col-md-12 offset-md-0">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("", "Reservation Id", htmlAttributes: new { @class = "control-label  text-white" })
+                        @Html.EditorFor(model => model.ReservationId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("", "Cell Id", htmlAttributes: new { @class = "control-label  text-white" })
+                        @Html.EditorFor(model => model.CellId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("", "Price", htmlAttributes: new { @class = "control-label  text-white" })
+                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("", "Start Reservation", htmlAttributes: new { @class = "control-label  text-white" })
+                        @Html.EditorFor(model => model.StartReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("", "End Reservation", htmlAttributes: new { @class = "control-label  text-white" })
+                        @Html.EditorFor(model => model.EndReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="form-group align-content-center">
+                        @Html.ActionLink("Check it in your History", "CheckMyReservation", "MyOffice", new { id = Model.ReservationId }, new { @class = "btn btn-primary btn-block my-btn-color", @style = "background:#8b00ff;" })
+                    </div>
+                </div>
+                <div class="col-md-4 offset-md-1">
+                    <div class="form-group">
+                        <a href=@Url.Action("Print", "Reservation", new { id = Model.ReservationId }) class="btn btn-primary btn-block" style="background:#8b00ff;">
+                            <img src="~/assets/images/icons8-print-20.png" alt="Print" />
+                            Print
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        @if (@ViewBag.Description.Count > 0)
+        {
+
+        <h2 class="text-center">These luggage didn't fit into one cell</h2>
+        <div class="wrapper-reserv">
+            <div class="wrapped-div-2  bg-warning">
+                <div class="col-md-10 offset-md-1">
+                    <table id="luggageBlock" class="table">
+                        @if (ViewBag.Description != null)
+                        {
+                            foreach (var item in ViewBag.Description)
+                            {
+                                <tr class='form-group' name='record'>
+                                    <td class='form-group'>
+                                        @Html.Label("Width", "Width", htmlAttributes: new { @class = "control-label text-black-50" })
+                                        <input class="form-control" value=@item.Width readonly />
+                                    </td>
+                                    <td class='form-group'>
+                                        @Html.Label("Height", "Height", htmlAttributes: new { @class = "control-label text-black-50" })
+                                        <input class="form-control" value=@item.Height readonly />
+                                    </td>
+                                    <td class='form-group'>
+                                        @Html.Label("Length", "Length", htmlAttributes: new { @class = "control-label text-black-50" })
+                                        <input class="form-control" value=@item.Length readonly />
+                                    </td>
+                                    <td class='form-group'>
+                                        @Html.Label("Capacity", "Capacity", htmlAttributes: new { @class = "control-label text-black-50" })
+                                        <input class="form-control" value=@item.Capacity readonly />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        }
+        
+
+            @*@if (@ViewBag.Description.Count > 0)
+            {
+                <div class="wrapper-reserv">
+                    <div class="wrapped-div-2">
+                        <div class="col-md-10 offset-md-1">
+                            <ul>
+                                @Html.Raw(ViewBag.Description);
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }*@
+
+

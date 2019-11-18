@@ -27,6 +27,20 @@
     {
       "library": "bootstrap-toggle@2.2.2",
       "destination": "wwwroot/lib/bootstrap/bootstrap-toggle/"
+    },
+    {
+      "library": "popper.js@1.15.0",
+      "destination": "wwwroot/lib/bootstrap/js/popper.js/",
+      "files": [
+        "umd/popper-utils.js",
+        "umd/popper-utils.js.map",
+        "umd/popper-utils.min.js",
+        "umd/popper-utils.min.js.map",
+        "umd/popper.js",
+        "umd/popper.js.map",
+        "umd/popper.min.js",
+        "umd/popper.min.js.map"
+      ]
     }
   ]
 }
