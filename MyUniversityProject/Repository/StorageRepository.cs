@@ -56,7 +56,7 @@ namespace MyUniversityProject.Repository
         public async Task<IEnumerable<Cell>> GetCellsAsync(int storageId) =>
             await dataContext.Cells.Where(o => o.StorageId == storageId).ToListAsync();
 
-        public async Task<IndexViewModel> GetCellsAsync(int storageId, int page)
+        public async Task<IndexCellModel> GetCellsAsync(int storageId, int page)
         {
             IQueryable<Cell> cells = dataContext.Cells.Where(o => o.StorageId == storageId);
             var count = cells.Count();
@@ -64,7 +64,7 @@ namespace MyUniversityProject.Repository
             
             var list = await Task.Run(()=> ListCells(skipCells));
             PageViewModel pageViewModel = new PageViewModel(count, page, 20);
-            IndexViewModel viewModel = new IndexViewModel
+            IndexCellModel viewModel = new IndexCellModel
             {
                 PageViewModel = pageViewModel,
                 Cells = list

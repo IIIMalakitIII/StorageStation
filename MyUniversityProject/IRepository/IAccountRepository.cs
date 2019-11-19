@@ -18,5 +18,6 @@ namespace MyUniversityProject.IRepository
         void Update(UserInfo user);
         Task<bool> Check(string Email, UserInfo userInfo);
         Task<UserInfo> UpdatePassword(string Email, ChangePassword password);
+        Task<int> UserInfoId(string Email);
     }
 }

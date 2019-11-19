@@ -16,14 +16,18 @@ namespace MyUniversityProject.Controllers
 {
     public class MyOfficeController : Controller
     {
+
         private readonly IAccountRepository accountRepository;
-        public MyOfficeController(IAccountRepository accountRepository)
+        private readonly IReservationRepository reservationRepository;
+        public MyOfficeController(IAccountRepository accountRepository, IReservationRepository reservationRepository)
         {
             this.accountRepository = accountRepository;
+            this.reservationRepository = reservationRepository;
         }
 
-        [Authorize]
+        
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var user = await accountRepository.GetUser(User.Identity.Name);
@@ -83,6 +87,31 @@ namespace MyUniversityProject.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ReservationHistory(string currentFilter, string searching, int page = 1)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = await accountRepository.UserInfoId(User.Identity.Name);
+                if (searching == null)
+                {
+                    if (currentFilter == null)
+                    {
+                        searching = "";
+                    }
+                    else
+                    {
+                        searching = currentFilter;
+                    }
+                }
+
+                ViewBag.CurrentFilter = searching;
+                var list = reservationRepository.GetUserReservations(userId, page, searching);
+                return View(list);
+            }
+            return RedirectToAction(nameof(Login));
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -167,17 +196,16 @@ namespace MyUniversityProject.Controllers
             return View(model);
         }
 
+
+
        
         private async Task Authenticate(string userEmail)
         {
-            // создаем один claim
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userEmail)
             };
-            // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 

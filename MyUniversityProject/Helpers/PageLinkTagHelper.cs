@@ -31,32 +31,58 @@ namespace MyUniversityProject.Helpers
             output.TagName = "div";
 
             TagBuilder tag = new TagBuilder("ul");
-            if (!PageModel.HasPreviousPage)
+            //if (!PageModel.HasPreviousPage)
+            //{
+            //    TagBuilder nextItem = CreateTagLastAndFirst(PageModel.TotalPages, urlHelper, true);
+            //    tag.InnerHtml.AppendHtml(nextItem);
+            //}
+            TagBuilder firstItem = CreateTagLastAndFirst(1, urlHelper, false);
+            tag.InnerHtml.AppendHtml(firstItem);
+            if ((PageModel.TotalPages - PageModel.PageNumber) < 5)
             {
-                TagBuilder nextItem = CreateTagLastAndFirst(PageModel.TotalPages, urlHelper, true);
-                tag.InnerHtml.AppendHtml(nextItem);
+                int index = 1;
+                if(PageModel.TotalPages >= 5)
+                {
+                    if (PageModel.HasPreviousPage && (PageModel.TotalPages - PageModel.PageNumber) + 1 == 5)
+                    {
+                        TagBuilder prevItem = CreateTag(PageModel.PageNumber - 1, urlHelper);
+                        tag.InnerHtml.AppendHtml(prevItem);
+                    }
+                    index = PageModel.TotalPages - 4;
+                }
+
+                for (int i = index; i <= PageModel.TotalPages; i++)
+                {
+                    TagBuilder Item = CreateTag(i, urlHelper);
+                    tag.InnerHtml.AppendHtml(Item);
+                }
             }
-            if (PageModel.HasPreviousPage)
+            else
             {
-                TagBuilder prevItem = CreateTag(PageModel.PageNumber - 1, urlHelper);
-                tag.InnerHtml.AppendHtml(prevItem);
-            }
-            int index = 0;
-            for (int i = PageModel.PageNumber; i <= PageModel.TotalPages; i++)
+                int index = 0;
+                if (PageModel.HasPreviousPage)
+                {
+                    TagBuilder prevItem = CreateTag(PageModel.PageNumber - 1, urlHelper);
+                    tag.InnerHtml.AppendHtml(prevItem);
+                }
+                for (int i = PageModel.PageNumber; i <= PageModel.TotalPages; i++)
                 {
                     index++;
-                    if (index ==5)
+                    if (index == 5)
                     {
                         break;
                     }
                     TagBuilder Item = CreateTag(i, urlHelper);
                     tag.InnerHtml.AppendHtml(Item);
                 }
-            if (!PageModel.HasNextPage)
-            {
-                TagBuilder nextItem = CreateTagLastAndFirst(1, urlHelper, false);
-                tag.InnerHtml.AppendHtml(nextItem);
             }
+            //if (!PageModel.HasNextPage)
+            //{
+            //    TagBuilder nextItem = CreateTagLastAndFirst(1, urlHelper, false);
+            //    tag.InnerHtml.AppendHtml(nextItem);
+            //}
+            TagBuilder nextItem = CreateTagLastAndFirst(PageModel.TotalPages, urlHelper, true);
+            tag.InnerHtml.AppendHtml(nextItem);
             output.Content.AppendHtml(tag);
         }
 
@@ -91,7 +117,7 @@ namespace MyUniversityProject.Helpers
             else
             {
                 item.AddCssClass("btn btn-default");
-                link.Attributes["href"] = urlHelper.Action(PageAction, new { id = StorageId, page = pageNumber });
+                link.Attributes["href"] = urlHelper.Action(PageAction+$"{pageNumber}"/*, new { id = StorageId, page = pageNumber }*/);
             }
 
             if (b)

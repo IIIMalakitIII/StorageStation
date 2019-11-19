@@ -9,11 +9,9 @@
         <div class="col-md-12 offset-md-0">
             @using (Html.BeginForm("Index", "Reservation", new { htmlAttributes = new { @class = "mb-4" } }))
             {
-                
                 @Html.AntiForgeryToken()
             <div class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.Storages);
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -24,8 +22,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+
                             @Html.LabelFor(model => model.StartReservation, "Date Reservation", htmlAttributes: new { @class = "control-label text-white" })
-                            @Html.DropDownListFor(model => model.SelectedStorage, Model.Storages as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.SelectedStorage, Model.Storages as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                            @for (int i = 0; i < Model.Storages.Count; i++)
+                            {
+                                @Html.HiddenFor(model => Model.Storages[i].Text)
+                            }
                         </div>
                     </div>
                 </div>

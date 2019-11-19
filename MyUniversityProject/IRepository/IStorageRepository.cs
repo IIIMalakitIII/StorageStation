@@ -11,7 +11,7 @@ namespace MyUniversityProject.IRepository
     {
         Task<IEnumerable<Storage>> GetAllStorageAsync(string searching, string sortOrder);
         Task<IEnumerable<Cell>> GetCellsAsync(int storageId);
-        Task<IndexViewModel> GetCellsAsync(int storageId, int page);
+        Task<IndexCellModel> GetCellsAsync(int storageId, int page);
         List<List<Cell>> ListCells(List<Cell> skipCells);
         List<Storage> GetStoragesCell();
         Task<Storage> GetStorageInfoAsync(int id);

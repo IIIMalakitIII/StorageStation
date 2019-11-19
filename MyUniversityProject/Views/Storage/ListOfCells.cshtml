@@ -1,5 +1,5 @@
 ﻿@using MyUniversityProject.Models.Pagination
-@model IndexViewModel
+@model IndexCellModel
 @addTagHelper "*, MyUniversityProject"
 
     @if (Model.Cells.FirstOrDefault().Any())
@@ -36,7 +36,7 @@
                     </table>
                 </li>
                 <li class="list-group-item-secondary text-center" style="list-style-type:none">
-                    <page-link page-model="@Model.PageViewModel" storage-id="@Model.Cells.FirstOrDefault().FirstOrDefault().StorageId" page-action="ListOfCells" page></page-link>
+                    <page-link page-model="@Model.PageViewModel" storage-id="@Model.Cells.FirstOrDefault().FirstOrDefault().StorageId" page-action="ListOfCells"></page-link>
                 </li>
             </ul>
 

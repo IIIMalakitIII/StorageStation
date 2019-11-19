@@ -68,6 +68,11 @@ namespace MyUniversityProject.Repository
             return user.Equals(userInfo);
         }
 
+        public async Task<int> UserInfoId(string Email)
+        {
+            var user = await GetUser(Email);
+            return user.UserInfoId;
+        }
 
     }
 }

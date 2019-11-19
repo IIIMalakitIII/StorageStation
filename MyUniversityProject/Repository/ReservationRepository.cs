@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
+using MyUniversityProject.Models.Pagination;
 using MyUniversityProject.Models.ReservationModel;
 using MyUniversityProject.Serviece;
 using Syncfusion.DocIO;
@@ -65,18 +66,15 @@ namespace MyUniversityProject.Repository
                 {
                     reservationLuggage.SomethingElse = true;
                     reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
-                    return null; //вернуть то что нет подходящей ячейки
+                    return reservationLuggage; //вернуть то что нет подходящей ячейки
                 }
                 if (result.Length > 1 && !reservationLuggage.DivideTheLuggage)
                 {
                     reservationLuggage.SomethingElse = true;
                     reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
+                    return reservationLuggage;
                 }
-                if (!reservationLuggage.DivideTheLuggage)
-                {
-                    reservationLuggage.SomethingElse = true;
-                    reservationLuggage.Exeception = "Sorry, but we couldn't find a suitable cell.";
-                }
+
                 for (int i = 0; i < result.Length - 1; i++)
                 {
                     luggage.Add(reservationLuggage.Luggages[result[i + 1]]);
@@ -131,7 +129,6 @@ namespace MyUniversityProject.Repository
         public async Task SaveAsync() =>
             await dataContext.SaveChangesAsync();
 
-        //public async Task<Reservation>() GetTaskInfo=>
 
         public async Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage)
         {
@@ -183,6 +180,7 @@ namespace MyUniversityProject.Repository
                 .Where(x => x.Storage.Location.Contains(location) && x.Storage.Status && x.Status && x.Reservations.All(r => r.Status))
                 .ToListAsync();
 
+
         public async Task<List<SelectListItem>> GetFreeStorage()
         {
             return await dataContext.Storages
@@ -195,6 +193,44 @@ namespace MyUniversityProject.Repository
                 })
                 .ToListAsync();
         }
-    }
 
+        
+        public async Task<List<Reservation>> GetUserReservations(int userId)
+        {
+            return await dataContext.Reservations
+                .Include(x => x.Cell)
+                .ThenInclude(x => x.Storage)
+                .Where( x => x.UserInfoId == userId)
+                .ToListAsync();
+        }
+        
+
+        public IndexReserveModel GetUserReservations(int userId, int page, string search)
+        {
+            IQueryable<Reservation> reserve = dataContext.Reservations
+                .Include(x => x.Cell)
+                .ThenInclude(x => x.Storage)
+                .Where(x => x.UserInfoId == userId && 
+                    (x.Price.ToString().Contains(search) || 
+                    x.ReservationId.ToString().Contains(search) ||
+                    x.StartReservation.ToString().Contains(search) ||
+                    x.EndReservation.ToString().Contains(search) ||
+                    x.CellId.ToString().Contains(search) ||
+                    x.Cell.Storage.Location.Contains(search)
+                    ))
+                .OrderByDescending(x => x);
+
+                //dataContext.Cells.Where(o => o.StorageId == storageId);
+            var count = reserve.Count();
+            var skipCells = reserve.Skip((page - 1) * 3).Take(3).ToList();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, 3);
+            IndexReserveModel viewModel = new IndexReserveModel
+            {
+                PageViewModel = pageViewModel,
+                Reservations = skipCells
+            };
+            return viewModel;
+        }
+    }
 }

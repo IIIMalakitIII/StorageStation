@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using MyUniversityProject.Models;
+using MyUniversityProject.Models.Pagination;
 using MyUniversityProject.Models.ReservationModel;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,10 @@ namespace MyUniversityProject.IRepository
         Task<Reservation> GetReservation(int id);
         Task SaveAsync();
         Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage);
-        //Task<List<Cell>> GetAllCell();
+        Task<List<Reservation>> GetUserReservations(int userId);
         Task<MemoryStream> ResultFile(int id);
         Task<List<SelectListItem>> GetFreeStorage();
         Task<List<Cell>> GetAllCell(string location);
+        IndexReserveModel GetUserReservations(int userId, int page, string search);
     }
 }
