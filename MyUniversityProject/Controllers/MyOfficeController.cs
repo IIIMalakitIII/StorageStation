@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.AuthenticationModel;
+using MyUniversityProject.Models.FilterModel;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -89,26 +90,22 @@ namespace MyUniversityProject.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> ReservationHistory(string currentFilter, string searching, int page = 1)
+        public async Task<IActionResult> ReservationHistory(ReserveFilterViewModel reserveFilter, int page = 1)
         {
             if (User.Identity.IsAuthenticated)
             {
+               
                 int userId = await accountRepository.UserInfoId(User.Identity.Name);
-                if (searching == null)
+                var list = reservationRepository.GetUserReservations(userId, page, reserveFilter);
+                list.ReserveFilterViewModel = new ReserveFilterViewModel();
+                if (reserveFilter != null)
                 {
-                    if (currentFilter == null)
-                    {
-                        searching = "";
-                    }
-                    else
-                    {
-                        searching = currentFilter;
-                    }
+                    list.ReserveFilterViewModel = reserveFilter;
                 }
-
-                ViewBag.CurrentFilter = searching;
-                var list = reservationRepository.GetUserReservations(userId, page, searching);
+                
                 return View(list);
+                //ViewBag.CurrentFilter = searching;
+
             }
             return RedirectToAction(nameof(Login));
         }

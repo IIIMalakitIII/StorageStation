@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using MyUniversityProject.Models.Pagination;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyUniversityProject.Helpers
@@ -22,7 +23,9 @@ namespace MyUniversityProject.Helpers
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
         public PageViewModel PageModel { get; set; }
-        public string StorageId { get; set; }
+        //public string StorageId { get; set; }
+        [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
+        public Dictionary<string, object> PageUrlValues { get; set; } = new Dictionary<string, object>();
         public string PageAction { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -98,7 +101,9 @@ namespace MyUniversityProject.Helpers
             else
             {
                 item.AddCssClass("btn btn-default");
-                link.Attributes["href"] = urlHelper.Action(PageAction, new { id = StorageId, page = pageNumber });
+                //link.Attributes["href"] = urlHelper.Action(PageAction, new { id = StorageId, page = pageNumber });
+                PageUrlValues["page"] = pageNumber;
+                link.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
             }
             link.InnerHtml.Append(pageNumber.ToString());
             item.InnerHtml.AppendHtml(link);
@@ -117,7 +122,9 @@ namespace MyUniversityProject.Helpers
             else
             {
                 item.AddCssClass("btn btn-default");
-                link.Attributes["href"] = urlHelper.Action(PageAction+$"{pageNumber}"/*, new { id = StorageId, page = pageNumber }*/);
+                //link.Attributes["href"] = urlHelper.Action(PageAction+$"{pageNumber}", new { id = StorageId, page = pageNumber });
+                PageUrlValues["page"] = pageNumber;
+                link.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
             }
 
             if (b)

@@ -1,4 +1,5 @@
-﻿@using MyUniversityProject.Models.Pagination
+﻿@using MyUniversityProject.Models.Pagination;
+@using MyUniversityProject.Models.FilterModel
 @model IndexReserveModel
 @addTagHelper "*, MyUniversityProject"
 
@@ -7,83 +8,91 @@
 }
 
 <h1 class="text-center">Reservation History</h1>
-@if (Model.Reservations.Any())
-{
-    <div class="d-flex justify-content-center">
-        <ul class="list-group">
-            <li class="list-group-item">
-                @using (Html.BeginForm("ReservationHistory", "MyOffice", FormMethod.Get))
-                {
-                    <div class="input-group mb-3 row d-flex justify-content-center">
-                        @Html.TextBox("searching", ViewBag.CurrentFilter as string)
-                        <div class="input-group-append">
-                            <input class="btn btn-primary" type="submit" value="Find">
-                        </div>
-                    </div>
-                }
-            </li>
-            <li class="list-group-item">
-                @foreach (var item in Model.Reservations)
-                {
-                    <div class="wrapper-reserv">
-                        <div class="wrapped-div-2">
-                            <div class="col-md-12 offset-md-0">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            @Html.Label("", "Reservation Id", htmlAttributes: new { @class = "control-label  text-white" })
-                                            @Html.EditorFor(model => item.ReservationId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            @Html.Label("", "Cell Id", htmlAttributes: new { @class = "control-label  text-white" })
-                                            @Html.EditorFor(model => item.CellId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            @Html.Label("", "Status", htmlAttributes: new { @class = "control-label  text-white" })
-                                            @Html.CheckBoxFor(model => item.Status, htmlAttributes: new { @class = "form-control", @type = "checkbox", @checked = @item.Status, @data_toggle = "toggle", @data_onstyle = "success", @data_offstyle = "danger", @data_width = "100", @disabled = true })
-                                        </div>
-                                    </div>
+<br>
+<div class="row">
+    <div class="col-md-5">
+        @await Html.PartialAsync("_ReserveFilter", Model.ReserveFilterViewModel)
+    </div>
+    <div class="col-md-7">
+        @if (Model.Reservations.Any())
+        {
+                <ul class="list-group bg-dark">
+                    @*<li class="list-group-item">
+                        @using (Html.BeginForm("ReservationHistory", "MyOffice", FormMethod.Get))
+                        {
+                            <div class="input-group mb-3 row d-flex justify-content-center">
+                                @Html.TextBox("searching", ViewBag.CurrentFilter as string)
+                                <div class="input-group-append">
+                                    <input class="btn btn-primary" type="submit" value="Find">
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            @Html.Label("", "Start Reservation", htmlAttributes: new { @class = "control-label  text-white" })
-                                            @Html.EditorFor(model => item.StartReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            </div>
+                        }
+                    </li>*@
+                    <li class="list-group-item bg-dark">
+                        @foreach (var item in Model.Reservations)
+                        {
+                            <div class="wrapper-reserv">
+                                <div class="wrapped-div-2">
+                                    <div class="col-md-12 offset-md-0">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Html.Label("", "Reservation Id", htmlAttributes: new { @class = "control-label  text-white" })
+                                                    @Html.EditorFor(model => item.ReservationId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Html.Label("", "Cell Id", htmlAttributes: new { @class = "control-label  text-white" })
+                                                    @Html.EditorFor(model => item.CellId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Html.Label("", "Status", htmlAttributes: new { @class = "control-label  text-white" })
+                                                    @Html.CheckBoxFor(model => item.Status, htmlAttributes: new { @class = "form-control", @type = "checkbox", @checked = @item.Status, @data_toggle = "toggle", data_on = "Active", data_off = "Deactive", @data_onstyle = "success", @data_offstyle = "danger", @data_width = "100", @disabled = true })
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            @Html.Label("", "End Reservation", htmlAttributes: new { @class = "control-label  text-white" })
-                                            @Html.EditorFor(model => item.EndReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    @Html.Label("", "Start Reservation", htmlAttributes: new { @class = "control-label  text-white" })
+                                                    @Html.EditorFor(model => item.StartReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    @Html.Label("", "End Reservation", htmlAttributes: new { @class = "control-label  text-white" })
+                                                    @Html.EditorFor(model => item.EndReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            @Html.Label("", "Price", htmlAttributes: new { @class = "control-label  text-white" })
-                                            @Html.EditorFor(model => item.Price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            @Html.Label("", "Storage Name", htmlAttributes: new { @class = "control-label  text-white" })
-                                            @Html.EditorFor(model => item.Cell.Storage.Location, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    @Html.Label("", "Price", htmlAttributes: new { @class = "control-label  text-white" })
+                                                    @Html.EditorFor(model => item.Price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    @Html.Label("", "Storage Name", htmlAttributes: new { @class = "control-label  text-white" })
+                                                    @Html.EditorFor(model => item.Cell.Storage.Location, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                }
-            </li>
-            <li class="list-group-item-secondary text-center" style="list-style-type:none">
-                <page-link page-model="@Model.PageViewModel" page-action="ReservationHistory?currentfilter='@ViewBag.CurrentFilter'&" page></page-link>
-            </li>
-        </ul>
+                        }
+                    </li>
+                    <li class="list-group-item-secondary text-center" style="list-style-type:none">
+                        <page-link page-model="@Model.PageViewModel" page-action="ReservationHistory" page-url-currentfilter=@ViewBag.CurrentFilter></page-link>
+                    </li>
+                </ul>
+        }
     </div>
-}
+</div>
+
+

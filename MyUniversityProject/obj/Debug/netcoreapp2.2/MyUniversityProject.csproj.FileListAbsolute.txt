@@ -130,3 +130,4 @@ C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netc
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Reservation\Result.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\ReservationHistory.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\_ReserveFilter.cshtml.g.cs

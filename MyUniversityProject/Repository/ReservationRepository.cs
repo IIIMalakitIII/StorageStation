@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
+using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
 using MyUniversityProject.Models.ReservationModel;
 using MyUniversityProject.Serviece;
@@ -205,9 +206,40 @@ namespace MyUniversityProject.Repository
         }
         
 
-        public IndexReserveModel GetUserReservations(int userId, int page, string search)
+        public IndexReserveModel GetUserReservations(int userId, int page, ReserveFilterViewModel reserve)
         {
-            IQueryable<Reservation> reserve = dataContext.Reservations
+            switch (reserve.SortItem)
+            {
+
+
+
+                case "":
+                    return dataContext.Reservations.Include(x => x.Cell)
+                        .ThenInclude(x => x.Storage)
+                    .Where(x => 
+                    x.UserInfoId == userId && 
+                    x.StartReservation >= reserve.FirstDate && 
+                    x.EndReservation <= reserve.SecondDate && 
+                    (x.Price.ToString().Contains(reserve.SearchFilter) ||
+                    x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
+                    x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
+                    x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
+                    x.CellId.ToString().Contains(reserve.SearchFilter) ||
+                    x.Cell.Storage.Location.Contains(reserve.SearchFilter)
+                    ))
+                    .OrderByDescending(x => x);
+                case "Location":
+                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
+                        .OrderBy(o => o.Location).ToListAsync();
+                case "location":
+                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
+                        .OrderByDescending(o => o.Location).ToListAsync();
+                default:
+                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
+                        .OrderBy(o => o.Status).ToListAsync();
+            }
+
+            /*IQueryable<Reservation> reserve = dataContext.Reservations
                 .Include(x => x.Cell)
                 .ThenInclude(x => x.Storage)
                 .Where(x => x.UserInfoId == userId && 
@@ -219,7 +251,7 @@ namespace MyUniversityProject.Repository
                     x.Cell.Storage.Location.Contains(search)
                     ))
                 .OrderByDescending(x => x);
-
+                */
                 //dataContext.Cells.Where(o => o.StorageId == storageId);
             var count = reserve.Count();
             var skipCells = reserve.Skip((page - 1) * 3).Take(3).ToList();
