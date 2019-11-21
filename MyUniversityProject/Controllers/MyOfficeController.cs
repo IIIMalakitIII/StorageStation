@@ -8,6 +8,7 @@ using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.AuthenticationModel;
 using MyUniversityProject.Models.FilterModel;
+using MyUniversityProject.Models.Pagination;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -94,15 +95,8 @@ namespace MyUniversityProject.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-               
                 int userId = await accountRepository.UserInfoId(User.Identity.Name);
-                var list = reservationRepository.GetUserReservations(userId, page, reserveFilter);
-                list.ReserveFilterViewModel = new ReserveFilterViewModel();
-                if (reserveFilter != null)
-                {
-                    list.ReserveFilterViewModel = reserveFilter;
-                }
-                
+                var list = await reservationRepository.GetUserReservations(userId, page, reserveFilter);
                 return View(list);
                 //ViewBag.CurrentFilter = searching;
 

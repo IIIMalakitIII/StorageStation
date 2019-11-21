@@ -23,24 +23,26 @@ namespace MyUniversityProject.Models.FilterModel
 
         public string SortItem { get; set; }
 
-        public string SearchFilter { get; set; }
+        //public string SearchFilter { get; set; }
         public string SearchValue { get; set; }
 
         public IEnumerable<SelectListItem> SortList => _sortItems;
         private readonly List<SelectListItem> _sortItems = new List<SelectListItem> { new SelectListItem { Text = "Default", Value = "Default" },
-                                                                                      new SelectListItem { Text = "Date (from Min to Max)", Value = "Date_ASC"},
-                                                                                      new SelectListItem { Text = "Date (from Max to Min)", Value = "Date_DESC"},
-                                                                                      new SelectListItem { Text = "Status Active", Value = "Status_Active"},
-                                                                                      new SelectListItem { Text = "Status Diactive", Value = "Status_Diactive"},
+                                                                                      new SelectListItem { Text = "From Min to Max Start Reserve Date", Value = "StartDate_ASC"},
+                                                                                      new SelectListItem { Text = "From Max to Min Start Reserve Date", Value = "StartDate_DESC"},
+                                                                                      new SelectListItem { Text = "From Min to Max End Reserve Date", Value = "EndDate_ASC"},
+                                                                                      new SelectListItem { Text = "From Max to Min End Reserve Date", Value = "EndDate_DESC"},
+                                                                                      new SelectListItem { Text = "Active First", Value = "Status_Active"},
+                                                                                      new SelectListItem { Text = "Active Last", Value = "Status_Diactive"},
                                                                                       new SelectListItem { Text = "Price (from Min to Max)", Value = "Price_ASC" },
                                                                                       new SelectListItem { Text = "Price (from Max to Min)", Value = "Price_DESC" }};
-        public IEnumerable<SelectListItem> SortListParams => _sortItemsParams;
-        private readonly List<SelectListItem> _sortItemsParams = new List<SelectListItem> { new SelectListItem { Text = "Any", Value = "Any" },
-                                                                                      new SelectListItem { Text = "Price", Value = "Price" },
+        public IEnumerable<SelectListItem> SearchFilter => _searchFilter;
+        private readonly List<SelectListItem> _searchFilter = new List<SelectListItem> { new SelectListItem { Text = "Any", Value = "Any" },
                                                                                       new SelectListItem { Text = "Location", Value = "Location" },
                                                                                       new SelectListItem { Text = "Reservation Id", Value = "ReservationId" },
                                                                                       new SelectListItem { Text = "Location", Value = "Location" },
-                                                                                      new SelectListItem { Text = "Cell Id", Value = "Cell_Id" }};
+                                                                                      new SelectListItem { Text = "Status", Value = "Active"},
+                                                                                      new SelectListItem { Text = "Cell Id", Value = "CellId" }};
     }
 }
 

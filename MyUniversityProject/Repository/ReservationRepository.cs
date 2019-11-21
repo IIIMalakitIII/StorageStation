@@ -9,6 +9,7 @@ using MyUniversityProject.Serviece;
 using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -204,63 +205,164 @@ namespace MyUniversityProject.Repository
                 .Where( x => x.UserInfoId == userId)
                 .ToListAsync();
         }
-        
 
-        public IndexReserveModel GetUserReservations(int userId, int page, ReserveFilterViewModel reserve)
+        public async Task<IEnumerable<Reservation>> GetSearchingReserve(int userId, ReserveFilterViewModel reserve)
         {
+            switch (reserve.SearchValue)
+            {
+                case "Location":
+                    return await dataContext.Reservations
+                        .Include(x => x.Cell)
+                        .ThenInclude(x => x.Storage)
+                        .Where(x =>
+                            x.UserInfoId == userId &&
+                            x.Cell.Storage.Location.Contains(reserve.SearchValue) &&
+                            x.Price >= reserve.MinPrice &&
+                            x.Price <= reserve.MaxPrice &&
+                            x.StartReservation >= reserve.FirstDate &&
+                            x.EndReservation <= reserve.SecondDate
+                        )
+                        .ToListAsync();
+                case "CellId":
+                    return await dataContext.Reservations
+                        .Include(x => x.Cell)
+                        .ThenInclude(x => x.Storage)
+                        .Where(x =>
+                            x.UserInfoId == userId &&
+                            x.CellId.ToString().Contains(reserve.SearchValue) &&
+                            x.Price >= reserve.MinPrice &&
+                            x.Price <= reserve.MaxPrice &&
+                            x.StartReservation >= reserve.FirstDate &&
+                            x.EndReservation <= reserve.SecondDate
+                        )
+                        .ToListAsync();
+                case "ReservationId":
+                    return await dataContext.Reservations
+                        .Include(x => x.Cell)
+                        .ThenInclude(x => x.Storage)
+                        .Where(x =>
+                            x.UserInfoId == userId &&
+                            x.ReservationId.ToString().Contains(reserve.SearchValue) &&
+                            x.Price >= reserve.MinPrice &&
+                            x.Price <= reserve.MaxPrice &&
+                            x.StartReservation >= reserve.FirstDate &&
+                            x.EndReservation <= reserve.SecondDate
+                        )
+                        .ToListAsync();
+                case "Active":
+                    bool any = reserve.SearchValue.Contains("Active") ||
+                        reserve.SearchValue.Contains("active") ||
+                        reserve.SearchValue.Contains("true") ||
+                        reserve.SearchValue.Contains("True") ||
+                        reserve.SearchValue.Contains("1") ||
+                        reserve.SearchValue.Contains("activ")
+                        ;
+                    return await dataContext.Reservations
+                        .Include(x => x.Cell)
+                        .ThenInclude(x => x.Storage)
+                        .Where(x =>
+                            x.UserInfoId == userId &&
+                            x.Status == any &&
+                            x.Price >= reserve.MinPrice &&
+                            x.Price <= reserve.MaxPrice &&
+                            x.StartReservation >= reserve.FirstDate &&
+                            x.EndReservation <= reserve.SecondDate
+                        )
+                        .ToListAsync();
+                default:
+                    return await dataContext.Reservations
+                        .Include(x => x.Cell)
+                        .ThenInclude(x => x.Storage)
+                        .Where(x =>
+                            x.UserInfoId == userId &&
+                            x.Price >= reserve.MinPrice &&
+                            x.Price <= reserve.MaxPrice &&
+                            x.StartReservation >= reserve.FirstDate &&
+                            x.EndReservation <= reserve.SecondDate && 
+                            (x.Price.ToString().Contains(reserve.SearchValue) ||
+                            x.ReservationId.ToString().Contains(reserve.SearchValue) ||
+                            x.StartReservation.ToString().Contains(reserve.SearchValue) ||
+                            x.EndReservation.ToString().Contains(reserve.SearchValue) ||
+                            x.CellId.ToString().Contains(reserve.SearchValue) ||
+                            x.Cell.Storage.Location.Contains(reserve.SearchValue)
+                            )
+                        )
+                        .ToListAsync();
+            }
+                                                    
+        }
+
+
+        public async Task<IndexReserveModel> GetUserReservations(int userId, int page, ReserveFilterViewModel reserve)
+        {
+
+            if (reserve == null)
+            {
+                reserve = new ReserveFilterViewModel();
+                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Price);
+                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Price);
+                reserve.FirstDate = DateTime.MinValue;
+                reserve.SecondDate = DateTime.MaxValue;
+                reserve.SortItem = "";
+                reserve.SearchValue = "";
+            }
+            if (reserve.SearchValue == null)
+            {
+                reserve.SearchValue = "";
+            }
+            if (reserve.SortItem == null)
+            {
+                reserve.SortItem = "";
+                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Price);
+                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Price);
+            }
+            if (reserve.SecondDate == DateTime.MinValue  )
+            {
+                reserve.SecondDate = DateTime.MaxValue;
+            }
+            IEnumerable<Reservation> item = new List<Reservation>();
+            item = await GetSearchingReserve(userId, reserve);
+
             switch (reserve.SortItem)
             {
-
-
-
-                case "":
-                    return dataContext.Reservations.Include(x => x.Cell)
-                        .ThenInclude(x => x.Storage)
-                    .Where(x => 
-                    x.UserInfoId == userId && 
-                    x.StartReservation >= reserve.FirstDate && 
-                    x.EndReservation <= reserve.SecondDate && 
-                    (x.Price.ToString().Contains(reserve.SearchFilter) ||
-                    x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
-                    x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
-                    x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
-                    x.CellId.ToString().Contains(reserve.SearchFilter) ||
-                    x.Cell.Storage.Location.Contains(reserve.SearchFilter)
-                    ))
-                    .OrderByDescending(x => x);
-                case "Location":
-                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
-                        .OrderBy(o => o.Location).ToListAsync();
-                case "location":
-                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
-                        .OrderByDescending(o => o.Location).ToListAsync();
+                case "Price_ASC":
+                    item.OrderBy(x => x.Price);
+                    break;
+                case "Price_DESC":
+                    item.OrderByDescending(x => x.Price);
+                    break;
+                case "Status_Active":
+                    item.OrderBy(x => x.Status);
+                    break;
+                case "Status_Diactive":
+                    item.OrderByDescending(x => x.Status);
+                    break;
+                case "StartDate_ASC":
+                    item.OrderBy(x => x.StartReservation);
+                    break;
+                case "StartDate_DESC":
+                    item.OrderByDescending(x => x.StartReservation);
+                    break;
+                case "EndDate_ASC":
+                    item.OrderBy(x => x.EndReservation);
+                    break;
+                case "EndDate_DESC":
+                    item.OrderByDescending(x => x.EndReservation);
+                    break;
                 default:
-                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
-                        .OrderBy(o => o.Status).ToListAsync();
+                    break;
             }
 
-            /*IQueryable<Reservation> reserve = dataContext.Reservations
-                .Include(x => x.Cell)
-                .ThenInclude(x => x.Storage)
-                .Where(x => x.UserInfoId == userId && 
-                    (x.Price.ToString().Contains(search) || 
-                    x.ReservationId.ToString().Contains(search) ||
-                    x.StartReservation.ToString().Contains(search) ||
-                    x.EndReservation.ToString().Contains(search) ||
-                    x.CellId.ToString().Contains(search) ||
-                    x.Cell.Storage.Location.Contains(search)
-                    ))
-                .OrderByDescending(x => x);
-                */
-                //dataContext.Cells.Where(o => o.StorageId == storageId);
-            var count = reserve.Count();
-            var skipCells = reserve.Skip((page - 1) * 3).Take(3).ToList();
+
+            var count = item.Count();
+            var skipCells = item.Skip((page - 1) * 3).Take(3).ToList();
 
             PageViewModel pageViewModel = new PageViewModel(count, page, 3);
             IndexReserveModel viewModel = new IndexReserveModel
             {
                 PageViewModel = pageViewModel,
-                Reservations = skipCells
+                Reservations = skipCells,
+                ReserveFilterViewModel = reserve
             };
             return viewModel;
         }
