@@ -91,13 +91,29 @@ namespace MyUniversityProject.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> ReservationHistory(ReserveFilterViewModel reserveFilter, int page = 1)
+        public async Task<IActionResult> _ReservationHistory([Bind("SearchFilter,SortItem,MinPrice,MaxPrice,SearchValue,FirstDate,SecondDate")] ReserveFilterViewModel reserveFilter, int page = 1)
         {
             if (User.Identity.IsAuthenticated)
             {
                 int userId = await accountRepository.UserInfoId(User.Identity.Name);
                 var list = await reservationRepository.GetUserReservations(userId, page, reserveFilter);
-                return View(list);
+                return PartialView(list);
+                //ViewBag.CurrentFilter = searching;
+
+            }
+            return RedirectToAction(nameof(Login));
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ReservationHistory([Bind("SearchFilter,SortItem,MinPrice,MaxPrice,SearchValue,FirstDate,SecondDate")] ReserveFilterViewModel reserveFilter, int page = 1)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = await accountRepository.UserInfoId(User.Identity.Name);
+                var list = await reservationRepository.GetUserReservations(userId, page, reserveFilter);
+                return View("ListOfReserve",list);
                 //ViewBag.CurrentFilter = searching;
 
             }

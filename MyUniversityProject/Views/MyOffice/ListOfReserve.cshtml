@@ -1,0 +1,15 @@
+﻿@using MyUniversityProject.Models.Pagination;
+@using MyUniversityProject.Models.FilterModel
+@model IndexReserveModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<script src="~/lib/bootstrap/js/jquery.unobtrusive-ajax.min.js"></script>
+<div class="row">
+    <div class="col-md-5">
+        @await Html.PartialAsync("_ReserveFilter", Model.ReserveFilterViewModel)
+    </div>
+    <div class="col-md-7">
+        @await Html.PartialAsync("_ReservationHistory", Model)
+    </div>
+</div>

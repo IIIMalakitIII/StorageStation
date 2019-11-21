@@ -21,7 +21,6 @@ namespace MyUniversityProject.Repository
     {
         private readonly DataContext dataContext;
 
-
         public ReservationRepository(DataContext dataContext)
         {
             this.dataContext = dataContext;
@@ -216,7 +215,7 @@ namespace MyUniversityProject.Repository
                         .ThenInclude(x => x.Storage)
                         .Where(x =>
                             x.UserInfoId == userId &&
-                            x.Cell.Storage.Location.Contains(reserve.SearchValue) &&
+                            x.Cell.Storage.Location.Contains(reserve.SearchFilter) &&
                             x.Price >= reserve.MinPrice &&
                             x.Price <= reserve.MaxPrice &&
                             x.StartReservation >= reserve.FirstDate &&
@@ -229,7 +228,7 @@ namespace MyUniversityProject.Repository
                         .ThenInclude(x => x.Storage)
                         .Where(x =>
                             x.UserInfoId == userId &&
-                            x.CellId.ToString().Contains(reserve.SearchValue) &&
+                            x.CellId.ToString().Contains(reserve.SearchFilter) &&
                             x.Price >= reserve.MinPrice &&
                             x.Price <= reserve.MaxPrice &&
                             x.StartReservation >= reserve.FirstDate &&
@@ -242,7 +241,7 @@ namespace MyUniversityProject.Repository
                         .ThenInclude(x => x.Storage)
                         .Where(x =>
                             x.UserInfoId == userId &&
-                            x.ReservationId.ToString().Contains(reserve.SearchValue) &&
+                            x.ReservationId.ToString().Contains(reserve.SearchFilter) &&
                             x.Price >= reserve.MinPrice &&
                             x.Price <= reserve.MaxPrice &&
                             x.StartReservation >= reserve.FirstDate &&
@@ -250,7 +249,7 @@ namespace MyUniversityProject.Repository
                         )
                         .ToListAsync();
                 case "Active":
-                    bool any = reserve.SearchValue.Contains("Active") ||
+                    bool any = reserve.SearchFilter.Contains("Active") ||
                         reserve.SearchValue.Contains("active") ||
                         reserve.SearchValue.Contains("true") ||
                         reserve.SearchValue.Contains("True") ||
@@ -279,12 +278,12 @@ namespace MyUniversityProject.Repository
                             x.Price <= reserve.MaxPrice &&
                             x.StartReservation >= reserve.FirstDate &&
                             x.EndReservation <= reserve.SecondDate && 
-                            (x.Price.ToString().Contains(reserve.SearchValue) ||
-                            x.ReservationId.ToString().Contains(reserve.SearchValue) ||
-                            x.StartReservation.ToString().Contains(reserve.SearchValue) ||
-                            x.EndReservation.ToString().Contains(reserve.SearchValue) ||
-                            x.CellId.ToString().Contains(reserve.SearchValue) ||
-                            x.Cell.Storage.Location.Contains(reserve.SearchValue)
+                            (x.Price.ToString().Contains(reserve.SearchFilter) ||
+                            x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
+                            x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
+                            x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
+                            x.CellId.ToString().Contains(reserve.SearchFilter) ||
+                            x.Cell.Storage.Location.Contains(reserve.SearchFilter)
                             )
                         )
                         .ToListAsync();
@@ -308,7 +307,11 @@ namespace MyUniversityProject.Repository
             }
             if (reserve.SearchValue == null)
             {
-                reserve.SearchValue = "";
+                reserve.SearchValue = "Any";
+            }
+            if (reserve.SearchFilter == null)
+            {
+                reserve.SearchFilter = "";
             }
             if (reserve.SortItem == null)
             {
@@ -318,36 +321,39 @@ namespace MyUniversityProject.Repository
             }
             if (reserve.SecondDate == DateTime.MinValue  )
             {
-                reserve.SecondDate = DateTime.MaxValue;
+                reserve.FirstDate = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.StartReservation).Date;
+                reserve.SecondDate = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.EndReservation).Date;
             }
+
+
             IEnumerable<Reservation> item = new List<Reservation>();
             item = await GetSearchingReserve(userId, reserve);
 
             switch (reserve.SortItem)
             {
                 case "Price_ASC":
-                    item.OrderBy(x => x.Price);
+                    item = item.OrderBy(x => x.Price);
                     break;
                 case "Price_DESC":
-                    item.OrderByDescending(x => x.Price);
+                    item = item.OrderByDescending(x => x.Price);
                     break;
                 case "Status_Active":
-                    item.OrderBy(x => x.Status);
+                    item = item.OrderBy(x => x.Status);
                     break;
                 case "Status_Diactive":
-                    item.OrderByDescending(x => x.Status);
+                    item = item.OrderByDescending(x => x.Status);
                     break;
                 case "StartDate_ASC":
-                    item.OrderBy(x => x.StartReservation);
+                    item = item.OrderBy(x => x.StartReservation);
                     break;
                 case "StartDate_DESC":
-                    item.OrderByDescending(x => x.StartReservation);
+                    item = item.OrderByDescending(x => x.StartReservation);
                     break;
                 case "EndDate_ASC":
-                    item.OrderBy(x => x.EndReservation);
+                    item = item.OrderBy(x => x.EndReservation);
                     break;
                 case "EndDate_DESC":
-                    item.OrderByDescending(x => x.EndReservation);
+                    item = item.OrderByDescending(x => x.EndReservation);
                     break;
                 default:
                     break;
