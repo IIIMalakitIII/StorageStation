@@ -20,21 +20,8 @@ namespace MyUniversityProject.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            //var activeStorages = await storageRepository.GetAllStorageAsync();
             return View();
         }
-
-        //[Authorize(Roles = "Admin ,SuperUser")]
-        //[HttpGet]
-        //public async Task<IActionResult> AllStorage(string searching)
-        //{
-        //    if (searching == null)
-        //    {
-        //        searching = ""; 
-        //    }
-        //    var activeStorages = await storageRepository.GetAllStorageAsync(searching);
-        //    return View(activeStorages);
-        //}
 
         [Authorize(Roles="Admin, SuperUser")]
         [HttpGet]
@@ -52,20 +39,14 @@ namespace MyUniversityProject.Controllers
             if (!ModelState.IsValid)
                 return View("StorageInfo", storage);
 
-            if (await storageRepository.Update(storage))
+            var result = await storageRepository.Update(storage);
+
+            if (result !=null)
             {
-                await storageRepository.SaveAsync();
-                if (await storageRepository.Check(storage))
-                {
-                    return RedirectToAction(nameof(StorageInformation), "Storage", new { id = storage.StorageId });
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("", "It is impossible to close the station storage, while there is existing reservation");
+                ModelState.AddModelError("", result);
+                return View("StorageInfo", storage);
             }
 
-            ModelState.AddModelError("", "Updating wasn't successful");
             return View("StorageInfo", storage);
         }
 

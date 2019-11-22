@@ -1,4 +1,4 @@
-﻿namespace MyUniversityProject.Models
+﻿namespace MyUniversityProject.Models.ErrorViewModel
 {
     public class ErrorViewModel
     {

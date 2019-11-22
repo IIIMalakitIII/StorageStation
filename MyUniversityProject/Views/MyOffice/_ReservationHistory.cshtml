@@ -57,7 +57,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.Label("", "Price", htmlAttributes: new { @class = "control-label  text-white" })
-                                        @Html.EditorFor(model => item.Price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                       C @Html.EditorFor(model => item.Price, new { htmlAttributes = new { @class = "form-control",@readonly = "readonly" } })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -79,8 +79,8 @@
                 page-url-MinPrice=@Model.ReserveFilterViewModel.MinPrice
                 page-url-MaxPrice=@Model.ReserveFilterViewModel.MaxPrice
                 page-url-SearchValue=@Model.ReserveFilterViewModel.SearchValue
-                page-url-FirstDate=@Model.ReserveFilterViewModel.FirstDate
-                page-url-SecondDate=@Model.ReserveFilterViewModel.SecondDate>
+                page-url-FirstDate=@(Model.ReserveFilterViewModel.FirstDate==null ? null:Model.ReserveFilterViewModel.FirstDate.Value.Date.ToString("yyyy-MM-dd"))
+                page-url-SecondDate=@(Model.ReserveFilterViewModel.SecondDate==null ? null:Model.ReserveFilterViewModel.SecondDate.Value.Date.ToString("yyyy-MM-dd"))>
             </page-link>
         </li>
     </ul>

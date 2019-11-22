@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
+using MyUniversityProject.Models.ErrorViewModel;
 using MyUniversityProject.Models.Pagination;
 using System;
 using System.Collections.Generic;
@@ -46,11 +47,11 @@ namespace MyUniversityProject.Repository
             .Where(o => o.StorageId == id)
             .FirstOrDefaultAsync();
 
-        public async Task<List<Cell>> GetAllStorageInfoAsync(int storageId) =>
+        public async Task<IEnumerable<Cell>> GetAllStorageInfoAsync(int storageId) =>
             await dataContext.Cells
                 .AsNoTracking()
                 .Include(o => o.Reservations)
-                .Where(x => x.StorageId == storageId && x.Reservations.All(r => r.Status))
+                .Where(x => x.StorageId == storageId && x.Reservations.Any(r => r.Status))
                 .ToListAsync();
 
         public async Task<IEnumerable<Cell>> GetCellsAsync(int storageId) =>
@@ -94,6 +95,7 @@ namespace MyUniversityProject.Repository
             }
             return list;
         }
+        /*
         public async Task SaveAsync()
         {
             try
@@ -105,6 +107,7 @@ namespace MyUniversityProject.Repository
                 throw new Exception("We are sorry. Your operation conflicted with another operation in database. It has been cancelled.");
             }
         }
+        */
 
         public List<Storage> GetStoragesCell()
         {
@@ -115,6 +118,7 @@ namespace MyUniversityProject.Repository
             return Storage;
         }
 
+        /*
         public async Task<bool> Update(Storage storage)
         {
 
@@ -146,6 +150,30 @@ namespace MyUniversityProject.Repository
                 return true;
             }
           
+        }*/
+
+        public async Task<string> SaveAsync()
+        {
+            try
+            {
+                await dataContext.SaveChangesAsync();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public async Task<string> Update(Storage storage)
+        {
+            var listOfCells = await GetAllStorageInfoAsync(storage.StorageId);
+            if(listOfCells.Count() > 0 && !storage.Status)
+            {
+                return "It is impossible to close the station storage, while there is existing reservation"; 
+            }
+            dataContext.Update(storage);
+            return await SaveAsync();
         }
 
         public async Task<bool> Check(Storage storage)

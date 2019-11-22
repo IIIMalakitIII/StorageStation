@@ -24,11 +24,16 @@ using MyUniversityProject.Models;
 #line default
 #line hidden
 #line 3 "C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\Views\_ViewImports.cshtml"
-using Microsoft.AspNetCore.Http;
+using MyUniversityProject.Models.ErrorViewModel;
 
 #line default
 #line hidden
 #line 4 "C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\Views\_ViewImports.cshtml"
+using Microsoft.AspNetCore.Http;
+
+#line default
+#line hidden
+#line 5 "C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\Views\_ViewImports.cshtml"
 using Microsoft.AspNetCore.Identity;
 
 #line default
@@ -39,7 +44,7 @@ using MyUniversityProject.Models.Pagination;
 #line default
 #line hidden
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"b8a319f08bb49f3c5446ee9584e00e0a94912df1", @"/Views/Storage/ListOfCells.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"91ade478114418871ab43e38a2e377a8ee271c89", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"9db963d04bd4b185239d217111c0291317422622", @"/Views/_ViewImports.cshtml")]
     public class Views_Storage_ListOfCells : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<IndexCellModel>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("page-action", "ListOfCells", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -161,7 +166,7 @@ using MyUniversityProject.Models.Pagination;
             WriteLiteral("                    </table>\r\n                </li>\r\n                <li class=\"list-group-item-secondary text-center\" style=\"list-style-type:none\">\r\n                    ");
             EndContext();
             BeginContext(2172, 154, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("page-link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b8a319f08bb49f3c5446ee9584e00e0a94912df19227", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("page-link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b8a319f08bb49f3c5446ee9584e00e0a94912df19411", async() => {
             }
             );
             __MyUniversityProject_Helpers_PageLinkTagHelper = CreateTagHelper<global::MyUniversityProject.Helpers.PageLinkTagHelper>();

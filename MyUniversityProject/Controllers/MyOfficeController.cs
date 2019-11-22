@@ -8,10 +8,10 @@ using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.AuthenticationModel;
 using MyUniversityProject.Models.FilterModel;
-using MyUniversityProject.Models.Pagination;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
+using MyUniversityProject.Models.ErrorViewModel;
 using System.Threading.Tasks;
 
 namespace MyUniversityProject.Controllers

@@ -16,9 +16,10 @@ namespace MyUniversityProject.IRepository
         List<Storage> GetStoragesCell();
         Task<Storage> GetStorageInfoAsync(int id);
         Task<bool> Check(Storage storage);
-        Task<bool> Update(Storage storage);
-        Task<List<Cell>> GetAllStorageInfoAsync(int storageId);
-        Task SaveAsync();
+        //Task<bool> Update(Storage storage);
+        Task<string> Update(Storage storage);
+        Task<IEnumerable<Cell>> GetAllStorageInfoAsync(int storageId);
+        Task<string> SaveAsync();
 
 
     }
