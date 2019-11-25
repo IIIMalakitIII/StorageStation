@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Repository;
+using System.Globalization;
 
 namespace MyUniversityProject
 {
@@ -65,7 +66,20 @@ namespace MyUniversityProject
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseRequestLocalization();
+            //app.UseRequestLocalization();
+            var supportedCultures = new[]
+{
+                new CultureInfo("en-US"),
+                new CultureInfo("en"),
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-US"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
+
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

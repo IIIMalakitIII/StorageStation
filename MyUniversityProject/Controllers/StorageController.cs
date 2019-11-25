@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
+using MyUniversityProject.Models.FilterModel;
 using System;
 using System.Threading.Tasks;
 
@@ -28,6 +29,8 @@ namespace MyUniversityProject.Controllers
         public async Task<IActionResult> StorageInformation(int id)
         {
             var activeStorages = await storageRepository.GetStorageInfoAsync(id);
+            ViewBag.Filter = new CellFilterViewModel() { StorageId = id};
+
             return View("StorageInfo", activeStorages);
         }
 
@@ -46,8 +49,23 @@ namespace MyUniversityProject.Controllers
                 ModelState.AddModelError("", result);
                 return View("StorageInfo", storage);
             }
-
+            
             return View("StorageInfo", storage);
+        }
+
+        [Authorize(Roles = "Admin, SuperUser")]
+        [HttpPost]
+        public async Task<IActionResult> _CreateStorage(Storage storage)
+        {
+            if (!ModelState.IsValid)
+                return View(storage);
+            var result = await storageRepository.CreateStorageAsync(storage);
+            if (result != null)
+            {
+                ModelState.AddModelError("Error", result);
+                return View(storage);
+            }
+            return RedirectToAction(nameof(AllStorage));
         }
 
 
@@ -77,14 +95,16 @@ namespace MyUniversityProject.Controllers
             return View(activeStorages);
         }
 
-
         [Authorize(Roles = "Admin ,SuperUser")]
         [HttpGet]
-        public async Task<IActionResult> ListOfCells(int id, int page=1)
+        public async Task<IActionResult> StorageCells([Bind("StorageId," +
+            "MinWidth, MaxWidth, MinHeight, MaxHeight, MinLength, MaxLength, MinCapacity," +
+            "MaxCapacity,SearchValue,SearchFilter,SortItem")]CellFilterViewModel cellFilterViewModel, int page=1)
         {
-            var activeStorages = await storageRepository.GetCellsAsync(id, page);
-            return View(activeStorages);
+            var storageCells = await storageRepository.GetCellsAsync(cellFilterViewModel, page);
+            return View(storageCells);
         }
 
+        
     }
 }

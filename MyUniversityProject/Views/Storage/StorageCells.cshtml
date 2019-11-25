@@ -1,0 +1,9 @@
+﻿@model MyUniversityProject.Models.Pagination.IndexCellViewModel
+<div class="row">
+    <div class="col-md-5">
+        @await Html.PartialAsync("_CellFilter", Model.CellFilterViewModel)
+    </div>
+    <div class="col-md-7">
+        @await Html.PartialAsync("_ListOfCells", Model)
+    </div>
+</div>

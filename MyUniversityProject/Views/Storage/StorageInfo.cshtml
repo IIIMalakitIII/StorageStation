@@ -1,5 +1,5 @@
 ﻿@model MyUniversityProject.Models.Storage
-
+@using MyUniversityProject.Models.FilterModel
 @{
     ViewData["Title"] = "StorageInfo";
 }
@@ -51,7 +51,7 @@
                     </li>
                 </ul>
             }
-                @Html.ActionLink("Look at the list of cells", "ListOfCells", "Storage", new { id = Model.StorageId }, new { @class = "btn btn-primary btn-block", @style = "background:#8b00ff;" })
+            @Html.ActionLink("Look at the list of cells", "StorageCells", "Storage", new { StorageId = Model.StorageId}, new { @class = "btn btn-primary btn-block", @style = "background:#8b00ff;" })
         </div>
     </div>
 </div>

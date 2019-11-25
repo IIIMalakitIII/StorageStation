@@ -2,6 +2,7 @@
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.ErrorViewModel;
+using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
 using System;
 using System.Collections.Generic;
@@ -57,7 +58,7 @@ namespace MyUniversityProject.Repository
         public async Task<IEnumerable<Cell>> GetCellsAsync(int storageId) =>
             await dataContext.Cells.Where(o => o.StorageId == storageId).ToListAsync();
 
-        public async Task<IndexCellModel> GetCellsAsync(int storageId, int page)
+        /*public async Task<IndexCellViewModel> GetCellsAsync(int storageId, int page)
         {
             IQueryable<Cell> cells = dataContext.Cells.Where(o => o.StorageId == storageId);
             var count = cells.Count();
@@ -65,14 +66,21 @@ namespace MyUniversityProject.Repository
             
             var list = await Task.Run(()=> ListCells(skipCells));
             PageViewModel pageViewModel = new PageViewModel(count, page, 20);
-            IndexCellModel viewModel = new IndexCellModel
+            IndexCellViewModel viewModel = new IndexCellViewModel
             {
                 PageViewModel = pageViewModel,
                 Cells = list
             };
             return viewModel;
         }
+        */
 
+
+        public async Task<string> CreateStorageAsync(Storage storage)
+        {
+            await dataContext.Storages.AddAsync(storage);
+            return await SaveAsync();
+        }
         public List<List<Cell>> ListCells(List<Cell> skipCells)
         {
             List<List<Cell>> list = new List<List<Cell>>();
@@ -83,7 +91,6 @@ namespace MyUniversityProject.Repository
 
                 for (int j = index; j < skipCells.Count(); j++)
                 {
-
                     listcell.Add(skipCells[j]);
                     if (listcell.Count== 5)
                     {
@@ -95,19 +102,6 @@ namespace MyUniversityProject.Repository
             }
             return list;
         }
-        /*
-        public async Task SaveAsync()
-        {
-            try
-            {
-                await dataContext.SaveChangesAsync();
-            }
-            catch
-            {
-                throw new Exception("We are sorry. Your operation conflicted with another operation in database. It has been cancelled.");
-            }
-        }
-        */
 
         public List<Storage> GetStoragesCell()
         {
@@ -118,40 +112,7 @@ namespace MyUniversityProject.Repository
             return Storage;
         }
 
-        /*
-        public async Task<bool> Update(Storage storage)
-        {
-
-            var oldStorage = await GetStorageInfoAsync(storage.StorageId);
-            if (oldStorage.Status == storage.Status || storage.Status)
-            {
-                dataContext.Storages.Update(storage);
-                return true;
-            }
-            else
-            {
-                var listOfCells = await GetAllStorageInfoAsync(storage.StorageId);
-                if (listOfCells == null)
-                {
-                    dataContext.Storages.Update(storage);
-                    return true;
-                }
-                else
-                {
-                    foreach (var cell in listOfCells)
-                    {
-                        if (cell.Reservations.Count > 0)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                dataContext.Storages.Update(storage);
-                return true;
-            }
-          
-        }*/
-
+      
         public async Task<string> SaveAsync()
         {
             try
@@ -176,10 +137,156 @@ namespace MyUniversityProject.Repository
             return await SaveAsync();
         }
 
-        public async Task<bool> Check(Storage storage)
+        public async Task<IndexCellViewModel> GetCellsAsync(CellFilterViewModel cellFilter, int page)
         {
-            Storage storageFind = await GetStorageInfoAsync(storage.StorageId);
-            return storageFind == storage;
+            if (cellFilter == null)
+            {
+                cellFilter = new CellFilterViewModel();
+                cellFilter.SortItem = "";
+                cellFilter.SearchValue = "";
+                cellFilter.SearchFilter = "";
+            }
+            cellFilter.SearchValue = cellFilter.SearchValue == null ? "Any" : cellFilter.SearchValue;
+            cellFilter.SearchFilter = cellFilter.SearchFilter == null ? "" : cellFilter.SearchFilter;
+            cellFilter.SortItem = cellFilter.SortItem == null ? "" : cellFilter.SortItem;
+
+            IEnumerable<Cell> cells = OrderByCell(await FilterSearch(cellFilter), cellFilter.SortItem);
+            
+            var count = cells.Count();
+            var skipCells = cells.Skip((page - 1) * 20).Take(20).ToList();
+
+            var list = ListCells(skipCells);
+            PageViewModel pageViewModel = new PageViewModel(count, page, 20);
+            IndexCellViewModel viewModel = new IndexCellViewModel
+            {
+                PageViewModel = pageViewModel,
+                Cells = list,
+                CellFilterViewModel = cellFilter
+            };
+            return viewModel;
+        }
+
+        public async Task<IEnumerable<Cell>> FilterSearch(CellFilterViewModel cellFilter)
+        {
+            IQueryable<Cell> list = dataContext.Cells
+                .AsNoTracking()
+                .Include(x => x.Standard)
+                .Where(x => x.StorageId == cellFilter.StorageId);
+
+            if(cellFilter.MaxWidth ==0 && cellFilter.MinWidth != 0)
+            {
+                list = list.Where(x => x.Width >= cellFilter.MinWidth);
+            }
+            else if(cellFilter.MaxWidth != 0 && cellFilter.MinWidth != 0)
+            {
+                list = list.Where(x => x.Width >= cellFilter.MinWidth && x.Width <= cellFilter.MaxWidth);
+            }
+
+            if (cellFilter.MaxHeight == 0 && cellFilter.MinHeight != 0)
+            {
+                list = list.Where(x => x.Height >= cellFilter.MinHeight);
+            }
+            else if (cellFilter.MaxHeight != 0 && cellFilter.MinHeight != 0)
+            {
+                list = list.Where(x => x.Height >= cellFilter.MinHeight && x.Height <= cellFilter.MaxHeight);
+            }
+
+            if (cellFilter.MaxLength == 0 && cellFilter.MinLength != 0)
+            {
+                list = list.Where(x => x.Length >= cellFilter.MinLength);
+            }
+            else if (cellFilter.MaxLength != 0 && cellFilter.MinLength != 0)
+            {
+                list = list.Where(x => x.Length >= cellFilter.MinLength && x.Length <= cellFilter.MaxLength);
+            }
+
+            if (cellFilter.MaxCapacity == 0 && cellFilter.MinCapacity != 0)
+            {
+                list = list.Where(x => x.Capacity >= cellFilter.MinCapacity);
+            }
+            else if (cellFilter.MaxCapacity != 0 && cellFilter.MinCapacity != 0)
+            {
+                list = list.Where(x => x.Capacity >= cellFilter.MinCapacity && x.Capacity <= cellFilter.MaxCapacity);
+            }
+
+            switch (cellFilter.SearchValue)
+            {
+                case "Width":
+                    return await list
+                        .Where(x => x.Width.ToString().Contains(cellFilter.SearchFilter))
+                        .ToListAsync();
+                case "Height":
+                    return await list
+                        .Where(x => x.Height.ToString().Contains(cellFilter.SearchFilter))
+                        .ToListAsync();
+                case "Length":
+                    return await list
+                        .Where(x => x.Length.ToString().Contains(cellFilter.SearchFilter))
+                        .ToListAsync();
+                case "Capacity":
+                    return await list
+                        .Where(x => x.Capacity.ToString().Contains(cellFilter.SearchFilter))
+                        .ToListAsync();
+                case "Standart_Id":
+                    return await list
+                        .Where(x => x.StandardId.ToString().Contains(cellFilter.SearchFilter))
+                        .ToListAsync();
+                case "Standart_Price":
+                    return await list
+                        .Where(x => x.Standard.Price.ToString().Contains(cellFilter.SearchFilter))
+                        .ToListAsync();
+                case "Status":
+                    bool statusFilter =
+                        cellFilter.SearchFilter == "Active" ||
+                        cellFilter.SearchFilter == "active" ||
+                        cellFilter.SearchFilter == "True" ||
+                        cellFilter.SearchFilter == "true" ||
+                        cellFilter.SearchFilter == "1";
+
+                    return await list
+                        .Where(x => x.Status == statusFilter)
+                        .ToListAsync();
+                default:
+                    return await list
+                        .Where(x => 
+                             x.Standard.Price.ToString().Contains(cellFilter.SearchFilter) ||
+                             x.StandardId.ToString().Contains(cellFilter.SearchFilter) ||
+                             x.Capacity.ToString().Contains(cellFilter.SearchFilter) ||
+                             x.Height.ToString().Contains(cellFilter.SearchFilter) ||
+                             x.Length.ToString().Contains(cellFilter.SearchFilter) ||
+                             x.Width.ToString().Contains(cellFilter.SearchFilter) ||
+                             x.Status.ToString().Contains(cellFilter.SearchFilter)
+                            )
+                        .ToListAsync();
+            }
+        }
+        public IEnumerable<Cell> OrderByCell(IEnumerable<Cell> cells, string sortItem)
+        {
+            switch (sortItem)
+            {
+                case "Width_ASC":
+                    return cells.OrderBy(x => x.Width);
+                case "Width_DESC":
+                    return cells.OrderByDescending(x => x.Width);
+                case "Height_ASC":
+                    return cells.OrderBy(x => x.Height);
+                case "Height_DESC":
+                    return cells.OrderByDescending(x => x.Height);
+                case "Capacity_ASC":
+                    return cells.OrderBy(x => x.Capacity);
+                case "Capacity_DESC":
+                    return cells.OrderByDescending(x => x.Capacity);
+                case "Length_ASC":
+                    return cells.OrderBy(x => x.Length);
+                case "Length_DESC":
+                    return cells.OrderByDescending(x => x.Length);
+                case "Price_ASC":
+                    return cells.OrderBy(x => x.Standard.Price);
+                case "Price_DESC":
+                    return cells.OrderByDescending(x => x.Standard.Price);
+                default:
+                    return cells.OrderBy(x => x.CellId); ;
+            }
         }
     }
 }

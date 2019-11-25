@@ -1,4 +1,118 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model MyUniversityProject.Models.FilterModel.CellFilterViewModel
+
+
+<div class="wrapper-reserv">
+    <div class="wrapped-div-2">
+        <div class="col-md-12 offset-md-0">
+            @using (Html.BeginForm("StorageCells", "Storage", FormMethod.Get, new { @class = "mt-4" }))
+            {
+                @Html.HiddenFor(x=>x.StorageId)
+            <ul class="list-group">
+                <li class="list-group-item bg-dark d-flex justify-content-center">
+                    <div class="form-group">
+                        <div class="input-group">
+                            @Html.DropDownListFor(x => x.SearchValue, Model.SearchParams, new { @class = "form-control", @Value = Model.SearchValue })
+                            @Html.EditorFor(x => x.SearchFilter, new { htmlAttributes = new { @class = "form-control", @placeholder = "Search" } })
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item bg-dark d-flex justify-content-center">
+                    <div class="form-group">
+                        @Html.Label("", "Order by:", htmlAttributes: new { @class = "control-label  text-white" })
+                        @Html.DropDownListFor(x => x.SortItem, Model.SortList, new { @class = "form-control", @Value = Model.SortItem })
+                    </div>
+                </li>
+                <li class="list-group-item bg-dark" id="accordionExample">
+                    <div class="text-center">
+                        <button class="btn btn-info btn-sm btn-block" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Width
+                        </button>
+                    </div>
+                    <div class="row collapse" id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("", "From:", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(x => x.MinWidth, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("", "To:", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(x => x.MaxWidth, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item bg-dark" id="accordionExample2">
+                        <div class="text-center">
+                            <button class="btn btn-info btn-sm btn-block" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Height
+                            </button>
+                        </div>
+                        <div class="row collapse" id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("", "From:", htmlAttributes: new { @class = "control-label text-white" })
+                                    @Html.EditorFor(x => x.MinHeight, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("", "To:", htmlAttributes: new { @class = "control-label text-white" })
+                                    @Html.EditorFor(x => x.MaxHeight, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                                </div>
+                            </div>
+                        </div>
+                </li>
+                <li class="list-group-item bg-dark" id="accordionExample3">
+                    <div class="text-center">
+                        <button class="btn btn-info btn-sm btn-block" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Length
+                        </button>
+                    </div>
+                    <div class="row collapse" id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("", "From:", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(x => x.MinLength, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("", "To:", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(x => x.MaxLength, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item bg-dark" id="accordionExample4">
+                    <div class="text-center">
+                        <button class="btn btn-info btn-sm btn-block" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Capacity
+                        </button>
+                    </div>
+                    <div class="row collapse" id="collapseFour" aria-labelledby="headingFour">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("", "From:", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(x => x.MinCapacity, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("", "To:", htmlAttributes: new { @class = "control-label text-white" })
+                                @Html.EditorFor(x => x.MaxCapacity, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item bg-dark">
+                    <input type="submit" class="btn btn-primary btn-lg btn-block" value="Find" />
+                </li>
+            </ul>
+            }
+
+        </div>
+    </div>
+</div>
+

@@ -9,10 +9,15 @@ namespace MyUniversityProject.Models.FilterModel
 {
     public class CellFilterViewModel
     {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int Length { get; set; }
-        public int Capacity { get; set; }
+        public int StorageId { get; set; }
+        public int MinWidth { get; set; }
+        public int MinHeight { get; set; }
+        public int MinLength { get; set; }
+        public int MinCapacity { get; set; }
+        public int MaxWidth { get; set; }
+        public int MaxHeight { get; set; }
+        public int MaxLength { get; set; }
+        public int MaxCapacity { get; set; }
         public string SearchFilter { get; set; }
         public string SearchValue { get; set; }
         public string SortItem { get; set; }
@@ -34,7 +39,8 @@ namespace MyUniversityProject.Models.FilterModel
                                                                                       new SelectListItem { Text = "Length (from Min to Max)", Value = "Length_ASC"},
                                                                                       new SelectListItem { Text = "Length (from Max to Min )", Value = "Length_DESC"},
                                                                                       new SelectListItem { Text = "Capacity (from Min to Max)", Value = "Capacity_ASC"},
-                                                                                      new SelectListItem { Text = "Capacity (from Max to Min )", Value = "Capacity_DESC"} };
-
+                                                                                      new SelectListItem { Text = "Capacity (from Max to Min )", Value = "Capacity_DESC"},
+                                                                                      new SelectListItem { Text = "Price (from Min to Max)", Value = "Price_ASC"},
+                                                                                      new SelectListItem { Text = "Price (from Max to Min )", Value = "Price_DESC"}};
     }
 }
