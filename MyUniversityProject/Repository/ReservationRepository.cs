@@ -8,8 +8,6 @@ using MyUniversityProject.Models.ReservationViewModel;
 using MyUniversityProject.Serviece;
 using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -112,7 +110,7 @@ namespace MyUniversityProject.Repository
 
             Reservation reservation = new Reservation();
             reservation.StartReservation = reservationLuggage.StartReservation;
-            reservation.Price = cell.Standard.Price * reservationLuggage.HowManyHours;
+            reservation.Amount = cell.Standard.Price * reservationLuggage.HowManyHours;
             reservation.EndReservation = reservationLuggage.StartReservation.AddHours(reservationLuggage.HowManyHours);
             reservation.UserInfoId = userInfo.UserInfoId;
             reservation.CellId = cell.CellId;
@@ -159,7 +157,7 @@ namespace MyUniversityProject.Repository
             {
                 document.EnsureMinimal();
                 document.LastParagraph.AppendText($"Reservation Id: {reservation.ReservationId} \n");
-                document.LastParagraph.AppendText($"Price: {reservation.Price} \n");
+                document.LastParagraph.AppendText($"Price: {reservation.Amount} \n");
                 document.LastParagraph.AppendText($"Start Reservation: {reservation.StartReservation} \n");
                 document.LastParagraph.AppendText($"End Reservation: {reservation.EndReservation} \n");
                 document.LastParagraph.AppendText($"Cell Id: {reservation.CellId} \n");
@@ -214,11 +212,11 @@ namespace MyUniversityProject.Repository
                     .ThenInclude(x => x.Storage)
                     .Where(x =>
                         x.UserInfoId == userId &&
-                        x.Price >= reserve.MinPrice &&
-                        x.Price <= reserve.MaxPrice &&
+                        x.Amount >= reserve.MinPrice &&
+                        x.Amount <= reserve.MaxPrice &&
                         (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
                         (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate) &&
-                        (x.Price.ToString().Contains(reserve.SearchFilter) ||
+                        (x.Amount.ToString().Contains(reserve.SearchFilter) ||
                         x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
                         x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
                         x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
@@ -238,8 +236,8 @@ namespace MyUniversityProject.Repository
                         .Where(x =>
                             x.UserInfoId == userId &&
                             x.Cell.Storage.Location.Contains(reserve.SearchFilter) &&
-                            x.Price >= reserve.MinPrice &&
-                            x.Price <= reserve.MaxPrice &&
+                            x.Amount >= reserve.MinPrice &&
+                            x.Amount <= reserve.MaxPrice &&
                             (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
                             (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
                         )
@@ -251,8 +249,8 @@ namespace MyUniversityProject.Repository
                         .Where(x =>
                             x.UserInfoId == userId &&
                             x.CellId.ToString().Contains(reserve.SearchFilter) &&
-                            x.Price >= reserve.MinPrice &&
-                            x.Price <= reserve.MaxPrice &&
+                            x.Amount >= reserve.MinPrice &&
+                            x.Amount <= reserve.MaxPrice &&
                             (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
                             (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
                         )
@@ -264,8 +262,8 @@ namespace MyUniversityProject.Repository
                         .Where(x =>
                             x.UserInfoId == userId &&
                             x.ReservationId.ToString().Contains(reserve.SearchFilter) &&
-                            x.Price >= reserve.MinPrice &&
-                            x.Price <= reserve.MaxPrice &&
+                            x.Amount >= reserve.MinPrice &&
+                            x.Amount <= reserve.MaxPrice &&
                             (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
                             (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
                         )
@@ -283,8 +281,8 @@ namespace MyUniversityProject.Repository
                         .Where(x =>
                             x.UserInfoId == userId &&
                             x.Status == any &&
-                            x.Price >= reserve.MinPrice &&
-                            x.Price <= reserve.MaxPrice &&
+                            x.Amount >= reserve.MinPrice &&
+                            x.Amount <= reserve.MaxPrice &&
                             (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
                             (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
                         )
@@ -295,11 +293,11 @@ namespace MyUniversityProject.Repository
                         .ThenInclude(x => x.Storage)
                         .Where(x =>
                             x.UserInfoId == userId &&
-                            x.Price >= reserve.MinPrice &&
-                            x.Price <= reserve.MaxPrice &&
+                            x.Amount >= reserve.MinPrice &&
+                            x.Amount <= reserve.MaxPrice &&
                             (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
                             (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate) &&
-                            (x.Price.ToString().Contains(reserve.SearchFilter) ||
+                            (x.Amount.ToString().Contains(reserve.SearchFilter) ||
                             x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
                             x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
                             x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
@@ -316,9 +314,9 @@ namespace MyUniversityProject.Repository
             switch (reserve.SortItem)
             {
                 case "Price_ASC":
-                    return list.OrderBy(x => x.Price);
+                    return list.OrderBy(x => x.Amount);
                 case "Price_DESC":
-                    return list.OrderByDescending(x => x.Price);
+                    return list.OrderByDescending(x => x.Amount);
                 case "StartDate_ASC":
                     return list.OrderBy(x => x.StartReservation);
                 case "StartDate_DESC":
@@ -339,8 +337,8 @@ namespace MyUniversityProject.Repository
             if (reserve == null)
             {
                 reserve = new ReserveFilterViewModel();
-                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Price);
-                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Price);
+                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Amount);
+                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Amount);
                 reserve.FirstDate = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.StartReservation).Date;
                 reserve.SecondDate = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.EndReservation).Date;
                 reserve.SortItem = "";
@@ -352,8 +350,8 @@ namespace MyUniversityProject.Repository
 
             if (reserve.MinPrice==0 && reserve.MaxPrice == 0)
             {
-                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Price);
-                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Price);
+                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Amount);
+                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Amount);
             }
 
             IEnumerable<Reservation> item = new List<Reservation>();

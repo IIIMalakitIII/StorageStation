@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyUniversityProject.Models
 {
@@ -10,11 +7,14 @@ namespace MyUniversityProject.Models
     {
         [Key]
         public int StandardId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "MinVolume is requred")]
+        [Range(1, 99999, ErrorMessage = "Invalid value")]
         public int MinVolume { get; set;}
-        [Required]
+        [Required(ErrorMessage = "MaxVolume is requred")]
+        [Range(1, 99999, ErrorMessage = "Invalid value")]
         public int MaxVolume { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Price is requred")]
+        [Range(typeof(decimal), "1.00", "999999.99", ErrorMessage = "Invalid value")]
         public decimal Price { get; set; }
 
         public List<Cell> Cells { get; set; } = new List<Cell>();

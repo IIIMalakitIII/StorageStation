@@ -43,7 +43,7 @@ namespace MyUniversityProject.Controllers
         {
             var result = await _storageRepository.DeleteAsync(id);
             TempData["ErrorMessage"] = result;
-            return RedirectToAction(nameof(AllStorage));
+            return RedirectToAction(nameof(GetAllStorage));
         }
 
         [Authorize(Roles = "Admin, SuperUser")]
@@ -76,13 +76,13 @@ namespace MyUniversityProject.Controllers
                 ModelState.AddModelError("Error", result);
                 return View(storage);
             }
-            return RedirectToAction(nameof(AllStorage));
+            return RedirectToAction(nameof(GetAllStorage));
         }
 
 
         [Authorize(Roles = "Admin, SuperUser")]
         [HttpGet]
-        public async Task<IActionResult> AllStorage(string currentFilter, string sortOrder, string searching)
+        public async Task<IActionResult> GetAllStorage(string currentFilter, string sortOrder, string searching)
         {
             var errMsg = TempData["ErrorMessage"];
 
@@ -232,6 +232,21 @@ namespace MyUniversityProject.Controllers
         }
 
         [Authorize(Roles = "Admin, SuperUser")]
+        [HttpPost]
+        public async Task<IActionResult> GetStandart(Standard standard)
+        {
+            if (!ModelState.IsValid)
+                return View(standard);
+            
+            var result = await _standartRepository.UpdateStandartAsync(standard);
+            if (result != null)
+            {
+                ModelState.AddModelError("", result);
+            }
+            return View(standard);
+        }
+
+        [Authorize(Roles = "Admin, SuperUser")]
         [HttpGet]
         public async Task<IActionResult> DeleteStandart(int id)
         {
@@ -253,6 +268,21 @@ namespace MyUniversityProject.Controllers
                 return View(standard);
             }
             return RedirectToAction(nameof(GetAllStandarts));
+        }
+
+        public async Task<IActionResult> _ChangeStandard(ChangeAllViewModel change)
+        {
+            if (!ModelState.IsValid)
+                return View(change);
+
+            var result = await _standartRepository.ChangeStandard(change);
+            if (result != null)
+            {
+                ModelState.AddModelError("", result);
+                return View("_ChangeStandard", change);
+            }
+
+            return View(nameof(GetStandart), new { id = change.OldId });
         }
     }
 }

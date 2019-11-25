@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyUniversityProject.Models
 {
@@ -11,13 +8,17 @@ namespace MyUniversityProject.Models
     {
         [Key]
         public int CellId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Width is requred")]
+        [Range(1, 99999, ErrorMessage = "Invalid value")]
         public int Width{ get; set; }
-        [Required]
+        [Required(ErrorMessage = "Height is requred")]
+        [Range(1, 99999, ErrorMessage = "Invalid value")]
         public int Height { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Length is requred")]
+        [Range(1, 99999, ErrorMessage = "Invalid value")]
         public int Length { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Capacity is requred")]
+        [Range(1, 99999, ErrorMessage = "Invalid value")]
         public int Capacity { get; set; }
         [Required]
         public bool Status { get; set; }

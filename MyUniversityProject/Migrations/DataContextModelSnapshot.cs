@@ -97,11 +97,11 @@ namespace MyUniversityProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("Amount");
+
                     b.Property<int>("CellId");
 
                     b.Property<DateTime>("EndReservation");
-
-                    b.Property<decimal>("Price");
 
                     b.Property<DateTime>("StartReservation");
 
@@ -132,7 +132,8 @@ namespace MyUniversityProject.Migrations
 
                     b.Property<int>("StorageId");
 
-                    b.Property<string>("WeekDay");
+                    b.Property<string>("WeekDay")
+                        .IsRequired();
 
                     b.HasKey("ScheduleId");
 
@@ -167,7 +168,8 @@ namespace MyUniversityProject.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Location")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(80);
 
                     b.Property<bool>("Status");
 
@@ -184,20 +186,21 @@ namespace MyUniversityProject.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(150);
+                        .HasMaxLength(100);
 
                     b.Property<string>("Email")
                         .IsRequired();
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(150);
+                        .HasMaxLength(80);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(150);
+                        .HasMaxLength(80);
 
-                    b.Property<string>("PassportId");
+                    b.Property<string>("PassportId")
+                        .HasMaxLength(30);
 
                     b.Property<string>("Password")
                         .IsRequired();
@@ -205,6 +208,9 @@ namespace MyUniversityProject.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(30);
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(10);
 
                     b.HasKey("UserInfoId");
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using MyUniversityProject.Models;
+using MyUniversityProject.Models.StorageViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace MyUniversityProject.IRepository
         Task<string> SaveAsync();
         Task<string> DeleteStandartAsync(int id);
         Task<string> CreateStandartAsync(Standard standard);
+        Task<string> UpdateStandartAsync(Standard standard);
+        Task<string> ChangeStandard(ChangeAllViewModel change);
     }
 }

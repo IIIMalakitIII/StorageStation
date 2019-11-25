@@ -1,0 +1,32 @@
+﻿@model MyUniversityProject.Models.StorageViewModel.ChangeAllViewModel
+
+<div class="wrapper">
+    <div class="wrapped-div-1">
+        <div class="col-md-10 offset-md-1">
+            @using (Html.BeginForm("_ChangeStandart", "Storage", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.OldId, "Old Id", htmlAttributes: new { @class = "control-label  text-white" })
+                            @Html.EditorFor(model => model.OldId, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = 1, @placeholder = "Old Id", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.OldId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.NewId, "New Id", htmlAttributes: new { @class = "control-label  text-white" })
+                            @Html.EditorFor(model => model.NewId, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = 1, @placeholder = "New Id" } })
+                            @Html.ValidationMessageFor(model => model.NewId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Change" class="btn btn-success btn-lg btn-block" />
+                </div>
+            }
+        </div>
+    </div>
+</div>

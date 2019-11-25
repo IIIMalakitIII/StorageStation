@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
-using MyUniversityProject.Models.ErrorViewModel;
 using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
 using MyUniversityProject.Models.StorageViewModel;
@@ -30,23 +29,32 @@ namespace MyUniversityProject.Repository
             switch (sortOrder)
             {
                 case "minVolume":
-                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
+                    return await dataContext.Storages
+                        .AsNoTracking()
+                        .Where(o => o.Location.Contains(searching))
                         .OrderByDescending(o => o.Status).ToListAsync();
                 case "Location":
-                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
+                    return await dataContext.Storages
+                        .AsNoTracking()
+                        .Where(o => o.Location.Contains(searching))
                         .OrderBy(o=>o.Location).ToListAsync();
                 case "location":
-                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
+                    return await dataContext.Storages
+                        .AsNoTracking()
+                        .Where(o => o.Location.Contains(searching))
                         .OrderByDescending(o => o.Location).ToListAsync();
                 default:
-                    return await dataContext.Storages.Where(o => o.Location.Contains(searching))
+                    return await dataContext.Storages
+                        .AsNoTracking()
+                        .Where(o => o.Location.Contains(searching))
                         .OrderBy(o => o.Status).ToListAsync();
             }
 
         }
 
         public async Task<Storage> GetStorageInfoAsync(int id) =>
-            await dataContext.Storages.AsNoTracking()
+            await dataContext.Storages
+            .AsNoTracking()
             .Where(o => o.StorageId == id)
             .FirstOrDefaultAsync();
 
@@ -107,7 +115,11 @@ namespace MyUniversityProject.Repository
         */
         public async Task<string> DeleteAsync(int id)
         {
-            var activeCells = await dataContext.Cells.Include(x => x.Reservations).Where(x => x.StorageId == id && x.Reservations.Any()).ToListAsync();
+            var activeCells = await dataContext.Cells
+                .AsNoTracking()
+                .Include(x => x.Reservations)
+                .Where(x => x.StorageId == id && x.Reservations.Any())
+                .ToListAsync();
             if (activeCells.Any())
             {
                 return "You cannot delete the storage, while some cells are reserved";
@@ -126,7 +138,10 @@ namespace MyUniversityProject.Repository
         }
 
         public async Task<Cell> GetCellAsync(int id) =>
-            await dataContext.Cells.AsNoTracking().Where(x => x.CellId == id).FirstOrDefaultAsync();
+            await dataContext.Cells
+            .AsNoTracking()
+            .Where(x => x.CellId == id)
+            .FirstOrDefaultAsync();
 
         public async Task<string> DeleteCellAsync(int id)
         {
@@ -178,6 +193,7 @@ namespace MyUniversityProject.Repository
         public List<Storage> GetStoragesCell()
         {
             var Storage = dataContext.Storages
+                .AsNoTracking()
                 .Include(blog => blog.Cells)
                 .ToList();
 
@@ -245,10 +261,22 @@ namespace MyUniversityProject.Repository
 
         public async Task<IEnumerable<Cell>> FilterSearch(CellFilterViewModel cellFilter)
         {
-            IQueryable<Cell> list = dataContext.Cells
+            IQueryable<Cell> list;
+            if (cellFilter.StorageId == -1)
+            {
+                list = dataContext.Cells
+                .AsNoTracking()
+                .Include(x => x.Standard);
+                
+            }
+            else
+            {
+                list = dataContext.Cells
                 .AsNoTracking()
                 .Include(x => x.Standard)
                 .Where(x => x.StorageId == cellFilter.StorageId);
+            }
+
 
             if(cellFilter.MaxWidth ==0 && cellFilter.MinWidth != 0)
             {
@@ -332,7 +360,8 @@ namespace MyUniversityProject.Repository
                              x.Height.ToString().Contains(cellFilter.SearchFilter) ||
                              x.Length.ToString().Contains(cellFilter.SearchFilter) ||
                              x.Width.ToString().Contains(cellFilter.SearchFilter) ||
-                             x.Status.ToString().Contains(cellFilter.SearchFilter)
+                             x.Status.ToString().Contains(cellFilter.SearchFilter) ||
+                             x.CellId.ToString().Contains(cellFilter.SearchFilter)
                             )
                         .ToListAsync();
             }
@@ -391,11 +420,6 @@ namespace MyUniversityProject.Repository
 
         public async Task<string> UpdateCellViewModelAsync(CreateCellViewModel createCell)
         {
-            if (GetCellAsync(createCell.CellId) == null)
-            {
-                return "Sorry, but this cell is missing. Try another time";
-            }
-
             Cell newCell = new Cell()
             {
                 CellId = createCell.CellId,
@@ -409,8 +433,8 @@ namespace MyUniversityProject.Repository
             };
 
             dataContext.Cells.Update(newCell);
-
-            return await SaveAsync();
+            var result = await SaveAsync();
+            return result;
         }
     }
 }

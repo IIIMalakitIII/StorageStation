@@ -1,17 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyUniversityProject.Models
 {
     public class Schedule
     {
+        [Key]
         public int ScheduleId { get; set; }
+        [Required]
         public string WeekDay { get; set; }
-
+        [Required(ErrorMessage = "Start Work is requred")]
+        [DataType(DataType.DateTime)]
         public DateTime StartWork { get; set; }
+        [Required(ErrorMessage = "End Work is requred")]
+        [DataType(DataType.DateTime)]
         public DateTime EndWork { get; set; }
         [ForeignKey(nameof(Storage))]
         public int StorageId { get; set; }
