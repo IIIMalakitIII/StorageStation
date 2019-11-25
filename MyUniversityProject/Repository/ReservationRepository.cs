@@ -4,7 +4,7 @@ using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
-using MyUniversityProject.Models.ReservationModel;
+using MyUniversityProject.Models.ReservationViewModel;
 using MyUniversityProject.Serviece;
 using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;

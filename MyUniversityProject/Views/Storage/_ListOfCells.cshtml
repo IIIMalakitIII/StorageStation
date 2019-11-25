@@ -4,7 +4,7 @@
 
 @if (Model.Cells.FirstOrDefault().Any())
 {
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center table-responsive-xl">
         <ul class="list-group">
             <li class="list-group-item">
                 <table class="table-sm table-dark text-center">
@@ -16,17 +16,47 @@
                                 <td class="form-group">
                                     <ul class="list-group">
                                         <li class="list-group-item">
-                                            @Html.LabelFor(modelItem => item.CellId, "Id: " + item.CellId.ToString(), new { @class = "control-label  text-dark text-center" })
+                                            <ul class="list-group">
+                                                <li>
+                                                    @if (item.Status)
+                                                    {
+                                                        <button class="btn btn-success btn-block">
+                                                            Active
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn btn-danger btn-block">
+                                                            Deactivated
+                                                        </button>
+                                                    }
+                                                </li>
+                                                <li class="list-group-item" style="width:200px;">
+                                                    @Html.LabelFor(modelItem => item.CellId, "Id: " + item.CellId.ToString(), new { @class = "control-label  text-dark text-center" })
+                                                </li>
+                                                <li class="list-group-item" style="width:200px;">
+                                                    @Html.LabelFor(modelItem => item.Width, "Width: " + item.Width.ToString(), new { @class = "control-label  text-dark text-center" })
+                                                </li>
+                                                <li class="list-group-item" style="width:200px;">
+                                                    @Html.LabelFor(modelItem => item.Height, "Height: " + item.Height.ToString(), new { @class = "control-label  text-dark text-center" })
+                                                </li>
+                                                <li class="list-group-item" style="width:200px;">
+                                                    @Html.LabelFor(modelItem => item.Length, "Length: " + item.Length.ToString(), new { @class = "control-label  text-dark text-center" })
+                                                </li>
+                                                <li class="list-group-item" style="width:200px;">
+                                                    @Html.LabelFor(modelItem => item.Capacity, "Capacity: " + item.Capacity.ToString(), new { @class = "control-label  text-dark text-center" })
+                                                </li>
+                                            </ul>
                                         </li>
                                         <li class="list-group-item">
-                                            @if (item.Status)
-                                            {
-                                                @Html.ActionLink("Reserve", "ReserveCell", "Storage", new { id = item.CellId }, new { @class = "btn btn-success" })
-                                            }
-                                            else
-                                            {
-                                                @Html.ActionLink("Reserve", "ReserveCell", "Storage", new { id = item.CellId }, new { @class = "btn btn-danger disabled" })
-                                            }
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    @Html.ActionLink("Information", "GetCellInfo", "Storage", new { id = item.CellId }, new { @class = "btn btn-info" })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @Html.ActionLink("Delete", "_DeleteCell", "Storage", new { storageId = item.StorageId,id = item.CellId, page = @Model.PageViewModel.PageNumber }, new { @class = "btn btn-danger" })
+                                                </div>
+                                            </div>
                                         </li>
                                     </ul>
                                 </td>

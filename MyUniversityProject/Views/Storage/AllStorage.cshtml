@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<MyUniversityProject.Models.Storage>
+@using System.Text
 <br />
 @using (Html.BeginForm("AllStorage", "Admin", FormMethod.Get))
 {
@@ -14,8 +15,9 @@
         @await Html.PartialAsync("_CreateStorage", new Storage())
     </div>
 </div>
-<br/>
-<div class="table-responsive-sm">
+<br />
+
+<div class="table-responsive-sm bg-dark">
     <table class="table table-dark text-center">
         <thead>
             <button class="btn btn-primary btn-sm btn-block" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -57,10 +59,26 @@
                         }
                     </td>
                     <td>
-                        @Html.ActionLink("Delete", "DeleteStorage", "Storage", new { storageId = item.StorageId }, new { @class = "btn btn-danger" })
+                        @Html.ActionLink("Delete", "DeleteStorage", "Storage", new { id = item.StorageId }, new { @class = "btn btn-danger" })
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+@section Scripts{ 
+    <script type="text/javascript">
+    @if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        var sb = new StringBuilder();
+        foreach (var modelState in ViewContext.ViewData.ModelState.Values)
+        {
+            foreach (var error in modelState.Errors)
+            {
+                sb.Append(error.ErrorMessage);
+            }
+        }
+        @:alert('@sb.ToString()');
+    }
+    </script>
+}

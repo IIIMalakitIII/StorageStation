@@ -119,7 +119,6 @@ C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netc
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_Layout.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\AllStorage.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\Index.cshtml.g.cs
-C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\ListOfCells.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\StorageInfo.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\_ViewStart.cshtml.g.cs
@@ -131,10 +130,18 @@ C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netc
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csproj.CopyComplete
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\ListOfReserve.cshtml.g.cs
 C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\_ReservationHistory.cshtml.g.cs
-C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\ListOfReserve.g.cshtml.cs
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\MyOffice\_ReservationHistory.g.cshtml.cs
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_CellFilter.g.cshtml.cs
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\StorageCells.g.cshtml.cs
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_ListOfCells.g.cshtml.cs
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_CreateStorage.g.cshtml.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\StorageCells.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_CellFilter.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_CreateStorage.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_ListOfCells.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\CreateCell.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\GetCellInfo.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\GetAllStandarts.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_CreateStandart.cshtml.g.cs

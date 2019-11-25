@@ -1,5 +1,5 @@
 ﻿using MyUniversityProject.Models;
-using MyUniversityProject.Models.ReservationModel;
+using MyUniversityProject.Models.ReservationViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyUniversityProject.IRepository;
-using MyUniversityProject.Models.ReservationModel;
+using MyUniversityProject.Models.ReservationViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;

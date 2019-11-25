@@ -2,7 +2,7 @@
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
-using MyUniversityProject.Models.ReservationModel;
+using MyUniversityProject.Models.ReservationViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,5 +24,6 @@ namespace MyUniversityProject.IRepository
         Task<List<Cell>> GetAllCell(string location);
         Task<IndexReserveModel> GetUserReservations(int userId, int page, ReserveFilterViewModel reserve);
         Task<IEnumerable<Reservation>> GetSearchingReserve(int userId, ReserveFilterViewModel reserve);
+
     }
 }

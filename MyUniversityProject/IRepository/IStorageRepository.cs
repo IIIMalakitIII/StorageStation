@@ -1,6 +1,8 @@
-﻿using MyUniversityProject.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MyUniversityProject.Models;
 using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
+using MyUniversityProject.Models.StorageViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +24,14 @@ namespace MyUniversityProject.IRepository
         IEnumerable<Cell> OrderByCell(IEnumerable<Cell> cells, string sortItem);
         Task<IEnumerable<Cell>> FilterSearch(CellFilterViewModel cellFilter);
         Task<IndexCellViewModel> GetCellsAsync(CellFilterViewModel cellFilter, int page);
+        Task<List<SelectListItem>> GetStoragesAsync();
         Task<string> CreateStorageAsync(Storage storage);
         Task<string> SaveAsync();
+        Task<string> DeleteAsync(int id);
+        Task<string> CreateCell(CreateCellViewModel createCell);
+        Task<Cell> GetCellAsync(int id);
+        Task<string> DeleteCellAsync(int id);
+        Task<CreateCellViewModel> GetCellViewModelAsync(int id);
+        Task<string> UpdateCellViewModelAsync(CreateCellViewModel createCell);
     }
 }

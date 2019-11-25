@@ -37,6 +37,7 @@ namespace MyUniversityProject
             services.AddScoped<IStorageRepository, StorageRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IStandartRepository, StandartRepository>();
 
             services.AddDistributedMemoryCache();
 
