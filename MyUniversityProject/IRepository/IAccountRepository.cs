@@ -12,12 +12,12 @@ namespace MyUniversityProject.IRepository
     {
         Task Registration(RegisterModel model);
         Task<UserInfo> Login(LoginModel model);
-        Task<bool> SaveAsync();
+        Task<string> SaveAsync();
         bool UserExists(string Email);
         Task<UserInfo> GetUser(string Email);
-        void Update(UserInfo user);
-        Task<bool> Check(string Email, UserInfo userInfo);
-        Task<UserInfo> UpdatePassword(string Email, ChangePassword password);
+        Task<string> UpdateAsync(UserInfo user);
+        Task<string> UpdatePassword(string Email, ChangePassword password);
         Task<int> UserInfoId(string Email);
+
     }
 }

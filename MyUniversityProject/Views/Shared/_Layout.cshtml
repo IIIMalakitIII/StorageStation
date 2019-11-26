@@ -48,7 +48,7 @@
                                     @Html.ActionLink("Work with Cell", "StorageCells", "Storage", new { StorageId = -1 }, new { @class = "dropdown-item btn-outline-success" })
                                     @Html.ActionLink("User Information", "Users", "Admin", null, new { @class = "dropdown-item btn-outline-success" })
                                     @Html.ActionLink("Admin Settings", "AdminSettings", "Admin", null, new { @class = "dropdown-item btn-outline-success" })
-                                    @Html.ActionLink("Reservation Info", "AllReservation", "Reservation", null, new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("Reservation Info", "GetReservations", "Reservation", null, new { @class = "dropdown-item btn-outline-success" })
                                     @Html.ActionLink("Create Cell", "CreateCell", "Storage", null, new { @class = "dropdown-item btn-outline-success" })
 
                                     <div class="dropdown-divider"></div>
@@ -100,7 +100,7 @@
                                         My Office
                                     </button>
                                     <div class="dropdown-menu">
-                                        @Html.ActionLink("My Office", "MyOffice", "Admin", null, new { @class = "dropdown-item btn-outline-danger" })
+                                        @Html.ActionLink("Admin Office", "AdminOffice", "Admin", null, new { @class = "dropdown-item btn-outline-danger" })
                                         @Html.ActionLink("Settings", "Index", "Admin", null, new { @class = "dropdown-item btn-outline-danger" })
                                         @Html.ActionLink("Logging History", "Reservation", "MyOffice", new { area = "" }, new { @class = "dropdown-item btn-outline-danger" })
                                         <div class="dropdown-divider"></div>

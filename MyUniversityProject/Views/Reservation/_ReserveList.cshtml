@@ -1,0 +1,117 @@
+﻿@using MyUniversityProject.Models.Pagination;
+@using MyUniversityProject.Models.FilterModel
+@model IndexReserveAdminModel
+@addTagHelper "*, MyUniversityProject"
+
+@{
+    ViewData["Title"] = "ReservationHistory";
+}
+
+<h1 class="text-center">Reservation History</h1>
+<br />
+
+@if (Model.Reservations.Any())
+{
+    <ul class="list-group bg-dark">
+        <li class="list-group-item bg-dark">
+            @foreach (var item in Model.Reservations)
+            {
+                <div class="wrapper-reserv">
+                    <div class="wrapped-div-2">
+                        <div class="col-md-12 offset-md-0">
+                            <div class="form-group">
+                                @if (item.Status)
+                                {
+                                    <div class="btn btn-success btn-block text-white">Active</div>
+                                }
+                                else
+                                {
+                                    <div class="btn btn-danger btn-block text-white">Deactivated</div>
+                                }
+                                @*@Html.Label("", "Status", htmlAttributes: new { @class = "control-label  text-white" })
+                                @Html.CheckBoxFor(model => item.Status, htmlAttributes: new { @class = "form-control btn-block", 
+                                    @type = "checkbox", @checked = @item.Status, @data_toggle = "toggle", data_on = "Active",
+                                    data_off = "Deactive", @data_onstyle = "success", @data_offstyle = "danger", @data_width = "100",
+                                    @disabled = true })*@
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("", "Reservation Id", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.ReservationId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("", "Cell Id", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.CellId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("", "Start Reservation", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.StartReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("", "End Reservation", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.EndReservation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("", "Price", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.Amount, new { htmlAttributes = new { @class = "form-control", @step = "any", @value = "0.00", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("", "Storage Name", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.Cell.Storage.Location, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("", "User Id", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.UserInfoId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.ActionLink("Information", "GetReserve", "Reservation", new { id = item.ReservationId }, new { @class = "btn btn-info btn-block" })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.ActionLink("Delete", "DeleteReserve", "Reservation", new { reserveId = item.ReservationId, page = @Model.PageViewModel.PageNumber }, new { @class = "btn btn-danger btn-block" })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </li>
+        <li class="list-group-item-secondary text-center" style="list-style-type:none">
+            <page-link page-model="@Model.PageViewModel" page-action="GetReservations"
+                       page-url-SearchFilter=@Model.ReserveAdminViewModel.SearchFilter
+                       page-url-SortItem=@Model.ReserveAdminViewModel.SortItem
+                       page-url-MinPrice=@Model.ReserveAdminViewModel.MinPrice
+                       page-url-MaxPrice=@Model.ReserveAdminViewModel.MaxPrice
+                       page-url-SearchValue=@Model.ReserveAdminViewModel.SearchValue
+                       page-url-FirstDate=@(Model.ReserveAdminViewModel.FirstDate==null ? null:Model.ReserveAdminViewModel.FirstDate.Value.Date.ToString("yyyy-MM-dd"))
+                       page-url-SecondDate=@(Model.ReserveAdminViewModel.SecondDate==null ? null:Model.ReserveAdminViewModel.SecondDate.Value.Date.ToString("yyyy-MM-dd"))>
+            </page-link>
+        </li>
+    </ul>
+}
+else
+{
+    <br />
+    <h1>Doesn't have any Reservation</h1>
+}

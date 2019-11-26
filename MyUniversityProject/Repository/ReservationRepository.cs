@@ -125,8 +125,19 @@ namespace MyUniversityProject.Repository
         public async Task<Reservation> GetReservation(int id) =>
              await dataContext.Reservations.Include(o => o.UserInfo).Where(o => o.ReservationId == id).FirstOrDefaultAsync();
 
-        public async Task SaveAsync() =>
-            await dataContext.SaveChangesAsync();
+        public async Task<string> SaveAsync()
+        {
+            try
+            {
+                await dataContext.SaveChangesAsync();
+                return null;
+            }
+            catch
+            {
+                return "Sorry at moment save something else... try another time";
+            }
+        }
+
 
 
         public async Task<List<Cell>> GetCells(ReservationLuggage reservationLuggage)
@@ -205,69 +216,36 @@ namespace MyUniversityProject.Repository
 
         public async Task<IEnumerable<Reservation>> GetSearchingReserve(int userId, ReserveFilterViewModel reserve)
         {
-            if(reserve.SearchFilter == "" && reserve.SearchValue!="Any")
-            {
-                return await dataContext.Reservations
+
+            var list = dataContext.Reservations
+                    .AsNoTracking()
                     .Include(x => x.Cell)
                     .ThenInclude(x => x.Storage)
-                    .Where(x =>
-                        x.UserInfoId == userId &&
-                        x.Amount >= reserve.MinPrice &&
-                        x.Amount <= reserve.MaxPrice &&
-                        (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
-                        (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate) &&
-                        (x.Amount.ToString().Contains(reserve.SearchFilter) ||
-                        x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
-                        x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
-                        x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
-                        x.CellId.ToString().Contains(reserve.SearchFilter) ||
-                        x.Cell.Storage.Location.Contains(reserve.SearchFilter)
-                        )
-                    )
-                    .ToListAsync();
+                    .Where(x => x.UserInfoId == userId);
+
+            if (reserve.MaxPrice == 0 && reserve.MinPrice  != 0)
+            {
+                list = list.Where(x => x.Amount >= reserve.MinPrice);
             }
+            else if (reserve.MaxPrice != 0 && reserve.MinPrice != 0)
+            {
+                list = list.Where(x => x.Amount >= reserve.MinPrice && x.Amount <= reserve.MaxPrice);
+            }
+
+            list = list.Where(x =>
+                (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
+                (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate));
 
             switch (reserve.SearchValue)
             {
                 case "Location":
-                    return await dataContext.Reservations
-                        .Include(x => x.Cell)
-                        .ThenInclude(x => x.Storage)
-                        .Where(x =>
-                            x.UserInfoId == userId &&
-                            x.Cell.Storage.Location.Contains(reserve.SearchFilter) &&
-                            x.Amount >= reserve.MinPrice &&
-                            x.Amount <= reserve.MaxPrice &&
-                            (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
-                            (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
-                        )
-                        .ToListAsync();
+                    return await list.Where(x =>x.Cell.Storage.Location.Contains(reserve.SearchFilter)).ToListAsync();
                 case "CellId":
-                    return await dataContext.Reservations
-                        .Include(x => x.Cell)
-                        .ThenInclude(x => x.Storage)
-                        .Where(x =>
-                            x.UserInfoId == userId &&
-                            x.CellId.ToString().Contains(reserve.SearchFilter) &&
-                            x.Amount >= reserve.MinPrice &&
-                            x.Amount <= reserve.MaxPrice &&
-                            (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
-                            (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
-                        )
-                        .ToListAsync();
+                    return await list
+                        .Where(x => x.CellId.ToString().Contains(reserve.SearchFilter)).ToListAsync();
                 case "ReservationId":
-                    return await dataContext.Reservations
-                        .Include(x => x.Cell)
-                        .ThenInclude(x => x.Storage)
-                        .Where(x =>
-                            x.UserInfoId == userId &&
-                            x.ReservationId.ToString().Contains(reserve.SearchFilter) &&
-                            x.Amount >= reserve.MinPrice &&
-                            x.Amount <= reserve.MaxPrice &&
-                            (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
-                            (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
-                        )
-                        .ToListAsync();
+                    return await list.Where(x => x.ReservationId.ToString().Contains(reserve.SearchFilter)).ToListAsync();
+                       
                 case "Active":
                     bool any = reserve.SearchFilter.Contains("Active") ||
                         reserve.SearchFilter.Contains("active") ||
@@ -275,43 +253,83 @@ namespace MyUniversityProject.Repository
                         reserve.SearchFilter.Contains("True") ||
                         reserve.SearchFilter.Contains("1") ||
                         reserve.SearchFilter.Contains("activ");
-                    return await dataContext.Reservations
-                        .Include(x => x.Cell)
-                        .ThenInclude(x => x.Storage)
-                        .Where(x =>
-                            x.UserInfoId == userId &&
-                            x.Status == any &&
-                            x.Amount >= reserve.MinPrice &&
-                            x.Amount <= reserve.MaxPrice &&
-                            (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
-                            (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate)
-                        )
-                        .ToListAsync();
+                    return await list.Where(x =>x.Status == any).ToListAsync();
                 default:
-                    return await dataContext.Reservations
-                        .Include(x => x.Cell)
-                        .ThenInclude(x => x.Storage)
+                    return await list
                         .Where(x =>
-                            x.UserInfoId == userId &&
-                            x.Amount >= reserve.MinPrice &&
-                            x.Amount <= reserve.MaxPrice &&
-                            (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
-                            (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate) &&
-                            (x.Amount.ToString().Contains(reserve.SearchFilter) ||
+                            x.Amount.ToString().Contains(reserve.SearchFilter) ||
                             x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
                             x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
                             x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
                             x.CellId.ToString().Contains(reserve.SearchFilter) ||
-                            x.Cell.Storage.Location.Contains(reserve.SearchFilter)
-                            )
-                        )
+                            x.Cell.Storage.Location.Contains(reserve.SearchFilter))
                         .ToListAsync();
+                        
             }
         }
 
-        public IEnumerable<Reservation> GetSortReserve(IEnumerable<Reservation> list, ReserveFilterViewModel reserve)
+        public async Task<IEnumerable<Reservation>> GetSearchingReserve(ReserveAdminViewModel reserve)
         {
-            switch (reserve.SortItem)
+
+            IQueryable<Reservation> list = dataContext.Reservations
+                    .AsNoTracking()
+                    .Include(x => x.UserInfo)
+                    .Include(x => x.Cell)
+                    .ThenInclude(x => x.Storage);
+                  
+
+            if (reserve.MaxPrice == 0 && reserve.MinPrice != 0)
+            {
+                list = list.Where(x => x.Amount >= reserve.MinPrice);
+            }
+            else if (reserve.MaxPrice != 0 && reserve.MinPrice != 0)
+            {
+                list = list.Where(x => x.Amount >= reserve.MinPrice && x.Amount <= reserve.MaxPrice);
+            }
+
+            list = list.Where(x =>
+                (reserve.FirstDate == null ? true : x.StartReservation >= reserve.FirstDate) &&
+                (reserve.SecondDate == null ? true : x.EndReservation <= reserve.SecondDate));
+
+            switch (reserve.SearchValue)
+            {
+                case "Location":
+                    return await list.Where(x => x.Cell.Storage.Location.Contains(reserve.SearchFilter)).ToListAsync();
+                case "CellId":
+                    return await list
+                        .Where(x => x.CellId.ToString().Contains(reserve.SearchFilter)).ToListAsync();
+                case "ReservationId":
+                    return await list.Where(x => x.ReservationId.ToString().Contains(reserve.SearchFilter)).ToListAsync();
+                case "Active":
+                    bool any = reserve.SearchFilter.Contains("Active") ||
+                        reserve.SearchFilter.Contains("active") ||
+                        reserve.SearchFilter.Contains("true") ||
+                        reserve.SearchFilter.Contains("True") ||
+                        reserve.SearchFilter.Contains("1") ||
+                        reserve.SearchFilter.Contains("activ");
+                    return await list.Where(x => x.Status == any).ToListAsync();
+                case "UserId":
+                    return await list.Where(x => x.UserInfoId.ToString().Contains(reserve.SearchFilter)).ToListAsync();
+                case "StorageId":
+                    return await list.Where(x => x.Cell.StorageId.ToString().Contains(reserve.SearchFilter)).ToListAsync();
+                default:
+                    return await list
+                        .Where(x =>
+                            x.Amount.ToString().Contains(reserve.SearchFilter) ||
+                            x.ReservationId.ToString().Contains(reserve.SearchFilter) ||
+                            x.StartReservation.ToString().Contains(reserve.SearchFilter) ||
+                            x.EndReservation.ToString().Contains(reserve.SearchFilter) ||
+                            x.CellId.ToString().Contains(reserve.SearchFilter) ||
+                            x.Cell.Storage.Location.Contains(reserve.SearchFilter))
+                        .ToListAsync();
+
+            }
+        }
+
+
+        public IEnumerable<Reservation> GetSortReserve(IEnumerable<Reservation> list, string SortItem)
+        {
+            switch (SortItem)
             {
                 case "Price_ASC":
                     return list.OrderBy(x => x.Amount);
@@ -331,31 +349,26 @@ namespace MyUniversityProject.Repository
         }
 
 
+
+
         public async Task<IndexReserveModel> GetUserReservations(int userId, int page, ReserveFilterViewModel reserve)
         {
 
             if (reserve == null)
             {
-                reserve = new ReserveFilterViewModel();
-                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Amount);
-                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Amount);
-                reserve.FirstDate = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.StartReservation).Date;
-                reserve.SecondDate = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.EndReservation).Date;
-                reserve.SortItem = "";
-                reserve.SearchValue = "";
+                return new IndexReserveModel()
+                {
+                    PageViewModel = new PageViewModel(0, 1, 3),
+                    Reservations = new List<Reservation>(),
+                    ReserveFilterViewModel = reserve
+                };
             }
             reserve.SearchValue = reserve.SearchValue == null ? "Any" : reserve.SearchValue;
             reserve.SearchFilter = reserve.SearchFilter == null ? "" : reserve.SearchFilter;
             reserve.SortItem = reserve.SortItem == null ? "" : reserve.SortItem;
 
-            if (reserve.MinPrice==0 && reserve.MaxPrice == 0)
-            {
-                reserve.MinPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Min(x => x.Amount);
-                reserve.MaxPrice = dataContext.Reservations.AsNoTracking().Where(x => x.UserInfoId == userId).Max(x => x.Amount);
-            }
-
             IEnumerable<Reservation> item = new List<Reservation>();
-            item = GetSortReserve(await GetSearchingReserve(userId, reserve), reserve);
+            item = GetSortReserve(await GetSearchingReserve(userId, reserve), reserve.SortItem);
 
             var count = item.Count();
             var skipCells = item.Skip((page - 1) * 3).Take(3).ToList();
@@ -369,5 +382,57 @@ namespace MyUniversityProject.Repository
             };
             return viewModel;
         }
+
+
+        public async Task<IndexReserveAdminModel> GetReservations(int page, ReserveAdminViewModel reserve)
+        {
+            if (reserve == null)
+            {
+                return new IndexReserveAdminModel()
+                {
+                    PageViewModel = new PageViewModel(0, 1, 3),
+                    Reservations = new List<Reservation>(),
+                    ReserveAdminViewModel = reserve
+                };
+            }
+
+            reserve.SearchValue = reserve.SearchValue == null ? "Any" : reserve.SearchValue;
+            reserve.SearchFilter = reserve.SearchFilter == null ? "" : reserve.SearchFilter;
+            reserve.SortItem = reserve.SortItem == null ? "" : reserve.SortItem;
+
+            IEnumerable<Reservation> item = new List<Reservation>();
+            item = GetSortReserve(await GetSearchingReserve(reserve), reserve.SortItem);
+
+            var count = item.Count();
+            var skipCells = item.Skip((page - 1) * 3).Take(3).ToList();
+            if (skipCells.Count == 0 && page != 1)
+            {
+                skipCells = item.Skip((page - 2) * 3).Take(3).ToList();
+                page -= 1;
+            }
+            PageViewModel pageViewModel = new PageViewModel(count, page, 3);
+            IndexReserveAdminModel viewModel = new IndexReserveAdminModel
+            {
+                PageViewModel = pageViewModel,
+                Reservations = skipCells,
+                ReserveAdminViewModel = reserve
+            };
+            return viewModel;
+        }
+
+        public async Task<string> DeleteReservation(int reserveId)
+        {
+            var reserve = await GetReservation(reserveId);
+
+            if (reserve == null)
+            {
+                return $"Did not find a reservation by this id = {reserveId}";
+            }
+            dataContext.Remove(reserve);
+            var result = await SaveAsync();
+            return result;
+
+        }
+            
     }
 }

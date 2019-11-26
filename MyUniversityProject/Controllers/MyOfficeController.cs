@@ -29,7 +29,7 @@ namespace MyUniversityProject.Controllers
 
         
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Index()
         {
             var user = await accountRepository.GetUser(User.Identity.Name);
@@ -45,7 +45,8 @@ namespace MyUniversityProject.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated && User.HasClaim(x => x.Type == ClaimTypes.Role
+        && x.Value == "User"))
             {
                 return RedirectToAction(nameof(Index), "MyOffice");
             }
@@ -65,7 +66,7 @@ namespace MyUniversityProject.Controllers
 
                 if (User != null)
                 {
-                    await Authenticate(User.Email);
+                    await Authenticate(User.Email, User.Role);
                     return RedirectToAction(nameof(Index), "MyOffice");
                 }
                 else
@@ -90,7 +91,7 @@ namespace MyUniversityProject.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> _ReservationHistory([Bind("SearchFilter,SortItem,MinPrice,MaxPrice,SearchValue,FirstDate,SecondDate")] ReserveFilterViewModel reserveFilter, int page = 1)
         {
             if (User.Identity.IsAuthenticated)
@@ -106,18 +107,13 @@ namespace MyUniversityProject.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ReservationHistory([Bind("SearchFilter,SortItem,MinPrice,MaxPrice,SearchValue,FirstDate,SecondDate")] ReserveFilterViewModel reserveFilter, int page = 1)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                int userId = await accountRepository.UserInfoId(User.Identity.Name);
-                var list = await reservationRepository.GetUserReservations(userId, page, reserveFilter);
-                return View("ListOfReserve",list);
-                //ViewBag.CurrentFilter = searching;
-
-            }
-            return RedirectToAction(nameof(Login));
+            int userId = await accountRepository.UserInfoId(User.Identity.Name);
+            var list = await reservationRepository.GetUserReservations(userId, page=1, reserveFilter);
+            return View("ListOfReserve",list);
+            //ViewBag.CurrentFilter = searching;
         }
 
         [HttpPost]
@@ -148,77 +144,57 @@ namespace MyUniversityProject.Controllers
         }
 
 
-        [Authorize]
+        
         [HttpPost]
-        public async Task<IActionResult> UserInformation(UserInfo user)
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> _OfficeForUser(UserInfo user)
         {
             if (ModelState.IsValid)
             {
-                accountRepository.Update(user);
-                try
+                var result = await accountRepository.UpdateAsync(user);
+                if (result == null)
                 {
-                    await accountRepository.SaveAsync();
-                    if (await accountRepository.Check(User.Identity.Name, user))
-                    {
-                        return RedirectToAction(nameof(Index), "MyOffice");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Updating user wasn't successful");
-                    }
+                    return RedirectToAction(nameof(Index), "MyOffice");
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ModelState.AddModelError("", "Updating user to the database wasn't successful");
-                }
+                
+                ModelState.AddModelError("", result);
             }
-            return View("_UserInformation", user);
+            return View(user);
         }
 
-        [Authorize]
+        
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> _ChangePassword(ChangePassword model)
         {
             if (ModelState.IsValid)
             {
-                var changeUser = await accountRepository.UpdatePassword(User.Identity.Name, model);
-                try
+                var result = await accountRepository.UpdatePassword(User.Identity.Name, model);
+                if (result == null)
                 {
-                    await accountRepository.SaveAsync();
-                    if (await accountRepository.Check(User.Identity.Name, changeUser))
-                    {
-                        //return RedirectToAction(nameof(Index), "MyOffice");
-                        return Json(new { redirectTo = Url.Action("Index") });
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Updating user password wasn't successful");
-                    }
+                    return RedirectToAction(nameof(Index), "MyOffice");
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ModelState.AddModelError("", "Changing user password wasn't successful");
-                }
+
+                ModelState.AddModelError("", result);
             }
             return View(model);
         }
 
-
-
        
-        private async Task Authenticate(string userEmail)
+        private async Task Authenticate(string userEmail, string role)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userEmail)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userEmail),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
 
-        [Authorize]
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

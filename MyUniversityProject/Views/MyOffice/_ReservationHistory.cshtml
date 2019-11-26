@@ -57,7 +57,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.Label("", "Price", htmlAttributes: new { @class = "control-label  text-white" })
-                                        @Html.EditorFor(model => item.Amount, new { htmlAttributes = new { @class = "form-control", @step="any", @value = "0.00", @readonly = "readonly" } })
+                                        @Html.EditorFor(model => item.Amount, new { htmlAttributes = new { @class = "form-control", @step = "any", @value = "0.00", @readonly = "readonly" } })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -73,15 +73,20 @@
             }
         </li>
         <li class="list-group-item-secondary text-center" style="list-style-type:none">
-            <page-link id="fdsf" page-model="@Model.PageViewModel" page-action="ReservationHistory"
-                page-url-SearchFilter=@Model.ReserveFilterViewModel.SearchFilter
-                page-url-SortItem=@Model.ReserveFilterViewModel.SortItem
-                page-url-MinPrice=@Model.ReserveFilterViewModel.MinPrice
-                page-url-MaxPrice=@Model.ReserveFilterViewModel.MaxPrice
-                page-url-SearchValue=@Model.ReserveFilterViewModel.SearchValue
-                page-url-FirstDate=@(Model.ReserveFilterViewModel.FirstDate==null ? null:Model.ReserveFilterViewModel.FirstDate.Value.Date.ToString("yyyy-MM-dd"))
-                page-url-SecondDate=@(Model.ReserveFilterViewModel.SecondDate==null ? null:Model.ReserveFilterViewModel.SecondDate.Value.Date.ToString("yyyy-MM-dd"))>
+            <page-link page-model="@Model.PageViewModel" page-action="ReservationHistory"
+                       page-url-SearchFilter=@Model.ReserveFilterViewModel.SearchFilter
+                       page-url-SortItem=@Model.ReserveFilterViewModel.SortItem
+                       page-url-MinPrice=@Model.ReserveFilterViewModel.MinPrice
+                       page-url-MaxPrice=@Model.ReserveFilterViewModel.MaxPrice
+                       page-url-SearchValue=@Model.ReserveFilterViewModel.SearchValue
+                       page-url-FirstDate=@(Model.ReserveFilterViewModel.FirstDate==null ? null:Model.ReserveFilterViewModel.FirstDate.Value.Date.ToString("yyyy-MM-dd"))
+                       page-url-SecondDate=@(Model.ReserveFilterViewModel.SecondDate==null ? null:Model.ReserveFilterViewModel.SecondDate.Value.Date.ToString("yyyy-MM-dd"))>
             </page-link>
         </li>
     </ul>
+}
+else
+{
+    <br />
+    <h1>Doesn't have any Reservation</h1>
 }

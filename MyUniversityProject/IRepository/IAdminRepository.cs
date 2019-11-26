@@ -10,10 +10,9 @@ namespace MyUniversityProject.IRepository
     public interface IAdminRepository
     {
         Task<Employee> Login(LoginModel model);
-        void UpdateEmployee(Employee employee);
-        Task<Employee> UpdatePassword(string Email, ChangePassword password);
-        Task SaveAsync();
+        Task<string> UpdateEmployee(Employee employee);
+        Task<string> UpdatePassword(string Email, ChangePassword password);
+        Task<string> SaveAsync();
         Task<Employee> GetEpmloyee(string Email);
-        Task<bool> Check(string Email, Employee employee);
     }
 }

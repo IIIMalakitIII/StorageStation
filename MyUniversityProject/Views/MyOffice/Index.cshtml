@@ -2,13 +2,13 @@
 @model MyUniversityProject.Models.UserInfo
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "MyOffice";
 }
 <h2 class="text-center"> User Information </h2>
 <hr>
 <div class="row">
     <div class="col-md-7">
-        @await Html.PartialAsync("_UserInformation", Model)
+        @await Html.PartialAsync("_OfficeForUser", Model)
     </div>
     <div class="col-md-5">
         @await Html.PartialAsync("_ChangePassword", new ChangePassword())

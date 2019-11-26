@@ -4,7 +4,6 @@ namespace MyUniversityProject.Models.AuthenticationModel
 {
     public class ChangePassword
     {
-        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "OldPassword")]
         public string OldPassword { get; set; }

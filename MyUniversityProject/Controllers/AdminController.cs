@@ -27,12 +27,14 @@ namespace MyUniversityProject.Controllers
             return View();
         }
 
-        public async Task<IActionResult> MyOffice()
+        [Authorize(Roles = "Admin, SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> AdminOffice()
         {
             var employee = await adminRepository.GetEpmloyee(User.Identity.Name);
             if (employee == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Login));
             }
 
             return View(employee);
@@ -44,24 +46,15 @@ namespace MyUniversityProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                adminRepository.UpdateEmployee(employee);
-                try
+                var result = await adminRepository.UpdateEmployee(employee);
+                if (result == null)
                 {
-                    await adminRepository.SaveAsync();
-                    if (await adminRepository.Check(User.Identity.Name, employee))
-                    {
-                        return RedirectToAction(nameof(MyOffice), "Admin");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Updating wasn't successful");
-                    }
+                    return RedirectToAction(nameof(AdminOffice), "Admin");
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ModelState.AddModelError("", "Updating to the database wasn't successful");
-                }
+                ModelState.AddModelError("", "Updating user password wasn't successful");
+                ModelState.AddModelError("", result);
             }
+
             return View("_MyOfficeForSuperUser", employee);
         }
 
@@ -71,26 +64,16 @@ namespace MyUniversityProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                var changeUser = await adminRepository.UpdatePassword(User.Identity.Name, model);
-                try
+                var result = await adminRepository.UpdatePassword(User.Identity.Name, model);
+                if (result == null)
                 {
-                    await adminRepository.SaveAsync();
-                    if (await adminRepository.Check(User.Identity.Name, changeUser))
-                    {
-                        return RedirectToAction(nameof(MyOffice), "Admin");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Updating user password wasn't successful");
-                    }
+                    return RedirectToAction(nameof(AdminOffice), "Admin");
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ModelState.AddModelError("", "Changing user password wasn't successful");
-                }
+                ModelState.AddModelError("", "Updating user password wasn't successful");
+                ModelState.AddModelError("", result);
             }
-            //return CreatedAtAction("GetTaskInfo", new { id = taskItem.Id }, taskItem);
-            return View("_ChangePassword", model);
+
+            return View(model);
         }
 
 
@@ -100,7 +83,7 @@ namespace MyUniversityProject.Controllers
             if (User.Identity.IsAuthenticated && User.HasClaim(x => x.Type == ClaimTypes.Role
                     && x.Value == "Admin" || x.Value=="SuperUser"))
             {
-                return RedirectToAction(nameof(MyOffice), "Admin");
+                return RedirectToAction(nameof(AdminOffice), "Admin");
             }
 
             return View();
@@ -111,7 +94,6 @@ namespace MyUniversityProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-
             if (ModelState.IsValid)
             {
                 var Employeer = await adminRepository.Login(model);
@@ -119,12 +101,10 @@ namespace MyUniversityProject.Controllers
                 if (Employeer != null)
                 {
                     await Authenticate(Employeer.Email,Employeer.Role);
-                    return RedirectToAction(nameof(MyOffice), "Admin");
+                    return RedirectToAction(nameof(AdminOffice), "Admin");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Incorrect login or password");
-                }
+
+                ModelState.AddModelError("", "Incorrect Login or Password");
             }
 
             return View(model);

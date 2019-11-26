@@ -84,9 +84,9 @@ namespace MyUniversityProject.Repository
                 await dataContext.SaveChangesAsync();
                 return null;
             }
-            catch (Exception ex)
+            catch
             {
-                return ex.Message;
+                return "Sorry at moment save something else... try another time";
             }
         }
 

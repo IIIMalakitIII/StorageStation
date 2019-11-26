@@ -27,6 +27,7 @@ namespace MyUniversityProject.Repository
                 Address = model.Address,
                 Password = model.Password,
                 Email = model.Email,
+                Role = "User"
             };
             await dataContext.UserInfos.AddAsync(user);
         }
@@ -36,34 +37,41 @@ namespace MyUniversityProject.Repository
 
         public bool UserExists(string Email) =>
             dataContext.UserInfos.Any(o => o.Email == Email);
-        
-        public async Task<bool> SaveAsync() =>
-            await dataContext.SaveChangesAsync() > 0;
+
+        public async Task<string> SaveAsync() 
+        {
+            try
+            {
+                await dataContext.SaveChangesAsync();
+                return null;
+            }
+            catch
+            {
+                return "Failed to save, maybe there is an error";
+            }
+        }
+            
 
         public async Task<UserInfo> GetUser(string Email)=>
             await dataContext.UserInfos.FirstOrDefaultAsync(o => o.Email == Email);
 
-        public void Update(UserInfo user)
+        public async Task<string> UpdateAsync(UserInfo user)
         {
-                dataContext.UserInfos.Update(user);
+            dataContext.UserInfos.Update(user);
+            var result = await SaveAsync();
+            return result;
         }
 
-        public async Task<UserInfo> UpdatePassword(string Email, ChangePassword password)
+        public async Task<string> UpdatePassword(string Email, ChangePassword password)
         {
             var user = await GetUser(Email);
             if (user != null && user.Password == Cryptography.Encrypt(password.OldPassword))
             {
                 user.Password = Cryptography.Encrypt(password.NewPassword);
-                Update(user);
-                return user;
+                var result = await UpdateAsync(user);
+                return result;
             }
-            return new UserInfo();
-        }
-
-        public async Task<bool> Check(string Email, UserInfo userInfo)
-        {
-            var user = await GetUser(Email);
-            return user.Equals(userInfo);
+            return null;
         }
 
         public async Task<int> UserInfoId(string Email)

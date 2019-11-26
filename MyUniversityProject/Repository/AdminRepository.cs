@@ -22,33 +22,40 @@ namespace MyUniversityProject.Repository
             await dataContext.Employee.FirstOrDefaultAsync(o => o.Email == model.Email && o.Password == Cryptography.Encrypt(model.Password));
 
 
-        public void UpdateEmployee(Employee employee)
+        public async Task<string> UpdateEmployee(Employee employee)
         {
             dataContext.Employee.Update(employee);
+            var result = await SaveAsync();
+            return result;
         }
 
-        public async Task<Employee> UpdatePassword(string Email, ChangePassword password)
+        public async Task<string> UpdatePassword(string Email, ChangePassword password)
         {
             var employee = await GetEpmloyee(Email);
             if (employee != null)
             {
                 employee.Password = Cryptography.Encrypt(password.NewPassword);
-                UpdateEmployee(employee);
-                return employee;
+                var result = await UpdateEmployee(employee);
+                return result;
             }
             return null;
         }
 
-        public async Task SaveAsync() =>
-            await dataContext.SaveChangesAsync();
+        public async Task<string> SaveAsync()
+        {
+            try
+            {
+                await dataContext.SaveChangesAsync();
+                return null;
+            }
+            catch
+            {
+                return "Failed to save, maybe there is an error";
+            }
+        }
 
         public async Task<Employee> GetEpmloyee(string Email) =>
             await dataContext.Employee.FirstOrDefaultAsync(o => o.Email == Email);
 
-        public async Task<bool> Check(string Email, Employee employee)
-        {
-            var employeeFind = await GetEpmloyee(Email);
-            return employeeFind.Equals(employee);
-        }
     }
 }

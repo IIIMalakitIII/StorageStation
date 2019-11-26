@@ -40,7 +40,6 @@ namespace MyUniversityProject.Models.FilterModel
         private readonly List<SelectListItem> _searchParams = new List<SelectListItem> { new SelectListItem { Text = "Any", Value = "Any" },
                                                                                       new SelectListItem { Text = "Location", Value = "Location" },
                                                                                       new SelectListItem { Text = "Reservation Id", Value = "ReservationId" },
-                                                                                      new SelectListItem { Text = "Location", Value = "Location" },
                                                                                       new SelectListItem { Text = "Status", Value = "Active"},
                                                                                       new SelectListItem { Text = "Cell Id", Value = "CellId" }};
     }

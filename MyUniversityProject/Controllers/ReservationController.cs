@@ -5,6 +5,7 @@ using MyUniversityProject.Models.ReservationViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using MyUniversityProject.Models.FilterModel;
 
 namespace MyUniversityProject.Controllers
 {
@@ -16,7 +17,6 @@ namespace MyUniversityProject.Controllers
         {
             this.reservationRepository = reservationRepository;
         }
-
 
         [HttpGet]
         [Authorize]
@@ -68,10 +68,56 @@ namespace MyUniversityProject.Controllers
             return View(model2);
         }
 
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Print(int id)
         {
             var stream = await reservationRepository.ResultFile(id);
             return File(stream, "application/msword", "Result.docx");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, SuperUser")]
+        public async Task<IActionResult> GetReservations([Bind(
+            "SearchFilter," +
+            "SortItem," +
+            "MinPrice," +
+            "MaxPrice," +
+            "SearchValue," +
+            "FirstDate," +
+            "SecondDate")] ReserveAdminViewModel reserveAdmin,int page=1)
+        {
+            var errMsg = TempData["ErrorMessage"];
+
+            if (errMsg != null)
+            {
+                ModelState.AddModelError("", errMsg as string);
+            }
+            var model = await reservationRepository.GetReservations(page, reserveAdmin);
+            return View("Reservations", model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, SuperUser")]
+        public async Task<IActionResult> DeleteReserve(int reserveId, int page = 1)
+        {
+            /* Сообщить пользователю*/
+            var result = await reservationRepository.DeleteReservation(reserveId);
+            TempData["ErrorMessage"] = result;
+            return RedirectToAction(nameof(GetReservations), new { page = page });
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, SuperUser")]
+        public async Task<IActionResult> GetReserve(int Id)
+        {
+            /* Сообщить пользователю*/
+            var result = await reservationRepository.GetReservation(Id);
+            if(result == null)
+            {
+                return RedirectToAction(nameof(GetReservations));
+            }
+            return View(result);
         }
 
     }
