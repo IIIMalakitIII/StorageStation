@@ -111,7 +111,7 @@ namespace MyUniversityProject.Controllers
         public async Task<IActionResult> ReservationHistory([Bind("SearchFilter,SortItem,MinPrice,MaxPrice,SearchValue,FirstDate,SecondDate")] ReserveFilterViewModel reserveFilter, int page = 1)
         {
             int userId = await accountRepository.UserInfoId(User.Identity.Name);
-            var list = await reservationRepository.GetUserReservations(userId, page=1, reserveFilter);
+            var list = await reservationRepository.GetUserReservations(userId, page, reserveFilter);
             return View("ListOfReserve",list);
             //ViewBag.CurrentFilter = searching;
         }
@@ -208,5 +208,71 @@ namespace MyUniversityProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet]
+        [Authorize(Roles = "SuperUser")]
+        public async Task<IActionResult> GetUsers([Bind(
+            "SearchFilter," +
+            "SortItem," +
+            "MinId," +
+            "MaxId," +
+            "SearchValue")] UserFilterViewModel indexUser, int page =1)
+        {
+            var errMsg = TempData["ErrorMessage"];
+
+            if (errMsg != null)
+            {
+                ModelState.AddModelError("", errMsg as string);
+            }
+            var user = await accountRepository.GetUsers(indexUser, page);
+            return View(user);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "SuperUser")]
+        public async Task<IActionResult> DeleteUser(int userId, int page = 1)
+        {
+            /* Сообщить пользователю*/
+            var result = await accountRepository.DeleteUser(userId);
+            TempData["ErrorMessage"] = result;
+            return RedirectToAction(nameof(GetUsers), new { page = page });
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "SuperUser")]
+        public async Task<IActionResult> GetUser(int Id)
+        {
+            /* Сообщить пользователю*/
+            var result = await accountRepository.GetUser(Id);
+            if (result == null)
+            {
+                TempData["ErrorMessage"] = $"Sorry, can't find User by this ID: {Id}";
+                return RedirectToAction(nameof(GetUsers));
+            }
+            return View(result);
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "SuperUser")]
+        public async Task<IActionResult> GetUser(UserInfo user)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await accountRepository.UpdateAsync(user);
+                if (result == null)
+                {
+                    return RedirectToAction(nameof(GetUser), new { id = user.UserInfoId });
+                }
+                else
+                {
+                    ModelState.AddModelError("", result);
+                }
+            }
+            /* Сообщить пользователю*/
+            return View(user);
+        }
+
+
     }
 }

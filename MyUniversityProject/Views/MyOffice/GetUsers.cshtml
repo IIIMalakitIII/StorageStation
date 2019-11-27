@@ -1,19 +1,13 @@
-﻿@model MyUniversityProject.Models.Pagination.IndexCellViewModel
+﻿@using MyUniversityProject.Models.Pagination;
 @using System.Text
+@model IndexUserViewModel
+
 <div class="row">
     <div class="col-md-5">
-        @await Html.PartialAsync("_CellFilter", Model.CellFilterViewModel)
+        @await Html.PartialAsync("_UserFilter", Model.UserFilterViewModel)
     </div>
     <div class="col-md-7">
-        @if (Model.CellFilterViewModel.StorageId == -1)
-        {
-            @await Html.PartialAsync("_GetAllCells", Model)
-        }
-        else
-        {
-            @await Html.PartialAsync("_ListOfCells", Model)
-        }
-
+        @await Html.PartialAsync("_UserList", Model)
     </div>
 </div>
 @section Scripts{

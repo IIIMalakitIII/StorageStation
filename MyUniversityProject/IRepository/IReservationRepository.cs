@@ -28,6 +28,7 @@ namespace MyUniversityProject.IRepository
         Task<IndexReserveAdminModel> GetReservations(int page, ReserveAdminViewModel reserve);
         Task<IEnumerable<Reservation>> GetSearchingReserve(ReserveAdminViewModel reserve);
         Task<string> DeleteReservation(int reserveId);
+        Task<string> UpdateReserve(Reservation reserve);
 
 
     }

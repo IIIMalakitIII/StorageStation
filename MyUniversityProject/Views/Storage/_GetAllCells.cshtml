@@ -54,7 +54,7 @@
                                                     @Html.ActionLink("Information", "GetCellInfo", "Storage", new { id = item.CellId }, new { @class = "btn btn-info" })
                                                 </div>
                                                 <div class="col-md-6">
-                                                    @Html.ActionLink("Delete", "_DeleteCell", "Storage", new { storageId = item.StorageId,id = item.CellId, page = @Model.PageViewModel.PageNumber }, new { @class = "btn btn-danger" })
+                                                    @Html.ActionLink("Delete","_DeleteOneCell","Storage", new { id = item.CellId, page = @Model.PageViewModel.PageNumber }, new { @class = "btn btn-danger" })
                                                 </div>
                                             </div>
                                         </li>
@@ -66,21 +66,19 @@
                 </table>
             </li>
             <li class="list-group-item-secondary text-center" style="list-style-type:none">
-                <page-link 
-                    page-model=@Model.PageViewModel
-                    page-url-StorageId=@Model.Cells.FirstOrDefault().FirstOrDefault().StorageId
-                    page-url-MinWidth=@Model.CellFilterViewModel.MinWidth
-                    page-url-MaxWidth=@Model.CellFilterViewModel.MaxWidth
-                    page-url-MinHeight=@Model.CellFilterViewModel.MinHeight
-                    page-url-MaxHeight=@Model.CellFilterViewModel.MaxHeight
-                    page-url-MinLength=@Model.CellFilterViewModel.MinLength
-                    page-url-MaxLength=@Model.CellFilterViewModel.MaxLength
-                    page-url-MinCapacity=@Model.CellFilterViewModel.MinCapacity
-                    page-url-MaxCapacity=@Model.CellFilterViewModel.MaxCapacity
-                    page-url-SearchFilter=@Model.CellFilterViewModel.SearchFilter
-                    page-url-SortItem=@Model.CellFilterViewModel.SortItem
-                    page-url-SearchValue=@Model.CellFilterViewModel.SearchValue
-                    page-action="StorageCells"></page-link>
+                <page-link page-model=@Model.PageViewModel
+                           page-url-MinWidth=@Model.CellFilterViewModel.MinWidth
+                           page-url-MaxWidth=@Model.CellFilterViewModel.MaxWidth
+                           page-url-MinHeight=@Model.CellFilterViewModel.MinHeight
+                           page-url-MaxHeight=@Model.CellFilterViewModel.MaxHeight
+                           page-url-MinLength=@Model.CellFilterViewModel.MinLength
+                           page-url-MaxLength=@Model.CellFilterViewModel.MaxLength
+                           page-url-MinCapacity=@Model.CellFilterViewModel.MinCapacity
+                           page-url-MaxCapacity=@Model.CellFilterViewModel.MaxCapacity
+                           page-url-SearchFilter=@Model.CellFilterViewModel.SearchFilter
+                           page-url-SortItem=@Model.CellFilterViewModel.SortItem
+                           page-url-SearchValue=@Model.CellFilterViewModel.SearchValue
+                           page-action="GetAllCells"></page-link>
             </li>
         </ul>
 
@@ -88,6 +86,6 @@
 }
 else
 {
-    <br/>
+    <br />
     <h1>Sorry, we haven't any cells</h1>
 }

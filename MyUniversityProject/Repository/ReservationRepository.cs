@@ -433,6 +433,19 @@ namespace MyUniversityProject.Repository
             return result;
 
         }
-            
+        
+        public async Task<string> UpdateReserve(Reservation reserve)
+        {
+            if (dataContext.Reservations.Any(x => x.ReservationId == reserve.ReservationId))
+            {
+                dataContext.Reservations.Update(reserve);
+                var result = await SaveAsync();
+
+                return result;
+            }
+            return $"Something wrong, can't find reservation with this Id: {reserve.ReservationId}";
+        }
+
+
     }
 }

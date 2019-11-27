@@ -45,8 +45,8 @@
                                 <div class="dropdown-menu">
                                     @Html.ActionLink("Work with Storage", "GetAllStorage", "Storage", null, new { @class = "dropdown-item btn-outline-success" })
                                     @Html.ActionLink("Work with Standart", "GetAllStandarts", "Storage", null, new { @class = "dropdown-item btn-outline-success" })
-                                    @Html.ActionLink("Work with Cell", "StorageCells", "Storage", new { StorageId = -1 }, new { @class = "dropdown-item btn-outline-success" })
-                                    @Html.ActionLink("User Information", "Users", "Admin", null, new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("Work with Cell", "GetAllCells", "Storage", null , new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("User Information", "GetUsers", "MyOffice", null, new { @class = "dropdown-item btn-outline-success" })
                                     @Html.ActionLink("Admin Settings", "AdminSettings", "Admin", null, new { @class = "dropdown-item btn-outline-success" })
                                     @Html.ActionLink("Reservation Info", "GetReservations", "Reservation", null, new { @class = "dropdown-item btn-outline-success" })
                                     @Html.ActionLink("Create Cell", "CreateCell", "Storage", null, new { @class = "dropdown-item btn-outline-success" })

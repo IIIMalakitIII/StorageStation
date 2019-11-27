@@ -1,0 +1,49 @@
+﻿@model MyUniversityProject.Models.FilterModel.UserFilterViewModel
+
+
+<div class="wrapper-reserv">
+    <div class="wrapped-div-2">
+        <div class="col-md-12 offset-md-0">
+            @using (Html.BeginForm("GetUsers", "MyOffice", FormMethod.Get, new { @class = "mt-4" }))
+            {
+                <ul class="list-group">
+                    <li class="list-group-item bg-dark d-flex justify-content-center">
+                        <div class="form-group">
+                            <div class="input-group">
+                                @Html.DropDownListFor(x => x.SearchValue, Model.SearchParams, new { @class = "form-control", @Value = Model.SearchValue })
+                                @Html.EditorFor(x => x.SearchFilter, new { htmlAttributes = new { @class = "form-control", @placeholder = "Search" } })
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <div class="form-group">
+                            @Html.Label("", "Order by:", htmlAttributes: new { @class = "control-label  text-white" })
+                            @Html.DropDownListFor(x => x.SortItem, Model.SortList, new { @class = "form-control", @Value = Model.SortItem })
+                        </div>
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("", "From:", htmlAttributes: new { @class = "control-label text-white" })
+                                    @Html.EditorFor(x => x.MinId, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("", "To:", htmlAttributes: new { @class = "control-label text-white" })
+                                    @Html.EditorFor(x => x.MaxId, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item bg-dark">
+                        <input type="submit" class="btn btn-primary btn-lg btn-block" value="Find" />
+                    </li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+

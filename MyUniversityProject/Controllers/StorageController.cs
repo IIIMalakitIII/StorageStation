@@ -112,6 +112,8 @@ namespace MyUniversityProject.Controllers
             return View(activeStorages);
         }
 
+        /*--------------------CELL-------------------------*/
+
         [Authorize(Roles = "Admin ,SuperUser")]
         [HttpGet]
         public async Task<IActionResult> StorageCells([Bind("StorageId," +
@@ -127,6 +129,23 @@ namespace MyUniversityProject.Controllers
             var storageCells = await _storageRepository.GetCellsAsync(cellFilterViewModel, page);
             return View(storageCells);
             
+        }
+
+        [Authorize(Roles = "Admin ,SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllCells([Bind("MinWidth," +
+            "MaxWidth, MinHeight, MaxHeight, MinLength, MaxLength, MinCapacity," +
+            "MaxCapacity,SearchValue,SearchFilter,SortItem")]CellFilterViewModel cellFilterViewModel, int page = 1)
+        {
+            var errMsg = TempData["ErrorMessage"];
+            cellFilterViewModel.StorageId = -1;//кастыль что бы взять все ячейки
+            if (errMsg != null)
+            {
+                ModelState.AddModelError("", errMsg as string);
+            }
+            var storageCells = await _storageRepository.GetCellsAsync(cellFilterViewModel, page);
+            return View(nameof(StorageCells),storageCells);
+
         }
 
         [Authorize(Roles = "Admin, SuperUser")]
@@ -146,6 +165,15 @@ namespace MyUniversityProject.Controllers
             var result = await _storageRepository.DeleteCellAsync(id);
             TempData["ErrorMessage"] = result;
             return RedirectToAction(nameof(StorageCells), new { StorageId = storageId, page });
+        }
+
+        [Authorize(Roles = "Admin, SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> _DeleteOneCell(int id, int page)
+        {
+            var result = await _storageRepository.DeleteCellAsync(id);
+            TempData["ErrorMessage"] = result;
+            return RedirectToAction(nameof(GetAllCells), new { page });
         }
 
         [Authorize(Roles = "Admin, SuperUser")]
@@ -189,6 +217,8 @@ namespace MyUniversityProject.Controllers
             return View(updateCell);
         }
 
+
+        /*--------------------STANDART-------------------------*/
         [Authorize(Roles = "Admin, SuperUser")]
         [HttpGet]
         public async Task<IActionResult> GetAllStandarts(string currentFilter, string sortOrder, string searching)

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -55,7 +58,7 @@ namespace MyUniversityProject.Controllers
                 ModelState.AddModelError("", result);
             }
 
-            return View("_MyOfficeForSuperUser", employee);
+            return View("_OfficeForSuperUser", employee);
         }
 
         [Authorize(Roles = "Admin, SuperUser")]
@@ -129,5 +132,35 @@ namespace MyUniversityProject.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction(nameof(Login), "Admin");
         }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public IActionResult GetAdminDash()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpPost]
+        public IActionResult GetAdminDash(string select)
+        {
+            try
+            {
+
+                SqlConnection sqlconn = new SqlConnection(ConnectionString);
+                sqlconn.Open();
+                SqlDataAdapter oda = new SqlDataAdapter(select, sqlconn);
+                DataTable dt = new DataTable();
+                oda.Fill(dt);
+                
+                sqlconn.Close();
+            }
+            catch (Exception ex)
+            {
+                    ModelState.AddModelError("",ex.Message);
+            }
+            return View(select);
+        }
+
     }
 }

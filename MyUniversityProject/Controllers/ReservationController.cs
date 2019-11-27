@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using MyUniversityProject.Models.FilterModel;
+using MyUniversityProject.Models;
 
 namespace MyUniversityProject.Controllers
 {
@@ -113,11 +114,33 @@ namespace MyUniversityProject.Controllers
         {
             /* Сообщить пользователю*/
             var result = await reservationRepository.GetReservation(Id);
-            if(result == null)
+            if (result == null)
             {
+                TempData["ErrorMessage"]= $"Sorry, can't find Reservation by this ID: {Id}";
                 return RedirectToAction(nameof(GetReservations));
             }
             return View(result);
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, SuperUser")]
+        public async Task<IActionResult> GetReserve(Reservation reserve)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await reservationRepository.UpdateReserve(reserve);
+                if (result == null)
+                {
+                    return RedirectToAction(nameof(GetReserve), new { id = reserve.ReservationId});
+                }
+                else
+                {
+                    ModelState.AddModelError("", result);
+                }
+            }
+            /* Сообщить пользователю*/
+            return View(reserve);
         }
 
     }

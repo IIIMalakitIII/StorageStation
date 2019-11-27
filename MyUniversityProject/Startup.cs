@@ -11,6 +11,7 @@ using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Repository;
 using System.Globalization;
+using System.Net;
 
 namespace MyUniversityProject
 {
@@ -41,11 +42,18 @@ namespace MyUniversityProject
 
             services.AddDistributedMemoryCache();
 
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options => //CookieAuthenticationOptions
+            //    {
+            //    options.LoginPath = new PathString("/MyOffice/Login");
+            //    });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
-                {
-                options.LoginPath = new PathString("/MyOffice/Login");
-                });
+                    .AddCookie(options =>
+                    {
+                        options.LoginPath = "/MyOffice/LogIn";
+                        options.LogoutPath = "/MyOffice/LogOut";
+                    });
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -66,7 +74,7 @@ namespace MyUniversityProject
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseAuthentication();
+       
             //app.UseRequestLocalization();
             var supportedCultures = new[]
 {
@@ -79,6 +87,10 @@ namespace MyUniversityProject
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });
+            app.UseAuthentication();
+
+            // If you don't want the cookie to be automatically authenticated and assigned HttpContext.User, 
+            // remove the CookieAuthenticationDefaults.AuthenticationScheme parameter passed to AddAuthentication.
 
 
             app.UseMvc(routes =>
