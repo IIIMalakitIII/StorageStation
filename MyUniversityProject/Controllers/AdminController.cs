@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.AuthenticationModel;
+using MyUniversityProject.Models.StorageViewModel;
 
 namespace MyUniversityProject.Controllers
 {
@@ -137,17 +138,112 @@ namespace MyUniversityProject.Controllers
         [HttpGet]
         public IActionResult GetAdminDash()
         {
-            return View();
+            return View(new SqlViewModel());
         }
         
         [Authorize(Roles = "SuperUser")]
         [HttpPost]
-        public IActionResult GetAdminDash(string select)
+        public IActionResult GetAdminDash(SqlViewModel select)
         {
-            
             var result = adminRepository.DashBoard(select);
             return View(result);
         }
 
+
+        /*------------------Admins--------------------------*/
+
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> GetAdmins(string currentFilter, string sortOrder, string searching)
+        {
+
+            var errMsg = TempData["ErrorMessage"];
+
+            if (errMsg != null)
+            {
+                ModelState.AddModelError("", errMsg as string);
+            }
+            ViewBag.Id = String.IsNullOrEmpty(sortOrder) ? "id" : "";
+            ViewBag.LastName = sortOrder == "LastName" ? "lastName" : "LastName";
+            ViewBag.FirstName = sortOrder == "FirstName" ? "firstName" : "FirstName";
+
+            if (searching == null)
+            {
+                if (currentFilter == null)
+                {
+                    searching = "";
+                }
+                else
+                {
+                    searching = currentFilter;
+                }
+            }
+
+            ViewBag.CurrentFilter = searching;
+            ViewData["DateSortParm"] = sortOrder == "id" ? "id" : "Id";
+            var activeStorages = await adminRepository.GetAdmins(sortOrder, searching);
+
+            return View(activeStorages);
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public IActionResult CreateAdmin()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpPost]
+        public async Task<IActionResult> CreateAdmin(Employee employee)
+        {
+            if (!ModelState.IsValid)
+                return View(employee);
+
+            var result = await adminRepository.CreateAdmins(employee);
+            if(result != null)
+            {
+                ModelState.AddModelError("", result);
+                return View(employee);
+            }
+            return RedirectToAction(nameof(GetAdmins));
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> GetAdmin(int Id)
+        {
+            var result = await adminRepository.GetEpmloyee(Id);
+            return View(result);
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpPost]
+        public async Task<IActionResult> GetAdmin(Employee employee)
+        {
+            if (!ModelState.IsValid)
+                return View(employee);
+
+            var result = await adminRepository.UpdateAdmin(employee);
+
+            if (result != null)
+            {
+                ModelState.AddModelError("", result);
+                return View(employee);
+            }
+
+            return View(employee);
+        }
+
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteAdmin(int id)
+        {
+                var result = await adminRepository.DeleteAdmin(id);
+                TempData["ErrorMessage"] = result;
+                return RedirectToAction(nameof(GetAdmins));
+        }
     }
 }

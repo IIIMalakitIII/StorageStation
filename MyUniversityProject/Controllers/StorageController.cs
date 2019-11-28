@@ -107,7 +107,7 @@ namespace MyUniversityProject.Controllers
 
             ViewBag.CurrentFilter = searching;
             ViewData["DateSortParm"] = sortOrder == "Location" ? "location" : "Location";
-            var activeStorages = await _storageRepository.GetAllStorageAsync(searching, sortOrder);
+            var activeStorages = await _storageRepository.GetAllStorageAsync(sortOrder, searching);
 
             return View(activeStorages);
         }
@@ -298,6 +298,14 @@ namespace MyUniversityProject.Controllers
                 return View(standard);
             }
             return RedirectToAction(nameof(GetAllStandarts));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, SuperUser")]
+        public async Task<IActionResult> PrintReserve(int storageId)
+        {
+            var stream = await _storageRepository.PrintReserve(storageId);
+            return File(stream, "application/msword", "Result.docx");
         }
 
         public async Task<IActionResult> _ChangeStandard(ChangeAllViewModel change)

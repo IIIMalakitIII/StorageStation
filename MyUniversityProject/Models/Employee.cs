@@ -45,6 +45,5 @@ namespace MyUniversityProject.Models
 
         public string Role { get; set; }
 
-        public virtual List<Schedule> Employees { get; set; }
     }
 }

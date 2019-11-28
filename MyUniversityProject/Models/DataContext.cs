@@ -16,7 +16,5 @@ namespace MyUniversityProject.Models
 
         public DbSet<Employee> Employee { get; set; }
 
-        public DbSet<Schedule> Schedule { get; set; }
-
     }
 }

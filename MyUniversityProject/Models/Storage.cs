@@ -13,7 +13,5 @@ namespace MyUniversityProject.Models
         [Required(ErrorMessage = "Status is requred")]
         public bool Status { get; set; }
         public virtual List<Cell> Cells {get;set;}
-        public virtual List<Schedule> Schedules { get; set; }
-
     }
 }

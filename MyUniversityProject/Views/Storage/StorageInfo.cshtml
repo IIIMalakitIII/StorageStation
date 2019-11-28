@@ -53,6 +53,12 @@
                     }
                 </div>
             </div>
+            <div class="form-group">
+                <a href=@Url.Action("PrintReserve", "Storage", new { storageId = Model.StorageId }) class="btn btn-primary btn-block" style="background:#8b00ff;">
+                    <img src="~/assets/images/icons8-print-20.png" alt="Print" />
+                    Print Active Reservation
+                </a>
+            </div>
             @Html.ActionLink("Look at the list of cells", "StorageCells", "Storage", new { StorageId = Model.StorageId }, new { @class = "btn btn-primary btn-block", @style = "background:#8b00ff;" })
         </div>
         

@@ -118,32 +118,6 @@ namespace MyUniversityProject.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("MyUniversityProject.Models.Schedule", b =>
-                {
-                    b.Property<int>("ScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmployeeId");
-
-                    b.Property<DateTime>("EndWork");
-
-                    b.Property<DateTime>("StartWork");
-
-                    b.Property<int>("StorageId");
-
-                    b.Property<string>("WeekDay")
-                        .IsRequired();
-
-                    b.HasKey("ScheduleId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("StorageId");
-
-                    b.ToTable("Schedule");
-                });
-
             modelBuilder.Entity("MyUniversityProject.Models.Standard", b =>
                 {
                     b.Property<int>("StandardId")
@@ -240,19 +214,6 @@ namespace MyUniversityProject.Migrations
                     b.HasOne("MyUniversityProject.Models.UserInfo", "UserInfo")
                         .WithMany("Reservations")
                         .HasForeignKey("UserInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("MyUniversityProject.Models.Schedule", b =>
-                {
-                    b.HasOne("MyUniversityProject.Models.Employee", "Employee")
-                        .WithMany("Employees")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MyUniversityProject.Models.Storage", "Storage")
-                        .WithMany("Schedules")
-                        .HasForeignKey("StorageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

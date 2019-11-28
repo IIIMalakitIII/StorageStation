@@ -172,3 +172,6 @@ C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\net
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Storage\_GetAllCells.g.cshtml.cs
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\MyUniversityProject.csprojAssemblyReference.cache
 C:\Users\Latif\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Admin\GetAdminDash.g.cshtml.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Admin\GetAdminDash.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Admin\GetAdmins.cshtml.g.cs
+C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\obj\Debug\netcoreapp2.2\Razor\Views\Admin\CreateAdmin.cshtml.g.cs

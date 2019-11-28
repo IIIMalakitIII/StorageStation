@@ -5,6 +5,7 @@ using MyUniversityProject.Models.Pagination;
 using MyUniversityProject.Models.StorageViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace MyUniversityProject.IRepository
         Task<Storage> GetStorageInfoAsync(int id);
         //Task<bool> Update(Storage storage);
         Task<string> Update(Storage storage);
+        Task<MemoryStream> PrintReserve(int id);
         Task<IEnumerable<Cell>> GetAllStorageInfoAsync(int storageId);
         IEnumerable<Cell> OrderByCell(IEnumerable<Cell> cells, string sortItem);
         Task<IEnumerable<Cell>> FilterSearch(CellFilterViewModel cellFilter);

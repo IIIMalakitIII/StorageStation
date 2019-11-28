@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MyUniversityProject.Models.Employee>
+@using System.Text
+<br />
+@using (Html.BeginForm("GetAdmins", "Admin", FormMethod.Get))
+{
+    <div class="input-group mb-3 row d-flex justify-content-center">
+        @Html.TextBox("searching", ViewBag.CurrentFilter as string)
+        <div class="input-group-append">
+            <input class="btn btn-primary" type="submit" value="Find">
+        </div>
+    </div>
+}
+<br />
+
+<div class="table-responsive-sm bg-dark">
+    <table class="table table-dark text-center">
+        <thead>
+            @Html.ActionLink(" Create Storage", "CreateAdmin","Admin", null, new { @class = "btn btn-primary btn-sm btn-block" })
+            <tr>
+                <th>
+                    @Html.ActionLink("Id", "GetAdmins", new { sortOrder = ViewBag.Id, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th>
+                    @Html.ActionLink("LastName", "GetAdmins", new { sortOrder = ViewBag.LastName, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th>
+                    Information
+                </th>
+                <th>
+                    @Html.ActionLink("FirstName", "GetAdmins", new { sortOrder = ViewBag.FirstName, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th>
+                    Role
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @item.EmployeeId
+                </td>
+                <td>
+                    @item.LastName
+                </td>
+                <td>
+                    @Html.ActionLink("Information", "GetAdmin", "Admin", new { id = item.EmployeeId }, new { @class = "btn btn-info" })
+                </td>
+                <td>
+                    @item.FirstName
+                </td>
+                <td>
+                    @item.Role
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "DeleteAdmin", "Admin", new { id = item.EmployeeId }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+    @if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        var sb = new StringBuilder();
+        foreach (var modelState in ViewContext.ViewData.ModelState.Values)
+        {
+            foreach (var error in modelState.Errors)
+            {
+                sb.Append(error.ErrorMessage);
+            }
+        }
+        @:alert('@sb.ToString()');
+    }
+    </script>
+}

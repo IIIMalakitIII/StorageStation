@@ -1,5 +1,6 @@
 ﻿using MyUniversityProject.Models;
 using MyUniversityProject.Models.AuthenticationModel;
+using MyUniversityProject.Models.StorageViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,11 @@ namespace MyUniversityProject.IRepository
         Task<string> SaveAsync();
         Task<Employee> GetEpmloyee(string Email);
         //string DashBoard(string sql);
-        Task<string> DashBoard(string sql);
+        SqlViewModel DashBoard(SqlViewModel sqlView);
+        Task<IEnumerable<Employee>> GetAdmins(string sortOrder, string searching);
+        Task<string> CreateAdmins(Employee employee);
+        Task<string> UpdateAdmin(Employee employee);
+        Task<Employee> GetEpmloyee(int Id);
+        Task<string> DeleteAdmin(int employeeId);
     }
 }

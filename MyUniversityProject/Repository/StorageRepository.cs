@@ -5,8 +5,11 @@ using MyUniversityProject.Models;
 using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
 using MyUniversityProject.Models.StorageViewModel;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,10 +24,41 @@ namespace MyUniversityProject.Repository
             this.dataContext = dataContext;
         }
 
-        //public async Task<IEnumerable<Storage>> GetAllStorageAsync(string searching) =>
-        //    await dataContext.Storages.Where(o => o.Location.Contains(searching)).ToListAsync();
+        public async Task<MemoryStream> PrintReserve(int id)
+        {
+            var list = await dataContext.Reservations
+                .Include(x => x.Cell)
+                .Include(x=>x.UserInfo)
+                .Where(x => x.Cell.StorageId == id && x.Status)
+                .ToListAsync();
+            using (WordDocument document = new WordDocument())
+            {
 
-        public async Task<IEnumerable<Storage>> GetAllStorageAsync(string searching, string sortOrder)
+                if (!list.Any())
+                {
+                    document.EnsureMinimal();
+                    document.LastParagraph.AppendText($"_________Storage empty______________________________\n");
+                }
+                foreach (var reservation in list)
+                {
+                    document.EnsureMinimal();
+                    document.LastParagraph.AppendText($"Reservation Id: {reservation.ReservationId} \n");
+                    document.LastParagraph.AppendText($"Price: {reservation.Amount} \n");
+                    document.LastParagraph.AppendText($"Start Reservation: {reservation.StartReservation} \n");
+                    document.LastParagraph.AppendText($"End Reservation: {reservation.EndReservation} \n");
+                    document.LastParagraph.AppendText($"Cell Id: {reservation.CellId} \n");
+                    document.LastParagraph.AppendText($"User Information: {reservation.UserInfo.FirstName} {reservation.UserInfo.LastName} \n");
+                    document.LastParagraph.AppendText($"User Id: {reservation.UserInfoId} \n");
+                    document.LastParagraph.AppendText($"_______________________________________\n");
+                }
+                MemoryStream stream = new MemoryStream();
+                document.Save(stream, FormatType.Docx);
+                stream.Position = 0;
+                return stream;
+            }
+        }
+
+        public async Task<IEnumerable<Storage>> GetAllStorageAsync(string sortOrder, string searching)
         {
             switch (sortOrder)
             {
