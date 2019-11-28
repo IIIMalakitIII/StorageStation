@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyUniversityProject.Models.FilterModel
 {
@@ -14,6 +16,15 @@ namespace MyUniversityProject.Models.FilterModel
         public int MaxHeight { get; set; }
         public int MaxLength { get; set; }
         public int MaxCapacity { get; set; }
+        [Display(Name = "First Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime? FirstDate { get; set; }
+
+        [Display(Name = "Second Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime? SecondDate { get; set; }
         public string SearchFilter { get; set; }
         public string SearchValue { get; set; }
         public string SortItem { get; set; }

@@ -118,7 +118,7 @@ namespace MyUniversityProject.Controllers
         [HttpGet]
         public async Task<IActionResult> StorageCells([Bind("StorageId," +
             "MinWidth, MaxWidth, MinHeight, MaxHeight, MinLength, MaxLength, MinCapacity," +
-            "MaxCapacity,SearchValue,SearchFilter,SortItem")]CellFilterViewModel cellFilterViewModel, int page=1)
+            "MaxCapacity,SearchValue,SearchFilter,SortItem,FirstDate,SecondDate")]CellFilterViewModel cellFilterViewModel, int page=1)
         {
             var errMsg = TempData["ErrorMessage"];
 

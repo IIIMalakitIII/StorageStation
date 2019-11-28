@@ -147,11 +147,11 @@ namespace MyUniversityProject.Repository
             var EndTimeReserve = reservationLuggage.StartReservation.AddHours(reservationLuggage.HowManyHours);
             foreach (var cell in Cells)
             {
-                bool addCell = cell.Reservations.Any(reserve =>
+                bool addCell = cell.Reservations.Any(reserve => 
                     (reserve.StartReservation <= reservationLuggage.StartReservation &&
                     reserve.EndReservation >= reservationLuggage.StartReservation) ||
                     (reservationLuggage.StartReservation <= reserve.StartReservation &&
-                    EndTimeReserve >= reserve.StartReservation));
+                    EndTimeReserve >= reserve.StartReservation)/* && reserve.Status*/);
 
                 if (!addCell)
                 {

@@ -4,7 +4,10 @@ using MyUniversityProject.Models;
 using MyUniversityProject.Models.AuthenticationModel;
 using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -216,11 +219,6 @@ namespace MyUniversityProject.Repository
                 default:
                     return list.OrderBy(x => x.UserInfoId); ;
             }
-        }
-
-        public IEnumerable<UserInfo> GetSortUser(IEnumerable<UserInfo> list, string SortItem)
-        {
-            dataContext.Standards.FromSql("Select * From Standards");
         }
 
     }

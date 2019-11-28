@@ -14,5 +14,7 @@ namespace MyUniversityProject.IRepository
         Task<string> UpdatePassword(string Email, ChangePassword password);
         Task<string> SaveAsync();
         Task<Employee> GetEpmloyee(string Email);
+        //string DashBoard(string sql);
+        Task<string> DashBoard(string sql);
     }
 }

@@ -266,7 +266,8 @@ namespace MyUniversityProject.Repository
             {
                 list = dataContext.Cells
                 .AsNoTracking()
-                .Include(x => x.Standard);
+                .Include(x => x.Standard)
+                .Include(x => x.Reservations);
                 
             }
             else
@@ -274,11 +275,21 @@ namespace MyUniversityProject.Repository
                 list = dataContext.Cells
                 .AsNoTracking()
                 .Include(x => x.Standard)
+                .Include(x => x.Reservations)
                 .Where(x => x.StorageId == cellFilter.StorageId);
             }
 
+            //if(cellFilter.FirstDate != null && cellFilter.SecondDate != null)
+            //{
+            //    list = list.Where(x =>
+            //       x.Reservations.Any(reserve =>
+            //        (reserve.StartReservation < cellFilter.FirstDate &&
+            //        reserve.EndReservation > cellFilter.FirstDate) ||
+            //        (cellFilter.FirstDate < reserve.StartReservation &&
+            //        cellFilter.SecondDate > reserve.StartReservation) && !reserve.Status));
+            //}
 
-            if(cellFilter.MaxWidth ==0 && cellFilter.MinWidth != 0)
+            if (cellFilter.MaxWidth ==0 && cellFilter.MinWidth != 0)
             {
                 list = list.Where(x => x.Width >= cellFilter.MinWidth);
             }

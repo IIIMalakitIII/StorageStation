@@ -84,11 +84,19 @@
                             </div>
                             <br />
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     @Html.ActionLink("Information", "GetReserve", "Reservation", new { id = item.ReservationId }, new { @class = "btn btn-info btn-block" })
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     @Html.ActionLink("Delete", "DeleteReserve", "Reservation", new { reserveId = item.ReservationId, page = @Model.PageViewModel.PageNumber }, new { @class = "btn btn-danger btn-block" })
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <a href=@Url.Action("Print", "Reservation", new { id = item.ReservationId }) class="btn btn-primary btn-block" style="background:#8b00ff;">
+                                            <img src="~/assets/images/icons8-print-20.png" alt="Print" />
+                                            Print
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 

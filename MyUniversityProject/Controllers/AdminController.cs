@@ -139,27 +139,14 @@ namespace MyUniversityProject.Controllers
         {
             return View();
         }
-
+        
         [Authorize(Roles = "SuperUser")]
         [HttpPost]
         public IActionResult GetAdminDash(string select)
         {
-            try
-            {
-
-                SqlConnection sqlconn = new SqlConnection(ConnectionString);
-                sqlconn.Open();
-                SqlDataAdapter oda = new SqlDataAdapter(select, sqlconn);
-                DataTable dt = new DataTable();
-                oda.Fill(dt);
-                
-                sqlconn.Close();
-            }
-            catch (Exception ex)
-            {
-                    ModelState.AddModelError("",ex.Message);
-            }
-            return View(select);
+            
+            var result = adminRepository.DashBoard(select);
+            return View(result);
         }
 
     }
