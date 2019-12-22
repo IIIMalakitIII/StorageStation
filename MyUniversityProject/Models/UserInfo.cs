@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyUniversityProject.Models
 {
@@ -11,27 +7,32 @@ namespace MyUniversityProject.Models
     {
         [Key]
         public int UserInfoId { get; set; }
-
-        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Something is wrong")]
+        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Email is invalid")]
         [Required]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Something is wrong")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-        [Required(ErrorMessage = "Something is wrong")]
-        [StringLength(150, MinimumLength = 3)]
+        [Required(ErrorMessage = "Address is requred")]
+        [StringLength(100, MinimumLength = 3)]
         public string Address { get; set; }
-        [Required(ErrorMessage = "Something is wrong")]
-        [StringLength(150, MinimumLength = 3)]
+        [Required(ErrorMessage = "FirstName is requred")]
+        [StringLength(80, MinimumLength = 3)]
         public string FirstName { get; set; }
-        [Required(ErrorMessage = "Something is wrong")]
-        [StringLength(150, MinimumLength = 3)]
+        [Required(ErrorMessage = "LastName is requred")]
+        [StringLength(80, MinimumLength = 3)]
         public string LastName { get; set; }
-        public string PassportId { get; set; }
-        [Required(ErrorMessage = "Something is wrong")]
+        [Required(ErrorMessage = "Phone Number is requred")]
         [StringLength(30, MinimumLength = 3)]
         public string PhoneNumber { get; set; }
-
+        [Required(ErrorMessage = "Password is requred")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [StringLength(30, MinimumLength = 3)]
+        public string PassportId { get; set; }
+        [StringLength(10, MinimumLength = 3)]
+        public string Role { get; set; }
         public virtual List<Reservation> Reservations { get; set; }
+
+
+
+
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MyUniversityProject.Models.AuthenticationModel
 {
@@ -19,7 +15,8 @@ namespace MyUniversityProject.Models.AuthenticationModel
 
         [Required]
         [DataType(DataType.Password)]
-        [Compare("NewPassword", ErrorMessage = "Пароли не совпадают")]
+        [Display(Name = "ConfirmPassword")]
+        [Compare("NewPassword", ErrorMessage = "Passwords don't match")]
         public string ConfirmPassword { get; set; }
     }
 }

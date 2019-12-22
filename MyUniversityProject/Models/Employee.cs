@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyUniversityProject.Models
 {
@@ -47,6 +45,5 @@ namespace MyUniversityProject.Models
 
         public string Role { get; set; }
 
-        public virtual List<Schedule> Employees { get; set; }
     }
 }

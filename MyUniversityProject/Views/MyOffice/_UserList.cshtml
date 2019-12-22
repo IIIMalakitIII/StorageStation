@@ -1,0 +1,86 @@
+﻿@using MyUniversityProject.Models.Pagination;
+@using MyUniversityProject.Models.FilterModel
+@model IndexUserViewModel
+@addTagHelper "*, MyUniversityProject"
+
+@{
+    ViewData["Title"] = "UserList";
+}
+
+<h1 class="text-center">UserList</h1>
+<br />
+
+@if (Model.UserInfo.Any())
+{
+    <ul class="list-group bg-dark">
+        <li class="list-group-item bg-dark">
+            @foreach (var item in Model.UserInfo)
+            {
+                <div class="wrapper-reserv">
+                    <div class="wrapped-div-2">
+                        <div class="col-md-12 offset-md-0">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("", "FirstName", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.FirstName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("", "LastName", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.LastName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("", "User Id", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.UserInfoId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("", "Address", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.Address, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("", "PassportId", htmlAttributes: new { @class = "control-label  text-white" })
+                                        @Html.EditorFor(model => item.PassportId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.ActionLink("Information", "GetUser", "MyOffice", new { Id = item.UserInfoId }, new { @class = "btn btn-info btn-block" })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.ActionLink("Delete", "DeleteUser", "MyOffice", new { userId = item.UserInfoId, page = @Model.PageViewModel.PageNumber }, new { @class = "btn btn-danger btn-block" })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </li>
+        <li class="list-group-item-secondary text-center" style="list-style-type:none">
+            <page-link page-model="@Model.PageViewModel" page-action="GetReservations"
+                       page-url-SearchFilter=@Model.UserFilterViewModel.SearchFilter
+                       page-url-SortItem=@Model.UserFilterViewModel.SortItem
+                       page-url-MinPrice=@Model.UserFilterViewModel.MinId
+                       page-url-MaxPrice=@Model.UserFilterViewModel.MaxId
+                       page-url-SearchValue=@Model.UserFilterViewModel.SearchValue>
+            </page-link>
+        </li>
+    </ul>
+}
+else
+{
+    <br />
+    <h1>Doesn't have any Users</h1>
+}

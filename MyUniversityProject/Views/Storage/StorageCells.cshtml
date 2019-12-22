@@ -1,0 +1,34 @@
+﻿@model MyUniversityProject.Models.Pagination.IndexCellViewModel
+@using System.Text
+<div class="row">
+    <div class="col-md-5">
+        @await Html.PartialAsync("_CellFilter", Model.CellFilterViewModel)
+    </div>
+    <div class="col-md-7">
+        @if (Model.CellFilterViewModel.StorageId == -1)
+        {
+            @await Html.PartialAsync("_GetAllCells", Model)
+        }
+        else
+        {
+            @await Html.PartialAsync("_ListOfCells", Model)
+        }
+
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+    @if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        var sb = new StringBuilder();
+        foreach (var modelState in ViewContext.ViewData.ModelState.Values)
+        {
+            foreach (var error in modelState.Errors)
+            {
+                sb.Append(error.ErrorMessage);
+            }
+        }
+        @:alert('@sb.ToString()');
+    }
+    </script>
+}

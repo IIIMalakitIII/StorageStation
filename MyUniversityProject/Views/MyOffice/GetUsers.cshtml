@@ -1,0 +1,28 @@
+﻿@using MyUniversityProject.Models.Pagination;
+@using System.Text
+@model IndexUserViewModel
+
+<div class="row">
+    <div class="col-md-5">
+        @await Html.PartialAsync("_UserFilter", Model.UserFilterViewModel)
+    </div>
+    <div class="col-md-7">
+        @await Html.PartialAsync("_UserList", Model)
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+    @if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        var sb = new StringBuilder();
+        foreach (var modelState in ViewContext.ViewData.ModelState.Values)
+        {
+            foreach (var error in modelState.Errors)
+            {
+                sb.Append(error.ErrorMessage);
+            }
+        }
+        @:alert('@sb.ToString()');
+    }
+    </script>
+}

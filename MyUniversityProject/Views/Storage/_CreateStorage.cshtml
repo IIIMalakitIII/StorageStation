@@ -1,0 +1,41 @@
+﻿@model MyUniversityProject.Models.Storage
+<br/>
+<form asp-action="_CreateStorage">
+    @Html.AntiForgeryToken()
+    <div class="row col-md-12">
+        <div class="col-md-4 bg-dark">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Location, "Location", htmlAttributes: new { @class = "control-label  text-white" })
+                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control", @placeholder = "Location" } })
+                @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-4 bg-dark">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Status, "Status", htmlAttributes: new { @class = "control-label  text-white" })
+                <div>
+                    @Html.CheckBoxFor(model => model.Status,
+                        new {
+                            @class = "form-control",
+                            @type = "checkbox",
+                            @checked = @Model.Status,
+                            @data_toggle = "toggle",
+                            @data_on = "Active",
+                            @data_off = "Deactive",
+                            @data_onstyle = "success",
+                            @data_offstyle = "danger",
+                            @data_width = "100"
+                        })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 bg-dark">
+            <div class="form-group">
+                <br/>
+                <div class="input-group">
+                    <input type="submit" value="Create New" class="btn btn-primary btn-block" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

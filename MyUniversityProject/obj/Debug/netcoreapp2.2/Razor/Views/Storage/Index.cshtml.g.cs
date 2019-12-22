@@ -24,17 +24,22 @@ using MyUniversityProject.Models;
 #line default
 #line hidden
 #line 3 "C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\Views\_ViewImports.cshtml"
-using Microsoft.AspNetCore.Http;
+using MyUniversityProject.Models.ErrorViewModel;
 
 #line default
 #line hidden
 #line 4 "C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\Views\_ViewImports.cshtml"
+using Microsoft.AspNetCore.Http;
+
+#line default
+#line hidden
+#line 5 "C:\Users\user\Documents\GitHub\StorageStation\MyUniversityProject\Views\_ViewImports.cshtml"
 using Microsoft.AspNetCore.Identity;
 
 #line default
 #line hidden
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2e6e49ed11bcdaa4ef0016baa146b11e4bd9a470", @"/Views/Storage/Index.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"91ade478114418871ab43e38a2e377a8ee271c89", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"9db963d04bd4b185239d217111c0291317422622", @"/Views/_ViewImports.cshtml")]
     public class Views_Storage_Index : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<IEnumerable<MyUniversityProject.Models.Storage>>
     {
         #pragma warning disable 1998

@@ -1,0 +1,24 @@
+﻿@using MyUniversityProject.Models.AuthenticationModel;
+@model MyUniversityProject.Models.Employee
+
+@{
+    ViewData["Title"] = "AdminOffice";
+}
+
+<h2 class="text-center"> Admin Information </h2>
+<hr>
+<div class="row">
+    <div class="col-md-7">
+        @if (User.IsInRole("SuperUser"))
+        {
+            @await Html.PartialAsync("_OfficeForSuperUser")
+        }
+        else
+        {
+            @await Html.PartialAsync("_OfficeForAdmin")
+        }
+    </div>
+    <div class="col-md-5">
+        @await Html.PartialAsync("_ChangePassword", new ChangePassword())
+    </div>
+</div>

@@ -10,6 +10,10 @@
         <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
         <script src="~/lib/jquery/jquery.js"></script>
         <script src="~/lib/bootstrap/js/jquery.unobtrusive-ajax.min.js"></script>
+        <script src="~/lib/bootstrap/js/popper.js/umd/popper.min.js"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="~/lib/bootstrap/bootstrap-toggle/css/bootstrap-toggle.min.css" />
+        <script src="~/lib/bootstrap/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -33,9 +37,24 @@
                     </button>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                     {
-                        <a class="navbar-brand text-white" href="/Admin">
-                            Settings
-                        </a>
+                
+                            <div class="btn-group pr-2">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Settings
+                                </button>
+                                <div class="dropdown-menu">
+                                    @Html.ActionLink("Work with Storage", "GetAllStorage", "Storage", null, new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("Work with Standart", "GetAllStandarts", "Storage", null, new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("Work with Cell", "GetAllCells", "Storage", null , new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("User Information", "GetUsers", "MyOffice", null, new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("Admins", "GetAdmins", "Admin", null, new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("Reservation Info", "GetReservations", "Reservation", null, new { @class = "dropdown-item btn-outline-success" })
+                                    @Html.ActionLink("Create Cell", "CreateCell", "Storage", null, new { @class = "dropdown-item btn-outline-success" })
+
+                                    <div class="dropdown-divider"></div>
+                                    @Html.ActionLink("AdminDash", "GetAdminDash", "Admin", null, new { @class = "dropdown-item btn-outline-success" })
+                                </div>
+                            </div>
                     }
                     else
                     {
@@ -59,19 +78,35 @@
                         @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("SuperUser"))
                         {
                             <li>
-                                @Html.ActionLink("My Office", "Index", "MyOffice", null, new { @class = "nav-link text-white" })
-                            </li>
-                            <li>
-                                @Html.ActionLink("Log out", "Logout", "MyOffice", new { area = "" }, new { @class = "btn btn-danger my-2 my-sm-0" })
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        My Office
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        @Html.ActionLink("My Office", "Index", "MyOffice", null, new { @class = "dropdown-item btn-outline-danger" })
+                                        @Html.ActionLink("Reservation History", "ReservationHistory", "MyOffice",null, new { @class = "dropdown-item btn-outline-danger" })
+                                        <div class="dropdown-divider"></div>
+                                        @Html.ActionLink("Log out", "Logout", "MyOffice", new { area = "" }, new { @class = "dropdown-item btn-outline-danger" })
+                                    </div>
+                                </div>
                             </li>
                         }
+
                         else if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("SuperUser"))
                         {
-                            <li class="float-righ">
-                                @Html.ActionLink("My Office", "MyOffice", "Admin", null, new { @class = "nav-link text-white" })
-                            </li>
-                            <li class="float-right">
-                                @Html.ActionLink("Log out", "Logout", "Admin", new { area = "" }, new { @class = "btn btn-danger my-2 my-sm-0" })
+                            <li>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        My Office
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        @Html.ActionLink("Admin Office", "AdminOffice", "Admin", null, new { @class = "dropdown-item btn-outline-danger" })
+                                        @Html.ActionLink("Settings", "Index", "Admin", null, new { @class = "dropdown-item btn-outline-danger" })
+                                        @Html.ActionLink("Logging History", "Reservation", "MyOffice", new { area = "" }, new { @class = "dropdown-item btn-outline-danger" })
+                                        <div class="dropdown-divider"></div>
+                                        @Html.ActionLink("Log out", "Logout", "Admin", new { area = "" }, new { @class = "dropdown-item btn-outline-danger" })
+                                    </div>
+                                </div>
                             </li>
                         }
                         else
@@ -104,3 +139,4 @@
 
 </body>
 </html>
+

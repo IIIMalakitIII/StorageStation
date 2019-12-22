@@ -1,0 +1,52 @@
+﻿@using MyUniversityProject.Models.StorageViewModel;
+@model SqlViewModel
+@{
+    ViewData["Title"] = "GetAdminDash";
+}
+
+<h1>GetAdminDash</h1>
+
+<div class="wrapper">
+    <div class="wrapped-div">
+        <div class="col-md-10 offset-md-1">
+            @using (Html.BeginForm("GetAdminDash", "Admin", new { htmlAttributes = new { @class = "mb-4" } }))
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SqlCommand, "Sql Command ", htmlAttributes: new { @class = "control-label text-white" })
+                    @Html.EditorFor(model => model.SqlCommand, new { htmlAttributes = new { @class = "form-control", @placeholder = "Sql Command" } })
+                    @Html.ValidationMessageFor(model => model.SqlCommand, "", new { @class = "text-danger" })
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="Do" class="btn btn-success btn-lg btn-block" />
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+@if (Model.ColumName.Any())
+{
+    <table class="table">
+        <tr>
+            @foreach (var item in Model.ColumName)
+            {
+                <th>@item</th>
+            }
+        </tr>
+        @if (Model.RowName.Any())
+        {
+            @foreach (var item in Model.RowName)
+            {
+                <tr>
+                    @foreach (var items in item)
+                    {
+                        <td>@items.ToString()</td>
+                    }
+                </tr>
+            }
+        }
+    </table>
+}

@@ -97,11 +97,11 @@ namespace MyUniversityProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("Amount");
+
                     b.Property<int>("CellId");
 
                     b.Property<DateTime>("EndReservation");
-
-                    b.Property<decimal>("Price");
 
                     b.Property<DateTime>("StartReservation");
 
@@ -116,31 +116,6 @@ namespace MyUniversityProject.Migrations
                     b.HasIndex("UserInfoId");
 
                     b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("MyUniversityProject.Models.Schedule", b =>
-                {
-                    b.Property<int>("ScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmployeeId");
-
-                    b.Property<DateTime>("EndWork");
-
-                    b.Property<DateTime>("StartWork");
-
-                    b.Property<int>("StorageId");
-
-                    b.Property<string>("WeekDay");
-
-                    b.HasKey("ScheduleId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("StorageId");
-
-                    b.ToTable("Schedule");
                 });
 
             modelBuilder.Entity("MyUniversityProject.Models.Standard", b =>
@@ -167,7 +142,8 @@ namespace MyUniversityProject.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Location")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(80);
 
                     b.Property<bool>("Status");
 
@@ -184,20 +160,21 @@ namespace MyUniversityProject.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(150);
+                        .HasMaxLength(100);
 
                     b.Property<string>("Email")
                         .IsRequired();
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(150);
+                        .HasMaxLength(80);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(150);
+                        .HasMaxLength(80);
 
-                    b.Property<string>("PassportId");
+                    b.Property<string>("PassportId")
+                        .HasMaxLength(30);
 
                     b.Property<string>("Password")
                         .IsRequired();
@@ -205,6 +182,9 @@ namespace MyUniversityProject.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(30);
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(10);
 
                     b.HasKey("UserInfoId");
 
@@ -234,19 +214,6 @@ namespace MyUniversityProject.Migrations
                     b.HasOne("MyUniversityProject.Models.UserInfo", "UserInfo")
                         .WithMany("Reservations")
                         .HasForeignKey("UserInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("MyUniversityProject.Models.Schedule", b =>
-                {
-                    b.HasOne("MyUniversityProject.Models.Employee", "Employee")
-                        .WithMany("Employees")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MyUniversityProject.Models.Storage", "Storage")
-                        .WithMany("Schedules")
-                        .HasForeignKey("StorageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

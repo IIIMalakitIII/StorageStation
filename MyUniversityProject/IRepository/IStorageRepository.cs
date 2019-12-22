@@ -1,7 +1,11 @@
-﻿using MyUniversityProject.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MyUniversityProject.Models;
+using MyUniversityProject.Models.FilterModel;
 using MyUniversityProject.Models.Pagination;
+using MyUniversityProject.Models.StorageViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,16 +14,26 @@ namespace MyUniversityProject.IRepository
     public interface IStorageRepository
     {
         Task<IEnumerable<Storage>> GetAllStorageAsync(string searching, string sortOrder);
-        Task<IEnumerable<Cell>> GetCellsAsync(int storageId);
-        Task<IndexViewModel> GetCellsAsync(int storageId, int page);
+        //Task<IEnumerable<Cell>> GetCellsAsync(int storageId);
+        //Task<IndexCellViewModel> GetCellsAsync(int storageId, int page);
         List<List<Cell>> ListCells(List<Cell> skipCells);
         List<Storage> GetStoragesCell();
         Task<Storage> GetStorageInfoAsync(int id);
-        Task<bool> Check(Storage storage);
-        Task<bool> Update(Storage storage);
-        Task<List<Cell>> GetAllStorageInfoAsync(int storageId);
-        Task SaveAsync();
-
-
+        //Task<bool> Update(Storage storage);
+        Task<string> Update(Storage storage);
+        Task<MemoryStream> PrintReserve(int id);
+        Task<IEnumerable<Cell>> GetAllStorageInfoAsync(int storageId);
+        IEnumerable<Cell> OrderByCell(IEnumerable<Cell> cells, string sortItem);
+        Task<IEnumerable<Cell>> FilterSearch(CellFilterViewModel cellFilter);
+        Task<IndexCellViewModel> GetCellsAsync(CellFilterViewModel cellFilter, int page);
+        Task<List<SelectListItem>> GetStoragesAsync();
+        Task<string> CreateStorageAsync(Storage storage);
+        Task<string> SaveAsync();
+        Task<string> DeleteAsync(int id);
+        Task<string> CreateCell(CreateCellViewModel createCell);
+        Task<Cell> GetCellAsync(int id);
+        Task<string> DeleteCellAsync(int id);
+        Task<CreateCellViewModel> GetCellViewModelAsync(int id);
+        Task<string> UpdateCellViewModelAsync(CreateCellViewModel createCell);
     }
 }

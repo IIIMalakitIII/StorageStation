@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyUniversityProject.Models
 {
@@ -12,15 +9,17 @@ namespace MyUniversityProject.Models
         [Key]
         public int ReservationId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Start Reservation is requred")]
+        [DataType(DataType.DateTime)]
         public DateTime StartReservation { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "End Reservation is requred")]
+        [DataType(DataType.DateTime)]
         public DateTime EndReservation { get; set; }
 
         public bool Status { get; set; }
-
-        public decimal Price { get; set; }
+        [Range(typeof(decimal), "1.00", "999999.99", ErrorMessage = "Invalid value")]
+        public decimal Amount { get; set; }
 
         [ForeignKey(nameof(Cell))]
         public int CellId { get; set; }

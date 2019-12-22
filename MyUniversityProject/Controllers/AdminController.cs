@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -9,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using MyUniversityProject.IRepository;
 using MyUniversityProject.Models;
 using MyUniversityProject.Models.AuthenticationModel;
+using MyUniversityProject.Models.StorageViewModel;
 
 namespace MyUniversityProject.Controllers
 {
@@ -27,13 +31,14 @@ namespace MyUniversityProject.Controllers
             return View();
         }
 
-    
-        public async Task<IActionResult> MyOffice()
+        [Authorize(Roles = "Admin, SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> AdminOffice()
         {
             var employee = await adminRepository.GetEpmloyee(User.Identity.Name);
             if (employee == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Login));
             }
 
             return View(employee);
@@ -45,25 +50,16 @@ namespace MyUniversityProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                adminRepository.UpdateEmployee(employee);
-                try
+                var result = await adminRepository.UpdateEmployee(employee);
+                if (result == null)
                 {
-                    await adminRepository.SaveAsync();
-                    if (await adminRepository.Check(User.Identity.Name, employee))
-                    {
-                        return RedirectToAction(nameof(MyOffice), "Admin");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Updating wasn't successful");
-                    }
+                    return RedirectToAction(nameof(AdminOffice), "Admin");
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ModelState.AddModelError("", "Updating to the database wasn't successful");
-                }
+                ModelState.AddModelError("", "Updating user password wasn't successful");
+                ModelState.AddModelError("", result);
             }
-            return View("_MyOfficeForSuperUser", employee);
+
+            return View("_OfficeForSuperUser", employee);
         }
 
         [Authorize(Roles = "Admin, SuperUser")]
@@ -72,26 +68,16 @@ namespace MyUniversityProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                var changeUser = await adminRepository.UpdatePassword(User.Identity.Name, model);
-                try
+                var result = await adminRepository.UpdatePassword(User.Identity.Name, model);
+                if (result == null)
                 {
-                    await adminRepository.SaveAsync();
-                    if (await adminRepository.Check(User.Identity.Name, changeUser))
-                    {
-                        return RedirectToAction(nameof(MyOffice), "Admin");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Updating user password wasn't successful");
-                    }
+                    return RedirectToAction(nameof(AdminOffice), "Admin");
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    ModelState.AddModelError("", "Changing user password wasn't successful");
-                }
+                ModelState.AddModelError("", "Updating user password wasn't successful");
+                ModelState.AddModelError("", result);
             }
-            //return CreatedAtAction("GetTaskInfo", new { id = taskItem.Id }, taskItem);
-            return View("_ChangePassword", model);
+
+            return View(model);
         }
 
 
@@ -101,7 +87,7 @@ namespace MyUniversityProject.Controllers
             if (User.Identity.IsAuthenticated && User.HasClaim(x => x.Type == ClaimTypes.Role
                     && x.Value == "Admin" || x.Value=="SuperUser"))
             {
-                return RedirectToAction(nameof(MyOffice), "Admin");
+                return RedirectToAction(nameof(AdminOffice), "Admin");
             }
 
             return View();
@@ -112,7 +98,6 @@ namespace MyUniversityProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-
             if (ModelState.IsValid)
             {
                 var Employeer = await adminRepository.Login(model);
@@ -120,12 +105,10 @@ namespace MyUniversityProject.Controllers
                 if (Employeer != null)
                 {
                     await Authenticate(Employeer.Email,Employeer.Role);
-                    return RedirectToAction(nameof(MyOffice), "Admin");
+                    return RedirectToAction(nameof(AdminOffice), "Admin");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Incorrect login or password");
-                }
+
+                ModelState.AddModelError("", "Incorrect Login or Password");
             }
 
             return View(model);
@@ -149,6 +132,118 @@ namespace MyUniversityProject.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction(nameof(Login), "Admin");
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public IActionResult GetAdminDash()
+        {
+            return View(new SqlViewModel());
+        }
+        
+        [Authorize(Roles = "SuperUser")]
+        [HttpPost]
+        public IActionResult GetAdminDash(SqlViewModel select)
+        {
+            var result = adminRepository.DashBoard(select);
+            return View(result);
+        }
+
+
+        /*------------------Admins--------------------------*/
+
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> GetAdmins(string currentFilter, string sortOrder, string searching)
+        {
+
+            var errMsg = TempData["ErrorMessage"];
+
+            if (errMsg != null)
+            {
+                ModelState.AddModelError("", errMsg as string);
+            }
+            ViewBag.Id = String.IsNullOrEmpty(sortOrder) ? "id" : "";
+            ViewBag.LastName = sortOrder == "LastName" ? "lastName" : "LastName";
+            ViewBag.FirstName = sortOrder == "FirstName" ? "firstName" : "FirstName";
+
+            if (searching == null)
+            {
+                if (currentFilter == null)
+                {
+                    searching = "";
+                }
+                else
+                {
+                    searching = currentFilter;
+                }
+            }
+
+            ViewBag.CurrentFilter = searching;
+            ViewData["DateSortParm"] = sortOrder == "id" ? "id" : "Id";
+            var activeStorages = await adminRepository.GetAdmins(sortOrder, searching);
+
+            return View(activeStorages);
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public IActionResult CreateAdmin()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpPost]
+        public async Task<IActionResult> CreateAdmin(Employee employee)
+        {
+            if (!ModelState.IsValid)
+                return View(employee);
+
+            var result = await adminRepository.CreateAdmins(employee);
+            if(result != null)
+            {
+                ModelState.AddModelError("", result);
+                return View(employee);
+            }
+            return RedirectToAction(nameof(GetAdmins));
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> GetAdmin(int Id)
+        {
+            var result = await adminRepository.GetEpmloyee(Id);
+            return View(result);
+        }
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpPost]
+        public async Task<IActionResult> GetAdmin(Employee employee)
+        {
+            if (!ModelState.IsValid)
+                return View(employee);
+
+            var result = await adminRepository.UpdateAdmin(employee);
+
+            if (result != null)
+            {
+                ModelState.AddModelError("", result);
+                return View(employee);
+            }
+
+            return View(employee);
+        }
+
+
+        [Authorize(Roles = "SuperUser")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteAdmin(int id)
+        {
+                var result = await adminRepository.DeleteAdmin(id);
+                TempData["ErrorMessage"] = result;
+                return RedirectToAction(nameof(GetAdmins));
         }
     }
 }
