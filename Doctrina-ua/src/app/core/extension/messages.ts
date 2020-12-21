@@ -1,0 +1,15 @@
+export enum Message {
+    SOMETHING_IS_WRONG = `Something is wrong`,
+    ACCOUNT_CREATED = `Account created`,
+    SPRINT_CREATED = `Sprint Created`,
+    LOGGED_IN = `You are logged in!`,
+    ISSUES_CREATED = `Issues Created`,
+    COMMENT_ADDED = `Comment Added`,
+    COURSE_CREATED = `Course created`,
+    COURSE_DELETED = `Course deleted`,
+    PROFILE_UPDATED = `Profile updated`,
+    PROFILE_DELETED = `Profile deleted`,
+    INVALID_GROUP_TITLE = `You should fill title field`,
+    SCHEDULE_GROUP_CREATED = `Schedule grioub created`,
+    DID_NOT_SELECT_ANY_ELEMENT = `You did not select any schedule element`,
+}

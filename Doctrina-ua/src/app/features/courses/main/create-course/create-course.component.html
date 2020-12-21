@@ -1,0 +1,77 @@
+<mat-toolbar class="dark">
+  <h1>COURSE CREATION</h1>
+  <span class="spacer"></span>
+  <button mat-icon-button type="button" [mat-dialog-close]="null">
+      <mat-icon color="warn">close</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="mx-3">
+  <form [formGroup]="createCourseForm" (ngSubmit)="onSubmit()">
+      <div class="form-group pt-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title"/>
+          <mat-error *ngIf="createCourseForm.get('title').hasError('required')">
+            Title is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group pt-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Date of the begining</mat-label>
+                <input matInput type="datetime-local" formControlName="dateStart" placeholder="mm/dd/yyyy">
+                <mat-error *ngIf="createCourseForm.get('dateStart').hasError('required')">
+                  Date of the begining is required
+                </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group pt-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Date of the end</mat-label>
+                <input matInput type="datetime-local" formControlName="dateEnd" placeholder="mm/dd/yyyy">
+                <mat-error *ngIf="createCourseForm.get('dateEnd').hasError('required')">
+                  Date of the end is required
+                </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="form-group pt-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Max mark</mat-label>
+          <input placeholder="Type..."
+                matInput
+                type="number"
+                formControlName="maxMark"
+                [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="createCourseForm.get('maxMark').hasError('required')">
+            Max mark is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group pt-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="course description" formControlName="description"></textarea>
+          <mat-error *ngIf="createCourseForm.get('description').hasError('required')">
+            Description is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-dialog-actions class="spacer-beetwen align-bottom  mx-2 p-4 pb-5">
+        <button mat-flat-button color="warn" [mat-dialog-close]>NO THANKS</button>
+        <button mat-flat-button color="primary" type="submit" >CREATE</button>
+      </mat-dialog-actions>
+  </form>
+</div>

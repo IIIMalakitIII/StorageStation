@@ -1,0 +1,77 @@
+<div class="mx-3">
+  <div class="course-list flex-column">
+    <section class="flex-row mx-3">
+      <section class="pt-2" >
+        <mat-card class="w-100">
+          <div class="card-header-container">
+            <h1 class="bold">
+              Lessons
+            </h1>
+            <mat-label>
+              <button *ngIf="canEdit" color="primary" mat-icon-button type="button" tabindex="-1" (click)="addLesson()">
+                  <mat-icon>add</mat-icon>
+              </button>
+            </mat-label>
+          </div>
+          <div class="span1">
+            <table class="table table-hover text-center">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Topic</th>
+                  <th scope="col">Date & Time</th>
+                  <th scope="col">Max grade</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let lesson of lessons; let i = index">
+                  <tr>
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{ lesson?.type}} </td>
+                    <td>{{ lesson?.title}} </td>
+                    <td>
+                      <ul style="list-style: none;">
+                        <li class="mat-body-2">
+                            Start At: {{ lesson?.dateStart?.toLocaleDateString() }} {{lesson?.dateStart?.toLocaleTimeString()}}
+                        </li>
+                        <li class="mat-body-2">
+                            End At: {{ lesson?.dateEnd?.toLocaleDateString() }} {{lesson?.dateEnd?.toLocaleTimeString()}}
+                        </li>
+                      </ul>
+                    </td>
+                    <td>{{ lesson?.maxMark}}</td>
+                    <td>
+                      <mat-label *ngIf="lessonEnded(lesson)" class="warn-color">
+                          Completed
+                      </mat-label>
+                      <mat-label *ngIf="lessonNow(lesson)" class="accent-color">
+                          Ongoing
+                      </mat-label>
+                      <mat-label *ngIf="lessonWill(lesson)" class="primary-color" disabled>
+                          Upcoming
+                      </mat-label>
+                    </td>
+                    <td>
+                      <button mat-raised-button type="button" tabindex="-1" color="primary" (click)="openLesson(lesson._id)">
+                        Open
+                      </button>
+                    </td>
+                    <td>
+                      <button *ngIf="canEdit" mat-icon-button type="button" tabindex="-1" color="warn" (click)="deleteLesson(lesson._id)">
+                        <mat-icon> close </mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+      </section>
+    </section>
+  </div>
+</div>
